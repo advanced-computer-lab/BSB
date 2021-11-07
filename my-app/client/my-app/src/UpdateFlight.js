@@ -1,86 +1,140 @@
 import React from 'react'
-//import * as React from 'react';
-import Table from 'react-bootstrap/Table';
 import {useState,useEffect} from 'react';
-import axios from 'axios';
-//import DeleteIcon from '@mui/icons-material/Delete';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import DeleteFlight from './DeleteFlight';
-//import AddFlightForm from './AddFlightForm';
-import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
-//import * as React from 'react';
-//import Table from '@mui/material/Table';
+import Modal from 'react-bootstrap/Modal'
+import ModalDialog from 'react-bootstrap/ModalDialog'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
 import { Button } from 'react-bootstrap';
-import { styled } from '@mui/material/styles';
-//import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
+import axios from 'axios';
+
 function UpdateFlight(props) {
-    const[clicked,setClicked]=useState(false);
-    const[flightlist,setFlightlist]=useState([]);
-  //const[clicked,setClicked]=useState(false);
-  const[from,setFrom]=useState("");
-  const[to,setTo]=useState("");
-  const[cabin,setCabin]=useState("");
-  const[seat,setSeat]=useState("");
-  const[date,setDate]=useState("");
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const[from,setFrom]=useState(props.from);
+  const[to,setTo]=useState(props.to);
+ 
+  const[date,setDate]=useState(props.date);
+   const[arr,setArr]=useState(props.arr);
+   const[dep,setDep]=useState(props.dep);
+   const[tdep,setTdep]=useState(props.tdep);
+   const[tarr,setTarr]=useState(props.tarr);
+   const[ec,setEc]=useState(props.ec);
+   const[bs,setBs]=useState(props.bs);
+   const[first,setFirst]=useState(props.first);
+
+
+
+
+
+
+  const[clicked,setClicked]=useState(false);
+  
   useEffect(() => {
-    axios.get("http://localhost:8000/showFlights").then(res=>{
-      console.log("xxxx");
-      setFlightlist(res.data);
-})
+if(clicked){
+    axios.post('http://localhost:8000/updateFlights', {
+      _id:props.idd,
+      From:from,
+      To: to,
+      FlightDate: date,
+      
+ArrivalTime:arr,
+DepartureTime:dep,
+ TerminalDeparture:tdep,
+TerminalArrival:tarr,
+NuofAvailableEconomySeats:ec,
+ NuofAvailableBuisnessSeats:bs,
+NuofAvailableFirstSeats:first
+  })
+  .then(function (response) {
+    console.log("xxx");
+  })
+  setShow(false);
+setClicked(false);}
 
 //.catch(err => {console.log(err)});
   })
-    if(clicked){
-   // const[upclicked,setupClicked]=useState(false);
-   return( <div>{flightlist.map( u => {return <TableRow key={u._id}><StyledTableCell align="center"><input type="text" id="from" name="from" defaultValue={u.from}  onChange={event =>setFrom(event.target.value)}/>
-   </StyledTableCell><StyledTableCell align="center"> <input type="text" id="to" name="to" defaultValue={u.to} onChange={event => setTo(event.target.value)}/></StyledTableCell><StyledTableCell align="center"> <input type="text" id="date" name="date" onChange={event => setDate(event.target.value)} defaultValue={u.FlightDate}/></StyledTableCell><StyledTableCell align="center"><input type="text" id="date" name="date" onChange={event => setCabin(event.target.value)} defaultValue={u.Cabin}/></StyledTableCell >
-   <StyledTableCell align="center"><input type="text" id="from" name="from" defaultValue={u.SeatsAvailableonFlight}  onChange={event =>setSeat(event.target.value)}/></StyledTableCell>  <StyledTableCell align="center"l><Button variant="outline-secondary">Show Map</Button>
-   </StyledTableCell><StyledTableCell align="center"> <button variant="outline-primary" onClick={(event) => axios.post('http://localhost:8000/updateFlights', {
-          From:from,
-          To: to,
-          FlightDate: date,
-          Cabin: cabin,
-          SeatsAvailableonFlight:seat
-      })
-      .then(function (response) {
-        console.log("xxx");
-      })}>Update</button> </StyledTableCell><StyledTableCell align="center"> 
-    <Popup trigger={<Button variant="outline-danger"data-target="#myModal"data-toggle="modal"data-backdrop="static"data-keyboard="false">Delete</Button>} position="right center">
- <div>Are you sure you want to delete?(if no click anywhere)</div>
- <DeleteFlight idd={u._id}></DeleteFlight>
-</Popup></StyledTableCell>
-   </TableRow>})  }   
-   </div>)}
-   
-    return(<div>
-        {flightlist.map(u => {return <TableRow key={u._id}><StyledTableCell align="center">{u.From}
-      </StyledTableCell><StyledTableCell align="center">{u.To}</StyledTableCell><StyledTableCell align="center">{u.FlightDate}</StyledTableCell><StyledTableCell align="center">{u.Cabin}</StyledTableCell >
-      <StyledTableCell align="center">{u.SeatsAvailableonFlight}</StyledTableCell>  <StyledTableCell align="center"l><Button variant="outline-secondary">Show Map</Button>
-      </StyledTableCell><StyledTableCell align="center"> <Button variant="outline-primary" onClick={(event) => setClicked(true)}>Update</Button></StyledTableCell><StyledTableCell align="center"> 
-       <Popup trigger={<Button variant="outline-danger"data-target="#myModal"data-toggle="modal"data-backdrop="static"data-keyboard="false">Delete</Button>} position="right center">
-    <div>Are you sure you want to delete?(if no click anywhere)</div>
-    <DeleteFlight idd={u._id}></DeleteFlight>
-  </Popup></StyledTableCell>
-      </TableRow>})}</div>
-    );
+  return (
+    <>
+      <Button variant="outline-primary" onClick={handleShow}> Update</Button>
+
+      <Modal show={show} onHide={handleClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Flight Number:{props.flightNum}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body> <div border="solid">
+           
+
+        
+    
+           <form >
+                 
+             From:
+             <br/>
+             
+              <input type="text" id="from" name="from" defaultValue={props.from}  onChange={event =>setFrom(event.target.value)}/>
+              <br/>
+             To:
+             <br/>
+              <input type="text" id="to" name="to" defaultValue={props.to} onChange={event => setTo(event.target.value)}/>
+              <br/>
+          Date:
+          <br/>
+          <input type="date" id="date" name="date" defaultValue={props.date} onChange={event => setDate(event.target.value)}/>
+          <br/>
+             
+          ArrivalTime:
+          <br/>
+          <input type="text" id="cabin" name="cabin" defaultValue={props.arr}onChange={event => setArr(event.target.value)}/>
+            
+          <br/>
+         Departure Time:
+         <br/>
+          <input type="text" id="seat" name="seat"defaultValue={props.dep} onChange={event => setDep(event.target.value)}/>
+          <br/>
+          Departure Terminal:
+          <br/>
+          <input type="number" id="cabin" name="cabin" defaultValue={props.tdep}onChange={event => setTdep(event.target.value)}/>
+            
+          <br/>
+          Arrival Teraminal:
+          <br/>
+          <input type="number" id="cabin" name="cabin" defaultValue={props.tarr}onChange={event => setTarr(event.target.value)}/>
+            
+          <br/>
+          Number of economy seats:
+          <br/>
+          <input type="number" id="cabin" name="cabin" defaultValue={props.ec}onChange={event => setEc(event.target.value)}/>
+            
+          <br/>
+          Number of Buisness seats:
+          <br/>
+          <input type="number" id="cabin" name="cabin" defaultValue={props.bs}onChange={event => setBs(event.target.value)}/>
+            
+          <br/>
+          Number of First seats:
+          <br/>
+          <input type="number" id="cabin" name="cabin" defaultValue={props.first}onChange={event => setFirst(event.target.value)}/>
+            
+          <br/>
+
+          <br/>
+          
+             </form>
+          </div></Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={(event)=>setClicked(true)}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
 
-export default UpdateFlight;
-
-
+export default UpdateFlight

@@ -67,46 +67,69 @@ app.post("/deleteFlights", (req, res) => {
        });
    });
    app.post("/updateFlights", (req, res) => {
-    flight.updateOne({ _id: req.body._id },{From:req.body.From, To:req.body.To, FlightDate: req.body.FlightDate, Cabin:req.body.Cabin,
-        SeatsAvailableonFlight: req.body.SeatsAvailableonFlight
-      }).exec(function (err, leads) {
-           res.status(201).send(leads);
-       });
+    flight.updateOne({ _id: req.body._id }, req.body).exec(function (err, leads) {
+        res.status(201).send(leads);
+    });
 });
 
+// app.post("/addFlight", (req, res) => {
+//     //console.log("also")
+//     // const newFlight = new flight;
+//     //newFlight.flightController();
+//     //newFlight.save().then((result) => {
+//     //res.send(result)
+//     //})
+//     //  .catch((err) => {
+//     //    console.log(err)
+//     //})
+//     const newFlight = new flight({
+//         'From': req.body.From,
+//         'To': req.body.To,
+//         'FlightDate': req.body.FlightDate,
+//         'Cabin': req.body.Cabin,
+//         'SeatsAvailableonFlight': req.body.SeatsAvailableonFlight
+
+
+
+//     })
+
+//     // // const schema = Joi.object({
+//     // //     From: Joi.string().min(3).required(),
+//     // //     To: Joi.string().min(3).required(),
+
+//     // // })
+//     // // Flight.push(newFlight)
+//     // console.log('alo?')
+//     newFlight.save().then((result) => {
+//         res.send(result)
+//     })
+//         .catch((err) => {
+//             console.log(err)
+//         })
+//     // res.status(201).send("successfully added")
+// })
+
 app.post("/addFlight", (req, res) => {
-    //console.log("also")
-    // const newFlight = new flight;
-    //newFlight.flightController();
-    //newFlight.save().then((result) => {
-    //res.send(result)
-    //})
-    //  .catch((err) => {
-    //    console.log(err)
-    //})
     const newFlight = new flight({
-        'From': req.body.From,
-        'To': req.body.To,
-        'FlightDate': req.body.FlightDate,
-        'Cabin': req.body.Cabin,
-        'SeatsAvailableonFlight': req.body.SeatsAvailableonFlight
-
-
-
-    })
-
-    // // const schema = Joi.object({
-    // //     From: Joi.string().min(3).required(),
-    // //     To: Joi.string().min(3).required(),
-
-    // // })
-    // // Flight.push(newFlight)
-    // console.log('alo?')
+        'From': req.body.From, 
+        'To': req.body.To, 
+        'FlightDate': req.body.FlightDate, 
+        'NuofAvailableFirstSeats': req.body.NuofAvailableFirstSeats,
+        'NuofAvailableBuisnessSeats': 
+        req.body.NuofAvailableBuisnessSeats,
+        'NuofAvailableEconomySeats':  req.body.NuofAvailableEconomySeats, 
+        'TerminalDeparture':req.body.TerminalDeparture, 
+        'TerminalArrival': req.body.TerminalArrival,
+        'FlightNu':req.body.FlightNu, 
+        'ArrivalTime':req.body.ArrivalTime, 
+        'DepartureTime':req.body.DepartureTime 
+    
+ })
     newFlight.save().then((result) => {
         res.send(result)
     })
         .catch((err) => {
             console.log(err)
         })
-    // res.status(201).send("successfully added")
+
 })

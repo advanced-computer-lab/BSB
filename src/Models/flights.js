@@ -14,16 +14,41 @@ const flightSchema = new Schema({
         type: Date,
         required: true,
     },
-    Cabin: {
-        type: String,
-        required: true,
-    },
-    SeatsAvailableonFlight: {
+    NuofAvailableFirstSeats: {
         type: Number,
         required: true,
-    },
+      },
+    NuofAvailableBuisnessSeats: {
+        type: Number,
+        required: true,
+      },
+    NuofAvailableEconomySeats: {
+        type: Number,
+        required: true,
+      },
+      TerminalDeparture: {
+        type: Number,
+        required: true,
+      },
+      TerminalArrival: {
+        type: Number,
+        required: true,
+    
+      },
+     FlightNu: {
+        type: String,
+        required: true
+      },
+     ArrivalTime: {
+        type: String,
+        required: true
+      },
+      DepartureTime: {
+        type: String,
+        required: true
+      },
 },
-    { timestamps: true });
+    { timestamps: false });
 
 const flight = mongoose.model('flights', flightSchema);
 module.exports = flight;
