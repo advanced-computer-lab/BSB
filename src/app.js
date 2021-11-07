@@ -72,43 +72,6 @@ app.post("/deleteFlights", (req, res) => {
     });
 });
 
-// app.post("/addFlight", (req, res) => {
-//     //console.log("also")
-//     // const newFlight = new flight;
-//     //newFlight.flightController();
-//     //newFlight.save().then((result) => {
-//     //res.send(result)
-//     //})
-//     //  .catch((err) => {
-//     //    console.log(err)
-//     //})
-//     const newFlight = new flight({
-//         'From': req.body.From,
-//         'To': req.body.To,
-//         'FlightDate': req.body.FlightDate,
-//         'Cabin': req.body.Cabin,
-//         'SeatsAvailableonFlight': req.body.SeatsAvailableonFlight
-
-
-
-//     })
-
-//     // // const schema = Joi.object({
-//     // //     From: Joi.string().min(3).required(),
-//     // //     To: Joi.string().min(3).required(),
-
-//     // // })
-//     // // Flight.push(newFlight)
-//     // console.log('alo?')
-//     newFlight.save().then((result) => {
-//         res.send(result)
-//     })
-//         .catch((err) => {
-//             console.log(err)
-//         })
-//     // res.status(201).send("successfully added")
-// })
-
 app.post("/addFlight", (req, res) => {
     const newFlight = new flight({
         'From': req.body.From, 
@@ -132,4 +95,10 @@ app.post("/addFlight", (req, res) => {
             console.log(err)
         })
 
+})
+
+app.post("/searchFlights", (req, res) => {
+    flight.find(req.body).exec(function (err, data) {
+        res.send(data)
+    })
 })
