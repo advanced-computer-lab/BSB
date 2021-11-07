@@ -13,7 +13,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Stack from '@mui/material/Stack';
 import Table from 'react-bootstrap/Table';
 import SearchResults from './SearchResults';
-
+import Search from './Search'
 function SearchFlight(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -56,160 +56,33 @@ function SearchFlight(props) {
 
   return (
     <div>
-      <Table border='transparent'>
+      <Button variant="outline-primary" onClick={handleShow}>
+        Search
+        <Modal show={show} onHide={handleClose} animation={false} sm='large'>
+          <Modal.Header closeButton>
+            <Modal.Title>Flights</Modal.Title>
+          </Modal.Header>
+          <Modal.Body> <div border="solid">
+            <Search from={props.from}
+              to={props.to}
+              date={props.date}
+              first={props.first}
+              business={props.business}
+              economy={props.economy}
+              arrival={props.arrival}
+              departure={props.departure}
+              arrivalTerminal={props.arrivalTerminal}
+              departureTerminal={props.departureTerminal}
+              flightNumber={props.flightNumber}>
 
-        <tr>
-          <td>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.from}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="From" />}
-            />
-          </td>y
-          <td>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.to}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="To" />}
-            />
-          </td>
-        </tr>
+            </Search>
 
 
 
-
-
-        <tr>
-          <td>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.date}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Date" />}
-            />
-          </td>
-          <td>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.first}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="First Class Seats" />}
-            />
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.economy}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Economy Class Seats" />}
-            />
-          </td>
-          <td>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.business}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Business Class Seats" />}
-            />
-          </td>
-        </tr>
-
-
-        <tr>
-          <td>
-
-
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.arrival}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Arrival Time" />}
-            />
-          </td>
-          <td>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.departure}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Departure Time" />}
-            />
-          </td>
-        </tr>
-
-
-        <tr>
-          <td>
-
-
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.arrivalTerminal}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Arrival Terminal" />}
-            />
-          </td>
-          <td>
-
-
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.departureTerminal}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Departure Terminal" />}
-            />
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={props.flightNumber}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Flight Number" />}
-            />
-
-          </td>
-          <td>
-            <Button variant="outline-primary" onClick={handleShow}>
-              Search
-              <Modal show={show} onHide={handleClose} animation={false}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Flights</Modal.Title>
-                </Modal.Header>
-                <Modal.Body> <div border="solid">
-                  <SearchResults>
-
-                  </SearchResults>
-
-
-
-
-                </div>
-                </Modal.Body>
-              </Modal>
-            </Button>
-          </td>
-        </tr>
-
-      </Table>
+          </div>
+          </Modal.Body>
+        </Modal>
+      </Button>
 
     </div>
   );

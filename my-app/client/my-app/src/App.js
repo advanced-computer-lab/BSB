@@ -29,6 +29,7 @@ import Icon from '@mui/material/Icon';
 import { Button } from 'react-bootstrap';
 import AddFlightForm from './AddFlightForm';
 import UpdateFlight from './UpdateFlight';
+import Search from './Search';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -52,7 +53,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function App() {
   const [flightlist, setFlightlist] = useState([]);
-  const [fromArr, setFrom] = useState([]);
+  /*const [fromArr, setFrom] = useState([]);
   const [toArr, setTo] = useState([]);
   const [dateArr, setDate] = useState([]);
   const [arrArr, setArr] = useState([]);
@@ -63,7 +64,7 @@ function App() {
   const [bsArr, setBs] = useState([])
   const [firstArr, setFirst] = useState([])
   const [flightNumArr, setFlightNum] = useState([])
-  const [unique, setUnique] = useState([])
+  const [unique, setUnique] = useState([])*/
   useEffect(() => {
     axios.get("http://localhost:8000/showFlights").then(res => {
       console.log("xxxx");
@@ -73,7 +74,7 @@ function App() {
     //.catch(err => {console.log(err)});
   })
 
-  useEffect(() => {
+ /* useEffect(() => {
     setFrom([...new Set(flightlist.map(item => item.From))]);
 
   })
@@ -106,11 +107,7 @@ function App() {
   })
   useEffect(() => {
     setFlightNum([...new Set(flightlist.map(item => item.FlightNu))])
-  })
-
-
-
-  //axios.get('mongodb+srv://Sprint1:123@cluster0.mypjh.mongodb.net/Flights?retryWrites=true&w=majority' ).then(res=>(setFlightlist(res.data)));
+  }) */
 
   return (
     <div>
@@ -132,8 +129,10 @@ function App() {
               <StyledTableCell align="center">&nbsp;</StyledTableCell>
               <StyledTableCell align="center">&nbsp;</StyledTableCell>
               <StyledTableCell align="center">&nbsp;</StyledTableCell>
-              <StyledTableCell align="center">&nbsp;</StyledTableCell>
               <StyledTableCell align="center"> <AddFlightForm />&nbsp;</StyledTableCell>
+              <StyledTableCell align="center"> <Search/>&nbsp;</StyledTableCell>
+
+
               <StyledTableCell align="center"> &nbsp;</StyledTableCell>
               <StyledTableCell align="center"></StyledTableCell>
             </TableRow>
@@ -156,12 +155,13 @@ function App() {
               <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
               <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
               <StyledTableCell align="center" l><Button variant="outline-secondary">Show Map</Button> </StyledTableCell>
+
               <StyledTableCell align="center"> <UpdateFlight idd={u._id} from={u.From} to={u.To}
                 flightNum={u.FlightNu}
                 date={u.FlightDate}
                 arr={u.ArrivalTime}
                 dep={u.DepartureTime}
-                tdep={u.TerminalDeparture}
+                tdep={u.TerminalDeparture}y
                 tarr={u.TerminalArrival}
                 ec={u.NuofAvailableEconomySeats}
                 bs={u.NuofAvailableBuisnessSeats}
@@ -177,20 +177,8 @@ function App() {
           })}
         </Table>
       </TableContainer>
-      {fromArr.length}
-      <SearchFlight
-        from={fromArr}
-        to={toArr}
-        date={dateArr}
-        first={firstArr}
-        business={bsArr}
-        economy={ecArr}
-        arrival={arrArr}
-        departure={depArr}
-        arrivalTerminal={tarrArr}
-        departureTerminal={tdepArr}
-        flightNumber={flightNumArr}
-      />
+     
+
 
 
 

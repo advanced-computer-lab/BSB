@@ -7,57 +7,57 @@ import ModalBody from 'react-bootstrap/ModalBody'
 import ModalFooter from 'react-bootstrap/ModalFooter'
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-
-function AddFlightForm(props) {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
-
-  const [date, setDate] = useState("");
-  const [arr, setArr] = useState("");
-  const [dep, setDep] = useState("");
-  const [tdep, setTdep] = useState("");
-  const [tarr, setTarr] = useState("");
-  const [ec, setEc] = useState("");
-  const [bs, setBs] = useState("");
-  const [first, setFirst] = useState("");
-  const [flightNum, setFlightNum] = useState("");
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import Stack from '@mui/material/Stack';
+import Table from 'react-bootstrap/Table';
+import SearchResults from './SearchResults';
 
 
-
-
-
-  const [clicked, setClicked] = useState(false);
-  useEffect(() => {
-    if (clicked) {
-      axios.post('http://localhost:8000/addFlight', {
-        FlightNu: flightNum,
-        From: from,
-        To: to,
-        FlightDate: date,
-        ArrivalTime: arr,
-        DepartureTime: dep,
-        TerminalDeparture: tdep,
-        TerminalArrival: tarr,
-        NuofAvailableEconomySeats: ec,
-        NuofAvailableBuisnessSeats: bs,
-        NuofAvailableFirstSeats: first
-      })
-        .then(function (response) {
-          console.log("xxx");
+function Search(props) {
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    const [from, setFrom] = useState("");
+    const [to, setTo] = useState("");
+    const [date, setDate] = useState("");
+    const [arr, setArr] = useState("");
+    const [dep, setDep] = useState("");
+    const [tdep, setTdep] = useState("");
+    const [tarr, setTarr] = useState("");
+    const [ec, setEc] = useState("");
+    const [bs, setBs] = useState("");
+    const [first, setFirst] = useState("");
+    const [flightNum, setFlightNum] = useState("");
+    const [searchflightlist, setFlightlist] = useState([]);
+    const [clicked, setClicked] = useState(false);
+    useEffect(() => {
+      if (clicked) {
+        axios.post('http://localhost:8000/searchFlights', {
+          FlightNu: flightNum,
+          From: from,
+          To: to,
+          FlightDate: date,
+          ArrivalTime: arr,
+          DepartureTime: dep,
+          TerminalDeparture: tdep,
+          TerminalArrival: tarr,
+          NuofAvailableEconomySeats: ec,
+          NuofAvailableBuisnessSeats: bs,
+          NuofAvailableFirstSeats: first
         })
-      setShow(false);
-      setClicked(false);
-    }
-  });
-
-
-  return (
-    <>
-      <Button variant="outline-primary" onClick={handleShow}> Add Flight</Button>
+          .then(function (response) {
+            console.log("xxx");
+            setFlightlist(response.data)
+          })
+        setShow(false);
+        setClicked(false);
+        
+      }
+    });
+    return (
+        <>
+      <Button variant="outline-primary" onClick={handleShow}> Search Flights</Button>
 
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
@@ -130,7 +130,7 @@ function AddFlightForm(props) {
             <br />
 
             <br />
-
+           
           </form>
         </div></Modal.Body>
         <Modal.Footer>
@@ -138,12 +138,16 @@ function AddFlightForm(props) {
             Close
           </Button>
           <Button variant="primary" onClick={(event) => setClicked(true)}>
-            +ADD
+            Search <Modal> 
+                <SearchResults>
+                    
+                </SearchResults>
+            </Modal>
           </Button>
         </Modal.Footer>
       </Modal>
     </>
-  );
+    )
 }
 
-export default AddFlightForm
+export default Search
