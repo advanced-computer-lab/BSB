@@ -67,7 +67,7 @@ function SearchFlight(props) {
               sx={{ width: 300 }}
               renderInput={(params) => <TextField {...params} label="From" />}
             />
-          </td>
+          </td>y
           <td>
             <Autocomplete
               disablePortal
