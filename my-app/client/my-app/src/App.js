@@ -30,6 +30,10 @@ import { Button } from 'react-bootstrap';
 import AddFlightForm from './AddFlightForm';
 import UpdateFlight from './UpdateFlight';
 import Search from './Search';
+import SearchBody from './SearchBody';
+import ShowMap from './ShowMap';
+
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -112,7 +116,7 @@ function App() {
   return (
     <div>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <Table sx={{ minWidth: 500 }} aria-label="customized table" size='m'>
           <TableHead>
             <TableRow>
               <StyledTableCell align="center">Flight Number</StyledTableCell>
@@ -130,7 +134,7 @@ function App() {
               <StyledTableCell align="center">&nbsp;</StyledTableCell>
               <StyledTableCell align="center">&nbsp;</StyledTableCell>
               <StyledTableCell align="center"> <AddFlightForm />&nbsp;</StyledTableCell>
-              <StyledTableCell align="center"> <Search/>&nbsp;</StyledTableCell>
+              
 
 
               <StyledTableCell align="center"> &nbsp;</StyledTableCell>
@@ -154,7 +158,7 @@ function App() {
               <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
               <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
               <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
-              <StyledTableCell align="center" l><Button variant="outline-secondary">Show Map</Button> </StyledTableCell>
+              <StyledTableCell align="center" ><ShowMap></ShowMap> </StyledTableCell>
 
               <StyledTableCell align="center"> <UpdateFlight idd={u._id} from={u.From} to={u.To}
                 flightNum={u.FlightNu}
@@ -179,7 +183,7 @@ function App() {
       </TableContainer>
      
 
-
+      <SearchBody></SearchBody>
 
 
 

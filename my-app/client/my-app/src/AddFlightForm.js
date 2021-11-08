@@ -61,7 +61,7 @@ function AddFlightForm(props) {
 
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title></Modal.Title>
+          <Modal.Title>Add a new flight</Modal.Title>
         </Modal.Header>
         <Modal.Body> <div border="solid">
 
@@ -138,7 +138,7 @@ function AddFlightForm(props) {
             Close
           </Button>
           <Button variant="primary" onClick={(event) => setClicked(true)}>
-            +ADD
+            ADD
           </Button>
         </Modal.Footer>
       </Modal>

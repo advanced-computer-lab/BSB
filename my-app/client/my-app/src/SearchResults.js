@@ -55,7 +55,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 
-function SearchResults() {
+function SearchResults(props) {
     const [flightlist, setFlightlist] = useState([]);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -103,7 +103,7 @@ function SearchResults() {
 
 
 
-                {flightlist.map(u => {
+                {props.flightlist.map(u => {
                     return <TableRow key={u._id}>
                         <StyledTableCell align="center">{u.FlightNu}</StyledTableCell>
                         <StyledTableCell align="center">{u.From} </StyledTableCell>
@@ -116,26 +116,7 @@ function SearchResults() {
                         <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
                         <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
                         <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
-                        <StyledTableCell align="center" l><Button variant="outline-secondary">Show Map</Button> </StyledTableCell>
-                        <StyledTableCell align="center">
-                            <UpdateFlight idd={u._id}
-                                from={u.From}
-                                to={u.To}
-                                flightNum={u.FlightNu}
-                                date={u.FlightDate}
-                                arr={u.ArrivalTime}
-                                dep={u.DepartureTime}
-                                tdep={u.TerminalDeparture}
-                                tarr={u.TerminalArrival}
-                                ec={u.NuofAvailableEconomySeats}
-                                bs={u.NuofAvailableBuisnessSeats}
-                                first={u.NuofAvailableFirstSeats} />
-                        </StyledTableCell>
-                        <StyledTableCell align="center"> <Popup trigger={<Button variant="outline-danger" data-target="#myModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Delete</Button>} position="right center">
-                            <div>Are you sure you want to delete?(if no click anywhere)</div>
-                            <DeleteFlight idd={u._id}></DeleteFlight>
-                        </Popup>
-                        </StyledTableCell>
+                        
                     </TableRow>
                 })}
             </Table>
