@@ -197,6 +197,7 @@ function SearchBody(props) {
               <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
               <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
               <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
+              
               <StyledTableCell align="center" > </StyledTableCell>
 
               
