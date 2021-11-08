@@ -97,8 +97,17 @@ app.post("/addFlight", (req, res) => {
 
 })
 
-app.post("/searchFlights", (req, res) => {
-    flight.find(req.body).exec(function (err, data) {
-        res.send(data)
-    })
-})
+app.post("/searchFlights",async (req, res) => {
+   
+   const criteria = req.body; console.log(req.body);
+   try{
+       const query=await flight.find(criteria);
+       console.log(query);
+       console.log("xxxx111");
+       res.json(query);
+
+   }catch (err){
+       res.json({message:err});}
+   
+});
+

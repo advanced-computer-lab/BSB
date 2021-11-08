@@ -6,14 +6,14 @@ import axios from 'axios';
 //import DeleteIcon from '@mui/icons-material/Delete';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DeleteFlight from './DeleteFlight';
-import SearchFlight from './SearchFlight';
+//mport SearchFlight from './SearchFlight';
 //import AddFlightForm from './AddFlightForm';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { styled } from '@mui/material/styles';
-
+import Search from './Search'
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -52,18 +52,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function App() {
   const [flightlist, setFlightlist] = useState([]);
-  const [fromArr, setFrom] = useState([]);
-  const [toArr, setTo] = useState([]);
-  const [dateArr, setDate] = useState([]);
-  const [arrArr, setArr] = useState([]);
-  const [depArr, setDep] = useState([])
-  const [tdepArr, setTdep] = useState([])
-  const [tarrArr, setTarr] = useState([])
-  const [ecArr, setEc] = useState([])
-  const [bsArr, setBs] = useState([])
-  const [firstArr, setFirst] = useState([])
-  const [flightNumArr, setFlightNum] = useState([])
-  const [unique, setUnique] = useState([])
+  
   useEffect(() => {
     axios.get("http://localhost:8000/showFlights").then(res => {
       console.log("xxxx");
@@ -73,42 +62,7 @@ function App() {
     //.catch(err => {console.log(err)});
   })
 
-  useEffect(() => {
-    setFrom([...new Set(flightlist.map(item => item.From))]);
-
-  })
-  useEffect(() => {
-    setTo([...new Set(flightlist.map(item => item.To))])
-  })
-  useEffect(() => {
-    setDate([...new Set(flightlist.map(item => item.FlightDate))])
-  })
-  useEffect(() => {
-    setArr([...new Set(flightlist.map(item => item.ArrivalTime))])
-  })
-  useEffect(() => {
-    setDep([...new Set(flightlist.map(item => item.DepartureTime))])
-  })
-  useEffect(() => {
-    setTdep([...new Set(flightlist.map(item => item.TerminalDeparture))])
-  })
-  useEffect(() => {
-    setTarr([...new Set(flightlist.map(item => item.TerminalArrival))])
-  })
-  useEffect(() => {
-    setEc([...new Set(flightlist.map(item => item.NuofAvailableEconomySeats))])
-  })
-  useEffect(() => {
-    setBs([...new Set(flightlist.map(item => item.NuofAvailableBuisnessSeats))])
-  })
-  useEffect(() => {
-    setFirst([...new Set(flightlist.map(item => item.NuofAvailableFirstSeats))])
-  })
-  useEffect(() => {
-    setFlightNum([...new Set(flightlist.map(item => item.FlightNu))])
-  })
-
-
+  
 
   //axios.get('mongodb+srv://Sprint1:123@cluster0.mypjh.mongodb.net/Flights?retryWrites=true&w=majority' ).then(res=>(setFlightlist(res.data)));
 
@@ -177,22 +131,10 @@ function App() {
           })}
         </Table>
       </TableContainer>
-      {fromArr.length}
-      <SearchFlight
-        from={fromArr}
-        to={toArr}
-        date={dateArr}
-        first={firstArr}
-        business={bsArr}
-        economy={ecArr}
-        arrival={arrArr}
-        departure={depArr}
-        arrivalTerminal={tarrArr}
-        departureTerminal={tdepArr}
-        flightNumber={flightNumArr}
-      />
+      
+      
 
-
+<Search></Search>
 
 
     </div>);
