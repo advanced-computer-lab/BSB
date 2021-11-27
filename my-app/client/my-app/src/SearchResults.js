@@ -57,26 +57,17 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function SearchResults(props) {
     const [flightlist, setFlightlist] = useState([]);
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    const [from, setFrom] = useState("");
-    const [to, setTo] = useState("");
-    const [date, setDate] = useState("");
-    const [arr, setArr] = useState("");
-    const [dep, setDep] = useState("");
-    const [tdep, setTdep] = useState("");
-    const [tarr, setTarr] = useState("");
-    const [ec, setEc] = useState("");
-    const [bs, setBs] = useState("");
-    const [first, setFirst] = useState("");
-    const [flightNum, setFlightNum] = useState("");
+    
+    
 
     const [clicked, setClicked] = useState(false);
     return (
+        <div>
+            <h1>Search Results</h1>
 
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                
                 <TableHead>
                     <TableRow>
                         <StyledTableCell align="center">Flight Number</StyledTableCell>
@@ -103,24 +94,10 @@ function SearchResults(props) {
 
 
 
-                {props.flightlist.map(u => {
-                    return <TableRow key={u._id}>
-                        <StyledTableCell align="center">{u.FlightNu}</StyledTableCell>
-                        <StyledTableCell align="center">{u.From} </StyledTableCell>
-                        <StyledTableCell align="center">{u.To}</StyledTableCell>
-                        <StyledTableCell align="center">{u.FlightDate}</StyledTableCell>
-                        <StyledTableCell align="center">{u.ArrivalTime}</StyledTableCell>
-                        <StyledTableCell align="center">{u.DepartureTime}</StyledTableCell>
-                        <StyledTableCell align="center">{u.TerminalDeparture}</StyledTableCell>
-                        <StyledTableCell align="center">{u.TerminalArrival}</StyledTableCell>
-                        <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
-                        <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
-                        <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
-                        
-                    </TableRow>
-                })}
+               
             </Table>
         </TableContainer>
+        </div>
     )
 }
 

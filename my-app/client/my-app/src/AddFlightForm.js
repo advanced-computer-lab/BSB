@@ -63,12 +63,14 @@ function AddFlightForm(props) {
         <Modal.Header closeButton>
           <Modal.Title>Add a new flight</Modal.Title>
         </Modal.Header>
-        <Modal.Body> <div border="solid">
+        <Modal.Body> 
+          <div border="solid">
 
 
 
 
-          <form >
+          <form style={{fontWeight: "bold"}} >
+            
             Flight Number:
 
             <br />

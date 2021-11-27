@@ -72,7 +72,7 @@ function UpdateFlight(props) {
 
           <form >
 
-            From:
+            From: {props.from}
             <br />
 
             <input type="text" id="from" name="from" defaultValue={props.from} onChange={event => setFrom(event.target.value)} />

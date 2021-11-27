@@ -52,7 +52,7 @@ function SearchFlight(props) {
       setShow(false);
       setClicked(false);
     }
-  });
+  },[]);
 
   return (
     <div>
