@@ -21,9 +21,10 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 
 import Typography from '@mui/material/Typography';
+
 import booktrip from "./images/booktrip.jpg"
-
-
+import { blue } from '@material-ui/core/colors';
+import { withStyles } from '@material-ui/core/styles';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
@@ -138,28 +139,51 @@ function User() {
 
     //search button
     const [search, setSearchButton] = useState(false);
+    //styles
+    const useStyles = makeStyles({
+        root: { maxWidth: 345, }
+        ,
+        media: { height: 150, }
+
+    })
+    const classes = useStyles();
+
+    //border
+    const styles = theme => ({
+        notchedOutline: {
+            borderWidth: "2px",
+            borderColor: "grey"
+        }
+    });
+    const borders = styles();
+
+
 
 
     return (
 
-        <div style={{ position: 'relative', marginLeft: -850 }}>
+        <div style={{ position: 'relative', marginLeft: -850, marginTop: 100 }}>
             <Box
                 component="form"
                 sx={{
                     '& .MuiTextField-root': { m: 1, width: '30ch' },
-                    color: 'white'
+                    color: 'grey'
                 }}
                 noValidate
                 autoComplete="off"
                 position='right'
             >
                 <div>
+
                     <TextField
+
                         required
                         id="outlined-error"
                         label="Depature Airport"
                         defaultValue=""
-                        className="classes.textField"
+
+
+
 
 
                     />
@@ -321,29 +345,31 @@ function User() {
                         Search
                     </Button>
 
-                    <Card sx={{
+
+
+                    <Card className={classes.root} sx={{
                         p: 1,
                         borderRadius: 2,
                         boxShadow: '0 0 16px rgba(0, 0, 0, .25)',
                         marginLeft: 200,
-                        marginTop:-53
+                        marginTop: -53
                     }}>
                         <CardMedia
                             component="img"
-                            alt="barcelona"
-                            height="300"
-                            image="C:\Users\reema\OneDrive\Desktop\BSB\my-app\client\my-app\src\images\booktrip.jpg"
+                            height="140"
+                            image="C:\Users\reema\OneDrive\Desktop\BSB\my-app\client\my-app\src\images\tripupdates.jpeg"
+                            alt="trips"
                         />
                         <CardContent>
-                            <Typography gutterBottom variant="h5" component="div">
-                                Barcelona,Spain
+                            <Typography gutterBottom variant="h5" component="div" color='#005792'>
+                                Enter your email to get the recent updates
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Book your trip to your favorite destination now!
-                            </Typography>
+                            <TextField id="outlined-basic" label="Email" variant="outlined" />
+
                         </CardContent>
                         <CardActions>
-                            <Button size="small" style={{ position: 'center', marginLeft: 120 }} >Book</Button>
+                            <Button size="small" variant="secondary" style={{ position: 'center', marginLeft: 120, }} >Submit</Button>
+
 
                         </CardActions>
                     </Card>
@@ -359,8 +385,11 @@ function User() {
 
 
 
+
+
                 </div>
             </Box>
+
 
 
 
