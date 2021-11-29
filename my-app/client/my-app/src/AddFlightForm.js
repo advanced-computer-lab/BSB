@@ -7,7 +7,14 @@ import ModalBody from 'react-bootstrap/ModalBody'
 import ModalFooter from 'react-bootstrap/ModalFooter'
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
 
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+//import AddFlightForm from './AddFlightForm';
 function AddFlightForm(props) {
   const [show, setShow] = useState(false);
 
@@ -57,20 +64,21 @@ function AddFlightForm(props) {
 
   return (
     <>
-      <Button variant="outline-primary" onClick={handleShow}> Add Flight</Button>
+    <MenuItem  onClick={handleShow}>
+                  Add Flight
+                </MenuItem>
+      
 
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Add a new flight</Modal.Title>
         </Modal.Header>
-        <Modal.Body> 
-          <div border="solid">
+        <Modal.Body> <div border="solid">
 
 
 
 
-          <form style={{fontWeight: "bold"}} >
-            
+          <form >
             Flight Number:
 
             <br />

@@ -34,6 +34,7 @@ import SearchBody from './SearchBody';
 import ShowMap from './ShowMap';
 import Logout from './Logout';
 import App from './App';
+import Navbar from './Navbar';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,6 +60,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function Admin() {
   const [flightlist, setFlightlist] = useState([]);
   const [logoutClicked, setLogoutClicked] = useState(false);
+  const [searchClicked, setSearchClicked] = useState(false);
   useEffect(() => {
     axios.get("http://localhost:8000/showFlights").then(res => {
       console.log("xxxx");
@@ -71,11 +73,12 @@ function Admin() {
 
 
   return (
+  
     <div>
-      
+      <Navbar/>
    
-      
-      {logoutClicked ? <App /> :
+    
+      {searchClicked ? <SearchBody />:
         <div style={{
           position: 'center',
           width: 1400,
@@ -165,11 +168,8 @@ function Admin() {
           </TableContainer>
 
 
-
-         <div style={{
-                    position: 'absolute',
-                    right: 100,
-                    top: 50}}> <SearchBody /> </div>
+<button onClick={(event)=>setSearchClicked(true)}>SEARCH</button>
+        
 
 
         </div>

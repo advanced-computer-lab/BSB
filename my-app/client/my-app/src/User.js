@@ -354,21 +354,16 @@ function User() {
                         marginLeft: 200,
                         marginTop: -53
                     }}>
-                        <CardMedia
-                            component="img"
-                            height="140"
-                            image="C:\Users\reema\OneDrive\Desktop\BSB\my-app\client\my-app\src\images\tripupdates.jpeg"
-                            alt="trips"
-                        />
+                       
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div" color='#005792'>
-                                Enter your email to get the recent updates
+                            Get Discount Vouchers, Secret Deals, Sale Previews and much more!
                             </Typography>
                             <TextField id="outlined-basic" label="Email" variant="outlined" />
 
                         </CardContent>
                         <CardActions>
-                            <Button size="small" variant="secondary" style={{ position: 'center', marginLeft: 120, }} >Submit</Button>
+                            <Button size="small" variant="secondary" style={{ position: 'center', marginLeft: 120, }} >Subscribe</Button>
 
 
                         </CardActions>

@@ -27,6 +27,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import Mail from '@mui/icons-material/Mail';
 import LanguageIcon from '@mui/icons-material/Language';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
+import CustomizedMenus from './images/CustomizedMenus';
 
 
 export default function App() {
@@ -62,7 +63,7 @@ export default function App() {
                                     </MDBNavbarLink>
                                 </MDBNavbarItem>
                                 <MDBNavbarItem>
-                                    <MDBNavbarLink href='#'>Book</MDBNavbarLink>
+                                    <MDBNavbarLink href='#'><CustomizedMenus/></MDBNavbarLink>
                                 </MDBNavbarItem>
                                 <MDBNavbarItem>
                                     <MDBNavbarLink href='#'>Contact Us</MDBNavbarLink>
@@ -78,10 +79,10 @@ export default function App() {
 
                                 <MDBNavbarItem>
                                     <Button variant="outline-primary" data-target="#myModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" style={{ position: 'center', marginLeft: 750 }}>Search</Button>
-                                    <Button variant="outline-danger" data-target="#myModal" onClick={(event) => setLogoutClicked(true)} data-toggle="modal" data-backdrop="static" data-keyboard="false" style={{
+                                {adminClicked || userClicked?   <Button variant="outline-danger" data-target="#myModal" onClick={(event) =>[setAdminClicked(false),setUserClicked(false)]} data-toggle="modal" data-backdrop="static" data-keyboard="false" style={{
                                         position: 'center',
 
-                                    }}>Logout</Button>
+                                    }}>Logout</Button>:null} 
                                 </MDBNavbarItem>
                             </MDBNavbarNav>
                         </div>
