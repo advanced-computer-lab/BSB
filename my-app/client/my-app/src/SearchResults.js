@@ -1,3 +1,5 @@
+
+
 import logo from './logo.svg';
 import './App.css';
 import Table from 'react-bootstrap/Table';
@@ -29,7 +31,7 @@ import Icon from '@mui/material/Icon';
 import { Button } from 'react-bootstrap';
 import AddFlightForm from './AddFlightForm';
 import UpdateFlight from './UpdateFlight';
-
+import SearchBody from './SearchBody';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -73,9 +75,10 @@ function SearchResults(props) {
     const [flightNum, setFlightNum] = useState("");
 
     const [clicked, setClicked] = useState(false);
-    return (
-
-        <TableContainer component={Paper}>
+    return ( <div>
+{clicked?<SearchBody/>:<div>
+ 
+    <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
                 <TableHead>
                     <TableRow>
@@ -94,7 +97,7 @@ function SearchResults(props) {
                         <StyledTableCell align="center">&nbsp;</StyledTableCell>
                         <StyledTableCell align="center">&nbsp;</StyledTableCell>
                         <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                        <StyledTableCell align="center"> <AddFlightForm />&nbsp;</StyledTableCell>
+                        <StyledTableCell align="center"> <button onClick={event =>setClicked(true)}>Done</button>&nbsp;</StyledTableCell>
                         <StyledTableCell align="center"> &nbsp;</StyledTableCell>
                         <StyledTableCell align="center"></StyledTableCell>
                     </TableRow>
@@ -120,8 +123,8 @@ function SearchResults(props) {
                     </TableRow>
                 })}
             </Table>
-        </TableContainer>
-    )
+        </TableContainer></div>}
+        </div>  )
 }
 
 export default SearchResults

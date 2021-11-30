@@ -1,194 +1,223 @@
-import logo from './logo.svg';
-import './App.css';
-import Table from 'react-bootstrap/Table';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-//import DeleteIcon from '@mui/icons-material/Delete';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import DeleteFlight from './DeleteFlight';
-import SearchFlight from './SearchFlight';
-//import AddFlightForm from './AddFlightForm';
-import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
-import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { styled } from '@mui/material/styles';
+//imports
 
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import UpdateButton from './UpdateButton'
-
-import { MDBCol, MDBIcon } from "mdbreact";
-
-
-import Icon from '@mui/material/Icon';
+import React from 'react'
+import Admin from './Admin';
 import { Button } from 'react-bootstrap';
-import AddFlightForm from './AddFlightForm';
-import UpdateFlight from './UpdateFlight';
-import Search from './Search';
-import SearchBody from './SearchBody';
-import ShowMap from './ShowMap';
+import { useState, useEffect } from 'react';
+import flight from "./images/flight.png"
+import {
+    MDBNavbar,
+    MDBNavbarNav,
+    MDBNavbarItem,
+    MDBNavbarToggler,
+    MDBNavbarLink,
+    MDBContainer,
+    MDBIcon,
+    MDBCol, MDBNavbarBrand
+} from 'mdb-react-ui-kit';
 
+import User from './User';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import FolderIcon from '@mui/icons-material/Folder';
+import RestoreIcon from '@mui/icons-material/Restore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import MailIcon from '@mui/icons-material/Mail';
+import Mail from '@mui/icons-material/Mail';
+import LanguageIcon from '@mui/icons-material/Language';
+import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
+import Dropdown from '@restart/ui/esm/Dropdown';
+import { DropdownButton } from 'react-bootstrap';
+import DropdownToggle from '@restart/ui/esm/DropdownToggle';
+import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
+import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
+import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
+import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import PrintIcon from '@mui/icons-material/Print';
+import ShareIcon from '@mui/icons-material/Share';
+import EditIcon from '@mui/icons-material/Edit';
+import { IconButton } from '@material-ui/core';
+import PersonIcon from '@mui/icons-material/Person';
+import Stack from '@mui/material/Stack';
+import { NavDropdown } from 'react-bootstrap';
+import { MenuItem } from '@material-ui/core';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Box } from '@mui/system';
+import { Backdrop } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Switch from '@mui/material/Switch';
+import { styled } from '@mui/system';
+import AppBar from '@mui/material/AppBar';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
+import Toolbar from '@mui/material/Toolbar';
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
 
+import Tooltip from '@mui/material/Tooltip';
 
-function App() {
-  const [flightlist, setFlightlist] = useState([]);
-  /*const [fromArr, setFrom] = useState([]);
-  const [toArr, setTo] = useState([]);
-  const [dateArr, setDate] = useState([]);
-  const [arrArr, setArr] = useState([]);
-  const [depArr, setDep] = useState([])
-  const [tdepArr, setTdep] = useState([])
-  const [tarrArr, setTarr] = useState([])
-  const [ecArr, setEc] = useState([])
-  const [bsArr, setBs] = useState([])
-  const [firstArr, setFirst] = useState([])
-  const [flightNumArr, setFlightNum] = useState([])
-  const [unique, setUnique] = useState([])*/
-  useEffect(() => {
-    axios.get("http://localhost:8000/showFlights").then(res => {
-      console.log("xxxx");
-      setFlightlist(res.data);
-    })
-
-    //.catch(err => {console.log(err)});
-  })
-
- /* useEffect(() => {
-    setFrom([...new Set(flightlist.map(item => item.From))]);
-
-  })
-  useEffect(() => {
-    setTo([...new Set(flightlist.map(item => item.To))])
-  })
-  useEffect(() => {
-    setDate([...new Set(flightlist.map(item => item.FlightDate))])
-  })
-  useEffect(() => {
-    setArr([...new Set(flightlist.map(item => item.ArrivalTime))])
-  })
-  useEffect(() => {
-    setDep([...new Set(flightlist.map(item => item.DepartureTime))])
-  })
-  useEffect(() => {
-    setTdep([...new Set(flightlist.map(item => item.TerminalDeparture))])
-  })
-  useEffect(() => {
-    setTarr([...new Set(flightlist.map(item => item.TerminalArrival))])
-  })
-  useEffect(() => {
-    setEc([...new Set(flightlist.map(item => item.NuofAvailableEconomySeats))])
-  })
-  useEffect(() => {
-    setBs([...new Set(flightlist.map(item => item.NuofAvailableBuisnessSeats))])
-  })
-  useEffect(() => {
-    setFirst([...new Set(flightlist.map(item => item.NuofAvailableFirstSeats))])
-  })
-  useEffect(() => {
-    setFlightNum([...new Set(flightlist.map(item => item.FlightNu))])
-  }) */
-
-  return (
-    <div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 500 }} aria-label="customized table" size='m'>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="center">Flight Number</StyledTableCell>
-              <StyledTableCell align="center">From</StyledTableCell>
-              <StyledTableCell align="center">To</StyledTableCell>
-              <StyledTableCell align="center">Flight Date&nbsp;</StyledTableCell>
-              <StyledTableCell align="center">Arrival time&nbsp;</StyledTableCell>
-              <StyledTableCell align="center">Departure Time</StyledTableCell>
-              <StyledTableCell align="center">Departure Terminal</StyledTableCell>
-              <StyledTableCell align="center">Arrival Terminal</StyledTableCell>
-              <StyledTableCell align="center">Economy seats available</StyledTableCell>
-              <StyledTableCell align="center">Business seats available&nbsp;</StyledTableCell>
-              <StyledTableCell align="center">First seats available</StyledTableCell>
-              <StyledTableCell align="center">&nbsp;</StyledTableCell>
-              <StyledTableCell align="center">&nbsp;</StyledTableCell>
-              <StyledTableCell align="center">&nbsp;</StyledTableCell>
-              <StyledTableCell align="center"> <AddFlightForm />&nbsp;</StyledTableCell>
-              
-
-
-              <StyledTableCell align="center"> &nbsp;</StyledTableCell>
-              <StyledTableCell align="center"></StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableRow> </TableRow>
+import Navbar from './Navbar';
 
 
 
-          {flightlist.map(u => {
-            return <TableRow key={u._id}>
-              <StyledTableCell align="center">{u.FlightNu}</StyledTableCell>
-              <StyledTableCell align="center">{u.From} </StyledTableCell>
-              <StyledTableCell align="center">{u.To}</StyledTableCell>
-              <StyledTableCell align="center">{u.FlightDate}</StyledTableCell>
-              <StyledTableCell align="center">{u.ArrivalTime}</StyledTableCell>
-              <StyledTableCell align="center">{u.DepartureTime}</StyledTableCell>
-              <StyledTableCell align="center">{u.TerminalDeparture}</StyledTableCell>
-              <StyledTableCell align="center">{u.TerminalArrival}</StyledTableCell>
-              <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
-              <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
-              <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
-              <StyledTableCell align="center" ><ShowMap></ShowMap> </StyledTableCell>
+export default function App() {
+    const [userClicked, setUserClicked] = useState(false);
+    const [adminClicked, setAdminClicked] = useState(false);
+    const [logoutClicked, setLogoutClicked] = useState(false);
 
-              <StyledTableCell align="center"> <UpdateFlight idd={u._id} from={u.From} to={u.To}
-                flightNum={u.FlightNu}
-                date={u.FlightDate}
-                arr={u.ArrivalTime}
-                dep={u.DepartureTime}
-                tdep={u.TerminalDeparture}y
-                tarr={u.TerminalArrival}
-                ec={u.NuofAvailableEconomySeats}
-                bs={u.NuofAvailableBuisnessSeats}
-                first={u.NuofAvailableFirstSeats}
-              /></StyledTableCell>
-              <StyledTableCell align="center">
-                <Popup trigger={<Button variant="outline-danger" data-target="#myModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Delete</Button>} position="right center">
-                  <div>Are you sure you want to delete?(if no click anywhere)</div>
-                  <DeleteFlight idd={u._id}></DeleteFlight>
-                </Popup>
-              </StyledTableCell>
-            </TableRow>
-          })}
-        </Table>
-      </TableContainer>
-     
+    //buttom nav bar
+    const [bNavBar, setBNavBar] = useState('recents');
 
-      <SearchBody></SearchBody>
+    const handleChangeBNavBar = (event, newValue) => {
+        setBNavBar(newValue);
+    };
+
+    //menu slider
+    const [alignment, setAlignment] = useState('left');
+
+    const handleAlignment = (event, newAlignment) => {
+        setAlignment(newAlignment);
+    };
+    const actions = [
+        { icon: <FileCopyIcon />, name: 'Copy' },
+        { icon: <SaveIcon />, name: 'Save' },
+        { icon: <PrintIcon />, name: 'Print' },
+        { icon: <ShareIcon />, name: 'Share' },
+    ];
 
 
+    //profile 
 
-    </div>);
+    const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+        position: 'absolute',
+        '&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft': {
+            bottom: theme.spacing(2),
+            right: theme.spacing(2),
+        },
+        '&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight': {
+            top: theme.spacing(2),
+            left: theme.spacing(2),
+        },
+    }));
 
+    const accountActions = [
+        { icon: <AccountCircleIcon />, name: 'Profile' },
+        { icon: <SettingsIcon />, name: 'Settings' },
+        { icon: <LogoutIcon />, name: 'Logout' },
+        { icon: <EditIcon />, name: 'Edit Profile' },
+    ];
+    const [accountOpen, setAccountOpen] = useState(false);
+    const handleOpenAccount = () => setAccountOpen(true);
+    const handleCloseAccount = () => setAccountOpen(false);
+    const [direction, setDirection] = React.useState('down');
+
+    const handleDirectionChange = (event) => {
+        setDirection(direction);
+    };
+
+    //navigation bar
+    
+
+
+
+
+    return (
+        <div>
+            <header>
+                <Navbar />  
+
+
+
+                <div
+                    id='intro-example'
+                    className='p-5 text-center bg-image'
+                    style={{
+                        background: `url(${flight})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", height: window.screen.height, width: window.screen.width
+                    }}
+
+                >
+                    <div className='mask' style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', marginTop: 100, height: 600, width: 1450 }}>
+
+                        <div className='d-flex justify-content-center align-items-center h-100'>
+                            <div className='text-white'>
+                                <h5 className='mb-4'></h5>
+                                {adminClicked ? <Admin></Admin> : (userClicked ? <User></User> : <div>
+                                    <Button variant="secondary" data-target="#myModal" data-toggle="modal" data-backdrop="static" onClick={(event) => setUserClicked(true)} data-keyboard="false" style={{
+                                        position: 'absolute',
+                                        right: 790,
+                                        top: 350,
+                                    }}>User</Button>
+                                    <Button variant="outline-primary" style={{
+                                        position: 'absolute',
+                                        right: 650,
+                                        top: 350,
+                                    }} data-target="#myModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" onClick={(event) => setAdminClicked(true)} >Admin</Button>
+                                </div>
+                                )}
+                            </div>
+                        </div>
+                        <SpeedDial
+                            ariaLabel="SpeedDial openIcon example"
+                            sx={{ position: 'absolute', bottom: 70, right: 9 }}
+                            icon={<SpeedDialIcon openIcon={<EditIcon />} />}
+                        >
+                            {actions.map((action) => (
+                                <SpeedDialAction
+                                    key={action.name}
+                                    icon={action.icon}
+                                    tooltipTitle={action.name}
+                                />
+                            ))}
+                        </SpeedDial>
+
+                    </div>
+                </div>
+
+                <BottomNavigation sx={{ width: window.screen.width, height: 70, marginLeft: 0, marginTop: -5 }} value={bNavBar} onChange={handleChangeBNavBar}>
+                    <BottomNavigationAction
+                        label="Send us an email"
+                        value="Send us an email"
+                        icon={<Mail />}
+                    />
+
+                    <BottomNavigationAction
+                        label="Find us"
+                        value="Find us"
+                        icon={<LocationOnIcon />}
+                    />
+
+                    <BottomNavigationAction
+                        label="Contact Us"
+                        value="Contact Us"
+                        icon={<PhoneInTalkIcon />} />
+                    <BottomNavigationAction
+                        label=" Language"
+                        value=" Language"
+                        icon={<LanguageIcon />}
+                    />
+                </BottomNavigation>
+
+
+            </header>
+
+
+        </div>
+    )
 }
-
-export default App;
