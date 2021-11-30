@@ -34,6 +34,8 @@ import SearchBody from './SearchBody';
 import ShowMap from './ShowMap';
 import Logout from './Logout';
 import App from './App';
+import Navbar from './Navbar';
+import AdminNavBar from './AdminNavBar';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,6 +61,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function Admin() {
   const [flightlist, setFlightlist] = useState([]);
   const [logoutClicked, setLogoutClicked] = useState(false);
+  const [searchClicked, setSearchClicked] = useState(false);
   useEffect(() => {
     axios.get("http://localhost:8000/showFlights").then(res => {
       console.log("xxxx");
@@ -71,11 +74,12 @@ function Admin() {
 
 
   return (
+  
     <div>
-      
+      <AdminNavBar/>
    
-      
-      {logoutClicked ? <App /> :
+    
+      {searchClicked ? <SearchBody />:
         <div style={{
           position: 'center',
           width: 1400,
@@ -112,10 +116,8 @@ function Admin() {
                   <StyledTableCell align="center">&nbsp;</StyledTableCell>
                   <StyledTableCell align="center">&nbsp;</StyledTableCell>
                   <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                  <StyledTableCell align="center"> <AddFlightForm />&nbsp;</StyledTableCell>
-                  <StyledTableCell align="center">
-                    <Button variant="outline-primary" data-target="#myModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" onClick={(event) => setLogoutClicked(true)}>Logout</Button>
-                    &nbsp;</StyledTableCell>
+                  
+                  
 
 
 
@@ -140,7 +142,7 @@ function Admin() {
                   <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
                   <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
                   <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
-                  <StyledTableCell align="center" ><ShowMap></ShowMap> </StyledTableCell>
+                  <StyledTableCell align="center" size='small'><ShowMap></ShowMap> </StyledTableCell>
 
                   <StyledTableCell align="center"> <UpdateFlight idd={u._id} from={u.From} to={u.To}
                     flightNum={u.FlightNu}
@@ -165,11 +167,8 @@ function Admin() {
           </TableContainer>
 
 
-
-         <div style={{
-                    position: 'absolute',
-                    right: 100,
-                    top: 50}}> <SearchBody /> </div>
+<button onClick={(event)=>setSearchClicked(true)}>SEARCH</button>
+        
 
 
         </div>

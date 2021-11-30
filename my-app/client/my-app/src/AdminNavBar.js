@@ -11,11 +11,12 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import AddFlightForm from './AddFlightForm';
 
-const pages = ['Home', 'Pricing', 'Blog'];
+//const pages = ['Home', props.first, props.second];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const NavBar = () => {
+const AdminNavBar= () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -35,8 +36,8 @@ const NavBar = () => {
   };
 
   return (
-    <AppBar position="fixed" style={{ width: window.screen.width }}>
-      <Container maxWidth="xl" style={{ marginLeft: 10 }}>
+    <AppBar position="fixed" style={{width: window.screen.width}}>
+      <Container maxWidth="xl"  style={{marginLeft:10}}>
         <Toolbar disableGutters>
           <Typography
             variant="h6"
@@ -47,7 +48,7 @@ const NavBar = () => {
             BSB Airways
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }} style={{ marginLeft: 20 }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none'  } }} style={{marginLeft:20}}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -76,11 +77,8 @@ const NavBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              
+             
             </Menu>
           </Box>
           <Typography
@@ -91,19 +89,12 @@ const NavBar = () => {
           >
             BSB Airways
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{ marginLeft: -20 }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{marginLeft:-20}}>
+        
           </Box>
+          <Box variant='primary'><AddFlightForm/></Box>
 
-          <Box sx={{ flexGrow: 0 }} style={{ marginLeft: -20 }}>
+          <Box sx={{ flexGrow: 0 }}  style={{marginLeft:-20}}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -138,4 +129,4 @@ const NavBar = () => {
     </AppBar>
   );
 };
-export default NavBar;
+export default AdminNavBar;
