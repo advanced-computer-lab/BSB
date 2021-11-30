@@ -75,56 +75,66 @@ function SearchResults(props) {
     const [flightNum, setFlightNum] = useState("");
 
     const [clicked, setClicked] = useState(false);
-    return ( <div>
-{clicked?<SearchBody/>:<div>
- 
-    <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell align="center">Flight Number</StyledTableCell>
-                        <StyledTableCell align="center">From</StyledTableCell>
-                        <StyledTableCell align="center">To</StyledTableCell>
-                        <StyledTableCell align="center">Flight Date&nbsp;</StyledTableCell>
-                        <StyledTableCell align="center">Arrival time&nbsp;</StyledTableCell>
-                        <StyledTableCell align="center">Departure Time</StyledTableCell>
-                        <StyledTableCell align="center">Departure Terminal</StyledTableCell>
-                        <StyledTableCell align="center">Arrival Terminal</StyledTableCell>
-                        <StyledTableCell align="center">Economy seats available</StyledTableCell>
-                        <StyledTableCell align="center">Business seats available&nbsp;</StyledTableCell>
-                        <StyledTableCell align="center">First seats available</StyledTableCell>
-                        <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                        <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                        <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                        <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                        <StyledTableCell align="center"> <button onClick={event =>setClicked(true)}>Done</button>&nbsp;</StyledTableCell>
-                        <StyledTableCell align="center"> &nbsp;</StyledTableCell>
-                        <StyledTableCell align="center"></StyledTableCell>
-                    </TableRow>
-                </TableHead>
-                <TableRow> </TableRow>
+    return (<div>
+        {clicked ? <SearchBody /> : <div>
+
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell align="center">Flight Number</StyledTableCell>
+                            <StyledTableCell align="center">Departure Airport</StyledTableCell>
+                            <StyledTableCell align="center">Arrival Airport</StyledTableCell>
+                            <StyledTableCell align="center">Flight Date&nbsp;</StyledTableCell>
+                            <StyledTableCell align="center">Arrival time&nbsp;</StyledTableCell>
+                            <StyledTableCell align="center">Departure Time</StyledTableCell>
+                            <StyledTableCell align="center">Trip Duration&nbsp; </StyledTableCell>
+                            <StyledTableCell align="center">Departure Terminal</StyledTableCell>
+                            <StyledTableCell align="center">Arrival Terminal</StyledTableCell>
+                            <StyledTableCell align="center">Economy seats available</StyledTableCell>
+                            <StyledTableCell align="center">Economy seats price</StyledTableCell>
+                            <StyledTableCell align="center">Business seats available&nbsp;</StyledTableCell>
+                            <StyledTableCell align="center">Business seats price &nbsp; </StyledTableCell>
+                            <StyledTableCell align="center">First seats available</StyledTableCell>
+                            <StyledTableCell align="center">First seats price </StyledTableCell>
+                            <StyledTableCell align="center">&nbsp;</StyledTableCell>
+                            <StyledTableCell align="center">&nbsp;</StyledTableCell>
+                            <StyledTableCell align="center">&nbsp;</StyledTableCell>
+                            <StyledTableCell align="center">&nbsp;</StyledTableCell>
+                            <StyledTableCell align="center">&nbsp; </StyledTableCell>
+                            
+                            
+                            <StyledTableCell align="center"> <button onClick={event => setClicked(true)}>Done</button>&nbsp;</StyledTableCell>
+                            <StyledTableCell align="center"> &nbsp;</StyledTableCell>
+                            <StyledTableCell align="center"></StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableRow> </TableRow>
 
 
 
-                {props.flightlist.map(u => {
-                    return <TableRow key={u._id}>
-                        <StyledTableCell align="center">{u.FlightNu}</StyledTableCell>
-                        <StyledTableCell align="center">{u.From} </StyledTableCell>
-                        <StyledTableCell align="center">{u.To}</StyledTableCell>
-                        <StyledTableCell align="center">{u.FlightDate}</StyledTableCell>
-                        <StyledTableCell align="center">{u.ArrivalTime}</StyledTableCell>
-                        <StyledTableCell align="center">{u.DepartureTime}</StyledTableCell>
-                        <StyledTableCell align="center">{u.TerminalDeparture}</StyledTableCell>
-                        <StyledTableCell align="center">{u.TerminalArrival}</StyledTableCell>
-                        <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
-                        <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
-                        <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
-                        
-                    </TableRow>
-                })}
-            </Table>
-        </TableContainer></div>}
-        </div>  )
+                    {props.flightlist.map(u => {
+                        return <TableRow key={u._id}>
+                            <StyledTableCell align="center">{u.FlightNu}</StyledTableCell>
+                            <StyledTableCell align="center">{u.From} </StyledTableCell>
+                            <StyledTableCell align="center">{u.To}</StyledTableCell>
+                            <StyledTableCell align="center">{u.FlightDate}</StyledTableCell>
+                             <StyledTableCell align="center">{u.DepartureTime}</StyledTableCell>
+                            <StyledTableCell align="center">{u.ArrivalTime}</StyledTableCell>
+                            <StyledTableCell align="center">{u.TripDuration}</StyledTableCell>
+                            <StyledTableCell align="center">{u.TerminalDeparture}</StyledTableCell>
+                            <StyledTableCell align="center">{u.TerminalArrival}</StyledTableCell>
+                            <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
+                            <StyledTableCell align="center">{u.EcoPrice}</StyledTableCell>
+                            <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
+                            <StyledTableCell align="center">{u.BusPrice}</StyledTableCell>
+                            <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
+                            <StyledTableCell align="center">{u.FPrice}</StyledTableCell>
+                        </TableRow>
+                    })}
+                </Table>
+            </TableContainer></div>}
+    </div>)
 }
 
 export default SearchResults

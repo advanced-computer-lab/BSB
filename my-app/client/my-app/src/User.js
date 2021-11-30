@@ -35,7 +35,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import DepartureList from './DepartureList';
 import axios from 'axios';
-
+import UserNavBar from './UserNavBar';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
@@ -240,6 +240,7 @@ function User() {
 
     return (
         <div>
+            <UserNavBar/>
             {searchClicked ? <DepartureList /> :
                 <div>
 

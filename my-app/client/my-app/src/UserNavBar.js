@@ -11,12 +11,12 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AddFlightForm from './AddFlightForm';
+
 
 //const pages = ['Home', props.first, props.second];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const AdminNavBar= () => {
+const UserNavBar= () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -44,11 +44,17 @@ const AdminNavBar= () => {
             noWrap
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+            marginLeft='100'
           >
-            BSB Airways
+            
           </Typography>
+          <Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none'  } }} style={{marginLeft:100, marginRight:50}}>
+
+
+              </Box>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none'  } }} >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -81,19 +87,11 @@ const AdminNavBar= () => {
              
             </Menu>
           </Box>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-            marginLeft='50'
-          >
-            BSB Airways
-          </Typography>
+         
           
          
 
-          <Box sx={{ flexGrow: 0 }}  style={{marginLeft:200}}>
+          <Box sx={{ flexGrow: 0 }} style={{marginLeft:1430}}  >
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -128,4 +126,4 @@ const AdminNavBar= () => {
     </AppBar>
   );
 };
-export default AdminNavBar;
+export default UserNavBar;

@@ -8,7 +8,8 @@ import {
   MDBContainer,
   MDBIcon
 } from 'mdb-react-ui-kit';
-
+import SearchIcon from '@mui/icons-material/Search';
+import AddFlightForm from './AddFlightForm';
 export default function App() {
   return (
     <header>
@@ -147,7 +148,7 @@ export default function App() {
           <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
-         
+
         </Stack>
 
 
@@ -163,82 +164,80 @@ export default function App() {
 
 
 
-        <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1 , height:30}}>
+        <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1, height: 30 }}>
 
-<FormControl  sx={{ mt: 1, display: 'none' }}>
-    
-        
+          <FormControl sx={{ mt: 1, display: 'none' }}>
 
-    
-</FormControl>
-<Box sx={{ position: 'relative', mt: 1, height: 200 }}>
-<FormControlLabel value="down" control={<AccountCircleIcon />} label="Down"  />
-    <StyledSpeedDial
-        ariaLabel="SpeedDial playground example"
-        style={{marginTop:-10}}
 
-        icon={<AccountCircleIcon />}
-        direction={direction}
-    >
-        {accountActions.map((action) => (
-            <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-            />
-        ))}
-    </StyledSpeedDial>
-</Box>
-</Box>
+
+
+          </FormControl>
+          <Box sx={{ position: 'relative', mt: 1, height: 200 }}>
+            <FormControlLabel value="down" control={<AccountCircleIcon />} label="Down" />
+            <StyledSpeedDial
+              ariaLabel="SpeedDial playground example"
+              style={{ marginTop: -10 }}
+
+              icon={<AccountCircleIcon />}
+              direction={direction}
+            >
+              {accountActions.map((action) => (
+                <SpeedDialAction
+                  key={action.name}
+                  icon={action.icon}
+                  tooltipTitle={action.name}
+                />
+              ))}
+            </StyledSpeedDial>
+          </Box>
+        </Box>
       </Card>
 
 
 
 
-      <MDBNavbar expand='lg' color="#DBE2EF" light bgColor='white' scrolling fixed="top" style={{height:60}}>
-                    <MDBContainer fluid>
+      <MDBNavbar expand='lg' color="#DBE2EF" light bgColor='white' scrolling fixed="top" style={{ height: 60 }}>
+        <MDBContainer fluid>
 
-                        <MDBNavbarToggler
-                            aria-controls='navbarExample01'
-                            aria-expanded='false'
-                            aria-label='Toggle navigation'
-                        >
-                            <MDBIcon fas icon='bars' />
-                        </MDBNavbarToggler>
-                        <div className='collapse navbar-collapse' id='navbarExample01'>
-                            <MDBNavbarNav right className='mb-2 mb-lg-0'>
-                                <MDBNavbarItem>
-                                    <h2 style={{ position: 'relative', marginLeft: 30, color: "#112D4E" }}>BSB Airways</h2>
-
-
-                                </MDBNavbarItem>
-                                <MDBNavbarItem style={{ position: 'center', marginLeft: 300, bgColor: 'grey' }} active>
-                                    <MDBNavbarLink aria-current='page' href='#'>
-                                        Home
-                                    </MDBNavbarLink>
-                                </MDBNavbarItem>
-                                <MDBNavbarItem   >
-                                    <MDBNavbarLink href='#'>Book</MDBNavbarLink>
-                                </MDBNavbarItem>
-                                <MDBNavbarItem >
-                                    <MDBNavbarLink href='#'>Contact Us</MDBNavbarLink>
-                                </MDBNavbarItem>
-                                <MDBNavbarItem>
-                                    <MDBNavbarLink href='#'>About Us</MDBNavbarLink>
-                                </MDBNavbarItem>
-                                <MDBNavbarItem>
-                                    <MDBCol md="12" className="mb-3">
-                                        <img src="C:\Users\reema\OneDrive\Desktop\BSB\my-app\client\my-app\src\images\BSBlogo.png" className="img-fluid z-depth-1" alt="" />
-                                    </MDBCol>
-                                </MDBNavbarItem>
-                                <MDBNavbarItem style={{ marginLeft: 700 }}>
+          <MDBNavbarToggler
+            aria-controls='navbarExample01'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
+          >
+            <MDBIcon fas icon='bars' />
+          </MDBNavbarToggler>
+          <div className='collapse navbar-collapse' id='navbarExample01'>
+            <MDBNavbarNav right className='mb-2 mb-lg-0'>
+              <MDBNavbarItem>
+                <h2 style={{ position: 'relative', marginLeft: 30, color: "#112D4E" }}>BSB Airways</h2>
 
 
-                                
+              </MDBNavbarItem>
+              <MDBNavbarItem style={{ position: 'center', marginLeft: 300, bgColor: 'grey' }} active>
+                <MDBNavbarLink aria-current='page' href='#'>
+                  Home
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem   >
+                <MDBNavbarLink href='#'>Book</MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem >
+                <MDBNavbarLink href='#'>Contact Us</MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBNavbarLink href='#'>About Us</MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBCol md="12" className="mb-3">
+                  <img src="C:\Users\reema\OneDrive\Desktop\BSB\my-app\client\my-app\src\images\BSBlogo.png" className="img-fluid z-depth-1" alt="" />
+                </MDBCol>
+              </MDBNavbarItem>
+              <MDBNavbarItem style={{ marginLeft: 700 }}>
 
-                                </MDBNavbarItem>
 
 
+
+              </MDBNavbarItem>
 
 
 
@@ -246,282 +245,377 @@ export default function App() {
 
 
 
-                            </MDBNavbarNav>
-
-                        </div>
-
-                    </MDBContainer>
-                </MDBNavbar>
-
-                <br />
-                    <FormControl sx={{ m: 1, minWidth: 261 }}>
-                        <InputLabel id="demo-controlled-open-select-label">Departure Terminal</InputLabel>
-                        <Select
-                            labelId="demo-controlled-open-select-label"
-                            id="demo-controlled-open-select"
-                            open={open}
-                            onClose={handleClose}
-                            onOpen={handleOpen}
-                            value={depTerminal}
-                            label="Departure Terminal"
-                            onChange={handleChange}
-                        >
-                            <MenuItem value="">
-                            </MenuItem>
-                            <MenuItem value={1}>1</MenuItem>
-                            <MenuItem value={2}>2</MenuItem>
-                            <MenuItem value={3}>3</MenuItem>
-                            <MenuItem value={4}>4</MenuItem>
-                            <MenuItem value={5}>5</MenuItem>
-                            <MenuItem value={6}>6</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl sx={{ m: 1, minWidth: 261 }}>
-                        <InputLabel id="demo-controlled-open-select-label">Arrival Terminal</InputLabel>
-                        <Select
-                            labelId="demo-controlled-open-select-label"
-                            id="demo-controlled-open-select"
-                            open={openArr}
-                            onClose={handleCloseArr}
-                            onOpen={handleOpenArr}
-                            value={arrTerminal}
-                            label="Arrival Terminal"
-                            onChange={handleChangeArr}
-                        >
-                            <MenuItem value="">
-                            </MenuItem>
-                            <MenuItem value={1}>1</MenuItem>
-                            <MenuItem value={2}>2</MenuItem>
-                            <MenuItem value={3}>3</MenuItem>
-                            <MenuItem value={4}>4</MenuItem>
-                            <MenuItem value={5}>5</MenuItem>
-                            <MenuItem value={6}>6</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <br />
 
 
+            </MDBNavbarNav>
 
+          </div>
 
+        </MDBContainer>
+      </MDBNavbar>
 
-                    <br />
-                    <FormControl sx={{ m: 1, minWidth: 261 }}>
-                        <InputLabel id="demo-controlled-open-select-label">No of Adults</InputLabel>
-                        <Select
-                            labelId="demo-controlled-open-select-label"
-                            id="demo-controlled-open-select"
-                            open={openAd}
-                            onClose={handleCloseAd}
-                            onOpen={handleOpenAd}
-                            value={noOfAdults}
-                            label="No of Adult seats"
-                            onChange={handleChangeAd}
-                        >
-                            <MenuItem value="">
-                            </MenuItem>
-                            <MenuItem value={1}>1</MenuItem>
-                            <MenuItem value={2}>2</MenuItem>
-                            <MenuItem value={3}>3</MenuItem>
-                            <MenuItem value={3}>4</MenuItem>
-                            <MenuItem value={3}>5</MenuItem>
-
-                        </Select>
-                    </FormControl>
-                    <FormControl sx={{ m: 1, minWidth: 261 }}>
-                        <InputLabel id="demo-controlled-open-select-label">No of Children</InputLabel>
-                        <Select
-                            labelId="demo-controlled-open-select-label"
-                            id="demo-controlled-open-select"
-                            open={openCh}
-                            onClose={handleCloseCh}
-                            onOpen={handleOpenCh}
-                            value={noOfChildren}
-                            label="No of Children seats"
-                            onChange={handleChangeCh}
-                        >
-                            <MenuItem value="">
-                            </MenuItem>
-                            <MenuItem value={1}>1</MenuItem>
-                            <MenuItem value={2}>2</MenuItem>
-                            <MenuItem value={3}>3</MenuItem>
-                            <MenuItem value={3}>4</MenuItem>
-                            <MenuItem value={3}>5</MenuItem>
-
-                        </Select>
-                    </FormControl>
-                    <br />
-
-
-
-
-                    <FormControl sx={{ m: 1, minWidth: 261, marginLeft: -34 }}>
-                        <InputLabel id="demo-controlled-open-select-label">Cabin Type</InputLabel>
-                        <Select
-                            labelId="demo-controlled-open-select-label"
-                            id="demo-controlled-open-select"
-                            open={openCabin}
-                            onClose={handleCloseCabin}
-                            onOpen={handleOpenCabin}
-                            value={cabinTypes}
-                            label="Cabin Types"
-                            onChange={handleChangeCabin}
-                        >
-                            <MenuItem value="">
-                            </MenuItem>
-                            <MenuItem value={1}>Economy</MenuItem>
-                            <MenuItem value={2}>Business Class</MenuItem>
-                            <MenuItem value={3}>First Class</MenuItem>
-
-                        </Select>
-
-                    </FormControl>
-
-
-
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DatePicker
-                                        label="Departure Date"
-                                        value={value}
-                                        onChange={[(newValue) => {
-                                            setValue(newValue)
-                                        }, (event) => { setDepDate(event.target.value) }]
-                                        }
-                                        renderInput={(params) => <TextField {...params} />}
-                                    />
-                                </LocalizationProvider>
-
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DatePicker
-                                        label="Return Date"
-                                        value={arrValue}
-                                        onChange={[(newValue) => {
-                                            setValue(newValue)
-                                        }, (event) => { setRetDate(event.target.value) }]
-                                        }
-                                        renderInput={(params) => <TextField {...params} />}
-                                    />
-                                </LocalizationProvider>
-                                <FormControl sx={{ m: 1, minWidth: 261 }}>
-                                    <InputLabel id="demo-controlled-open-select-label">Departure Terminal</InputLabel>
-                                    <Select
-                                        labelId="demo-controlled-open-select-label"
-                                        id="demo-controlled-open-select"
-                                        open={open}
-                                        onClose={handleClose}
-                                        onOpen={handleOpen}
-                                        value={depTerminal}
-                                        label="Departure Terminal"
-                                        onChange={[handleChange, (event) => { setTdep(event.target.value) }]}
-                                    >
-                                        <MenuItem value="">
-                                        </MenuItem>
-                                        <MenuItem value={1}>1</MenuItem>
-                                        <MenuItem value={2}>2</MenuItem>
-                                        <MenuItem value={3}>3</MenuItem>
-                                        <MenuItem value={4}>4</MenuItem>
-                                        <MenuItem value={5}>5</MenuItem>
-                                        <MenuItem value={6}>6</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <FormControl sx={{ m: 1, minWidth: 261 }}>
-                                    <InputLabel id="demo-controlled-open-select-label">Arrival Terminal</InputLabel>
-                                    <Select
-                                        labelId="demo-controlled-open-select-label"
-                                        id="demo-controlled-open-select"
-                                        open={openArr}
-                                        onClose={handleCloseArr}
-                                        onOpen={handleOpenArr}
-                                        value={arrTerminal}
-                                        label="Arrival Terminal"
-                                        onChange={[handleChangeArr, (event) => { setTarr(event.target.value) }]}
-                                    >
-                                        <MenuItem value="">
-                                        </MenuItem>
-                                        <MenuItem value={1}>1</MenuItem>
-                                        <MenuItem value={2}>2</MenuItem>
-                                        <MenuItem value={3}>3</MenuItem>
-                                        <MenuItem value={4}>4</MenuItem>
-                                        <MenuItem value={5}>5</MenuItem>
-                                        <MenuItem value={6}>6</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <br />
+      <br />
+      <FormControl sx={{ m: 1, minWidth: 261 }}>
+        <InputLabel id="demo-controlled-open-select-label">Departure Terminal</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={open}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          value={depTerminal}
+          label="Departure Terminal"
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={4}>4</MenuItem>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={6}>6</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl sx={{ m: 1, minWidth: 261 }}>
+        <InputLabel id="demo-controlled-open-select-label">Arrival Terminal</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openArr}
+          onClose={handleCloseArr}
+          onOpen={handleOpenArr}
+          value={arrTerminal}
+          label="Arrival Terminal"
+          onChange={handleChangeArr}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={4}>4</MenuItem>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={6}>6</MenuItem>
+        </Select>
+      </FormControl>
+      <br />
 
 
 
 
 
-                                <br />
-                                <FormControl sx={{ m: 1, minWidth: 261 }}>
-                                    <InputLabel id="demo-controlled-open-select-label">No of Adults</InputLabel>
-                                    <Select
-                                        labelId="demo-controlled-open-select-label"
-                                        id="demo-controlled-open-select"
-                                        open={openAd}
-                                        onClose={handleCloseAd}
-                                        onOpen={handleOpenAd}
-                                        value={noOfAdults}
-                                        label="No of Adult seats"
-                                        onChange={[handleChangeAd, (event) => { setAdults(event.target.value) }]}
-                                    >
-                                        <MenuItem value="">
-                                        </MenuItem>
-                                        <MenuItem value={1}>1</MenuItem>
-                                        <MenuItem value={2}>2</MenuItem>
-                                        <MenuItem value={3}>3</MenuItem>
-                                        <MenuItem value={3}>4</MenuItem>
-                                        <MenuItem value={3}>5</MenuItem>
+      <br />
+      <FormControl sx={{ m: 1, minWidth: 261 }}>
+        <InputLabel id="demo-controlled-open-select-label">No of Adults</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openAd}
+          onClose={handleCloseAd}
+          onOpen={handleOpenAd}
+          value={noOfAdults}
+          label="No of Adult seats"
+          onChange={handleChangeAd}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={3}>4</MenuItem>
+          <MenuItem value={3}>5</MenuItem>
 
-                                    </Select>
-                                </FormControl>
-                                <FormControl sx={{ m: 1, minWidth: 261 }}>
-                                    <InputLabel id="demo-controlled-open-select-label">No of Children</InputLabel>
-                                    <Select
-                                        labelId="demo-controlled-open-select-label"
-                                        id="demo-controlled-open-select"
-                                        open={openCh}
-                                        onClose={handleCloseCh}
-                                        onOpen={handleOpenCh}
-                                        value={noOfChildren}
-                                        label="No of Children seats"
-                                        onChange={[handleChangeCh, (event) => { setChildren(event.target.value) }]}
-                                    >
-                                        <MenuItem value="">
-                                        </MenuItem>
-                                        <MenuItem value={1}>1</MenuItem>
-                                        <MenuItem value={2}>2</MenuItem>
-                                        <MenuItem value={3}>3</MenuItem>
-                                        <MenuItem value={3}>4</MenuItem>
-                                        <MenuItem value={3}>5</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl sx={{ m: 1, minWidth: 261 }}>
+        <InputLabel id="demo-controlled-open-select-label">No of Children</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openCh}
+          onClose={handleCloseCh}
+          onOpen={handleOpenCh}
+          value={noOfChildren}
+          label="No of Children seats"
+          onChange={handleChangeCh}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={3}>4</MenuItem>
+          <MenuItem value={3}>5</MenuItem>
 
-                                    </Select>
-                                </FormControl>
-                                <br />
-
-
+        </Select>
+      </FormControl>
+      <br />
 
 
-                                <FormControl sx={{ m: 1, minWidth: 261, marginLeft: -34 }}>
-                                    <InputLabel id="demo-controlled-open-select-label">Cabin Type</InputLabel>
-                                    <Select
-                                        labelId="demo-controlled-open-select-label"
-                                        id="demo-controlled-open-select"
-                                        open={openCabin}
-                                        onClose={handleCloseCabin}
-                                        onOpen={handleOpenCabin}
-                                        value={cabinTypes}
-                                        label="Cabin Types"
-                                        onChange={[handleChangeCabin, (event) => { setCabin(event.target.value) }]}
-                                    >
-                                        <MenuItem value="">
-                                        </MenuItem>
-                                        <MenuItem value={1}>Economy</MenuItem>
-                                        <MenuItem value={2}>Business Class</MenuItem>
-                                        <MenuItem value={3}>First Class</MenuItem>
 
-                                    </Select>
 
-                                </FormControl>
+      <FormControl sx={{ m: 1, minWidth: 261, marginLeft: -34 }}>
+        <InputLabel id="demo-controlled-open-select-label">Cabin Type</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openCabin}
+          onClose={handleCloseCabin}
+          onOpen={handleOpenCabin}
+          value={cabinTypes}
+          label="Cabin Types"
+          onChange={handleChangeCabin}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          <MenuItem value={1}>Economy</MenuItem>
+          <MenuItem value={2}>Business Class</MenuItem>
+          <MenuItem value={3}>First Class</MenuItem>
+
+        </Select>
+
+      </FormControl>
+
+
+
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DatePicker
+          label="Departure Date"
+          value={value}
+          onChange={[(newValue) => {
+            setValue(newValue)
+          }, (event) => { setDepDate(event.target.value) }]
+          }
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </LocalizationProvider>
+
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DatePicker
+          label="Return Date"
+          value={arrValue}
+          onChange={[(newValue) => {
+            setValue(newValue)
+          }, (event) => { setRetDate(event.target.value) }]
+          }
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </LocalizationProvider>
+      <FormControl sx={{ m: 1, minWidth: 261 }}>
+        <InputLabel id="demo-controlled-open-select-label">Departure Terminal</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={open}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          value={depTerminal}
+          label="Departure Terminal"
+          onChange={[handleChange, (event) => { setTdep(event.target.value) }]}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={4}>4</MenuItem>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={6}>6</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl sx={{ m: 1, minWidth: 261 }}>
+        <InputLabel id="demo-controlled-open-select-label">Arrival Terminal</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openArr}
+          onClose={handleCloseArr}
+          onOpen={handleOpenArr}
+          value={arrTerminal}
+          label="Arrival Terminal"
+          onChange={[handleChangeArr, (event) => { setTarr(event.target.value) }]}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={4}>4</MenuItem>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={6}>6</MenuItem>
+        </Select>
+      </FormControl>
+      <br />
+
+
+
+
+
+      <br />
+      <FormControl sx={{ m: 1, minWidth: 261 }}>
+        <InputLabel id="demo-controlled-open-select-label">No of Adults</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openAd}
+          onClose={handleCloseAd}
+          onOpen={handleOpenAd}
+          value={noOfAdults}
+          label="No of Adult seats"
+          onChange={[handleChangeAd, (event) => { setAdults(event.target.value) }]}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={3}>4</MenuItem>
+          <MenuItem value={3}>5</MenuItem>
+
+        </Select>
+      </FormControl>
+      <FormControl sx={{ m: 1, minWidth: 261 }}>
+        <InputLabel id="demo-controlled-open-select-label">No of Children</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openCh}
+          onClose={handleCloseCh}
+          onOpen={handleOpenCh}
+          value={noOfChildren}
+          label="No of Children seats"
+          onChange={[handleChangeCh, (event) => { setChildren(event.target.value) }]}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={3}>4</MenuItem>
+          <MenuItem value={3}>5</MenuItem>
+
+        </Select>
+      </FormControl>
+      <br />
+
+
+
+
+      <FormControl sx={{ m: 1, minWidth: 261, marginLeft: -34 }}>
+        <InputLabel id="demo-controlled-open-select-label">Cabin Type</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openCabin}
+          onClose={handleCloseCabin}
+          onOpen={handleOpenCabin}
+          value={cabinTypes}
+          label="Cabin Types"
+          onChange={[handleChangeCabin, (event) => { setCabin(event.target.value) }]}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          <MenuItem value={1}>Economy</MenuItem>
+          <MenuItem value={2}>Business Class</MenuItem>
+          <MenuItem value={3}>First Class</MenuItem>
+
+        </Select>
+
+      </FormControl>
+
+
+
+
+
+      <Grid container spacing={2}>
+        <Grid item xs={8}>
+          <Item>xs=8</Item>
+        </Grid>
+        <Grid item xs={4}>
+          <Item>xs=4</Item>
+        </Grid>
+      </Grid>
+
+
+
+
+      <Card sx={{ maxWidth: 345 }}>
+        <CardMedia
+          component="img"
+          height="140"
+          alt="green iguana"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            Choose
+          </Typography>
+
+        </CardContent>
+        <CardActions>
+          <AddFlightForm />
+          <Button size="small" onClick={(event) => setSearchClicked(true)}>Search Flight</Button>
+
+
+        </CardActions>
+      </Card>
+
+
+
+
+
+
+
+      <Grid container spacing={2}>
+        
+        <Grid item xs={12} sm container>
+          <Grid item xs container direction="column" spacing={2}>
+            <Grid item xs>
+            <AddFlightForm />
+              
+            
+            </Grid>
+            <Grid item>
+            <Button size="small" onClick={(event) => setSearchClicked(true)}>Search Flight</Button>
+            </Grid>
+          </Grid>
+          
+        </Grid>
+      </Grid>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <List
+      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      component="nav"
+      aria-labelledby="nested-list-subheader"
+      subheader={
+        <ListSubheader component="div" id="nested-list-subheader">
+          Choose
+        </ListSubheader>
+      }
+    >
+      <AddFlightForm/>
+      <ListItemButton onClick={(event) => setSearchClicked(true)}>
+        <ListItemIcon>
+          <SearchIcon />
+        </ListItemIcon>
+        <ListItemText primary="Search Flights" />
+      </ListItemButton>
+     
+    </List>
+
+
 
     </header>
   );

@@ -133,7 +133,7 @@ export default function App() {
     };
 
     //navigation bar
-    
+
 
 
 
@@ -141,8 +141,7 @@ export default function App() {
     return (
         <div>
             <header>
-                <Navbar />  
-
+                
 
 
                 <div
@@ -153,7 +152,7 @@ export default function App() {
                     }}
 
                 >
-                    <div className='mask' style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', marginTop: 100, height: 600, width: 1450 }}>
+                    <div className='mask' style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', marginTop: 100, height: 600, width: 1450 }}>
 
                         <div className='d-flex justify-content-center align-items-center h-100'>
                             <div className='text-white'>

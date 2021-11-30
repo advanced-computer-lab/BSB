@@ -7,6 +7,7 @@ import ModalBody from 'react-bootstrap/ModalBody'
 import ModalFooter from 'react-bootstrap/ModalFooter'
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
+import { TextField } from '@mui/material';
 
 function UpdateFlight(props) {
   const [show, setShow] = useState(false);
@@ -24,9 +25,10 @@ function UpdateFlight(props) {
   const [ec, setEc] = useState(props.ec);
   const [bs, setBs] = useState(props.bs);
   const [first, setFirst] = useState(props.first);
-
-
-
+  const [ecPrice, setEcPrice] = useState("");
+  const [bsPrice, setBsPrice] = useState("");
+  const [firstPrice, setFirstPrice] = useState("");
+  const [tripDuration, setTripDuration] = useState("");
 
 
 
@@ -46,7 +48,11 @@ function UpdateFlight(props) {
         TerminalArrival: tarr,
         NuofAvailableEconomySeats: ec,
         NuofAvailableBuisnessSeats: bs,
-        NuofAvailableFirstSeats: first
+        NuofAvailableFirstSeats: first,
+        EcoPrice: ecPrice,
+        BusPrice: bsPrice,
+        FPrice: firstPrice,
+        TripDuration: tripDuration
       })
         .then(function (response) {
           console.log("xxx");
@@ -61,7 +67,7 @@ function UpdateFlight(props) {
     <>
       <Button variant="outline-primary" onClick={handleShow}> Update</Button>
 
-      <Modal show={show} onHide={handleClose} animation={false}>
+      <Modal show={show} onHide={handleClose} animation={false} style={{height:500 , marginTop:150} }>
         <Modal.Header closeButton>
           <Modal.Title>Flight Number:{props.flightNum}</Modal.Title>
         </Modal.Header>
@@ -72,60 +78,206 @@ function UpdateFlight(props) {
 
           <form >
 
-            From: {props.from}
-            <br />
-
-            <input type="text" id="from" name="from" defaultValue={props.from} onChange={event => setFrom(event.target.value)} />
-            <br />
-            To:
-            <br />
-            <input type="text" id="to" name="to" defaultValue={props.to} onChange={event => setTo(event.target.value)} />
-            <br />
-            Date:
-            <br />
-            <input type="date" id="date" name="date" defaultValue={props.date} onChange={event => setDate(event.target.value)} />
-            <br />
-
-            ArrivalTime:
-            <br />
-            <input type="text" id="cabin" name="cabin" defaultValue={props.arr} onChange={event => setArr(event.target.value)} />
 
             <br />
-            Departure Time:
-            <br />
-            <input type="text" id="seat" name="seat" defaultValue={props.dep} onChange={event => setDep(event.target.value)} />
-            <br />
-            Departure Terminal:
-            <br />
-            <input type="number" id="cabin" name="cabin" defaultValue={props.tdep} onChange={event => setTdep(event.target.value)} />
+            <TextField
 
-            <br />
-            Arrival Teraminal:
-            <br />
-            <input type="number" id="cabin" name="cabin" defaultValue={props.tarr} onChange={event => setTarr(event.target.value)} />
+              required
+              id="outlined-size-small"
 
-            <br />
-            Number of economy seats:
-            <br />
-            <input type="number" id="cabin" name="cabin" defaultValue={props.ec} onChange={event => setEc(event.target.value)} />
-
-            <br />
-            Number of Buisness seats:
-            <br />
-            <input type="number" id="cabin" name="cabin" defaultValue={props.bs} onChange={event => setBs(event.target.value)} />
-
-            <br />
-            Number of First seats:
-            <br />
-            <input type="number" id="cabin" name="cabin" defaultValue={props.first} onChange={event => setFirst(event.target.value)} />
+              size="small"
+              label="Departure Airport"
+              defaultValue={props.from}
+              onChange={event => setFrom(event.target.value)}
+            />
 
             <br />
 
             <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Arrival Airport"
+              defaultValue={props.to}
+              onChange={event => setTo(event.target.value)}
+            />
+
+            <br />
+            
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Date"
+              defaultValue={props.date}
+              onChange={event => setDate(event.target.value)}
+            />
+            <br />
+
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Departure time"
+              defaultValue={props.dep}
+              onChange={event => setDep(event.target.value)}
+            />
+
+
+            <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Arrival time"
+              defaultValue={props.arr}
+              onChange={event => setArr(event.target.value)}
+            />
+            <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Departure Terminal"
+              defaultValue={props.tdep}
+
+              onChange={event => setTdep(event.target.value)}
+            />
+
+            <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Arrival Terminal"
+              defaultValue={props.tarr}
+              onChange={event => setTarr(event.target.value)}
+            />
+
+            <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Economy Seats"
+              defaultValue={props.ec}
+              onChange={event => setEc(event.target.value)}
+            />
+
+
+            <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Economy Seats Price"
+              defaultValue={props.ecPrice}
+              onChange={event => setEcPrice(event.target.value)}
+            />
+            <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Business Seats"
+              defaultValue={props.bs}
+              onChange={event => setBs(event.target.value)}
+            />
+
+
+            <br />
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Business Seats Price"
+              defaultValue={props.bsPrice}
+              onChange={event => setBsPrice(event.target.value)}
+            />
+
+            <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="First Class Seats"
+              defaultValue={props.first}
+              onChange={event => setFirst(event.target.value)}
+            />
+
+
+            <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="First Class Seats Price"
+              defaultValue={props.firstPrice}
+              onChange={event => setFirstPrice(event.target.value)}
+            />
+
+            <br />
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Trip Duration"
+              defaultValue=""
+              onChange={event => setTripDuration(event.target.value)}
+            />
+            <br/>
 
           </form>
         </div></Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer position="fixed">
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>

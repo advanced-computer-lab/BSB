@@ -14,12 +14,15 @@ import Avatar from '@mui/material/Avatar';
 
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { TextField } from '@mui/material';
+import { ListItemIcon, TextField } from '@mui/material';
 
 import Stack from '@mui/material/Stack';
 
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import FlightIcon from '@mui/icons-material/Flight';
+import ListItemText from '@mui/material/ListItemText';
+import { ListItemButton } from '@mui/material';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -46,9 +49,10 @@ function AddFlightForm(props) {
 
 
   const [bs, setBs] = useState("");
-  const [bsPrice,setBsPrice ] = useState("");
+  const [bsPrice, setBsPrice] = useState("");
   const [first, setFirst] = useState("");
-  const [firstPrice,setFirstPrice ] = useState("");
+  const [firstPrice, setFirstPrice] = useState("");
+  const [tripDuration, setTripDuration] = useState("");
 
 
 
@@ -86,9 +90,10 @@ function AddFlightForm(props) {
         NuofAvailableEconomySeats: ec,
         NuofAvailableBuisnessSeats: bs,
         NuofAvailableFirstSeats: first,
-        EcoPrice:ecPrice,
-        BusPrice:bsPrice,
-        FPrice:firstPrice
+        EcoPrice: ecPrice,
+        BusPrice: bsPrice,
+        FPrice: firstPrice,
+        TripDuration: tripDuration
       })
         .then(function (response) {
           console.log("xxx");
@@ -101,13 +106,16 @@ function AddFlightForm(props) {
 
   return (
     <>
-      <MenuItem onClick={handleShow} variant='primary'>
-        Add Flight
-      </MenuItem>
+      <ListItemButton onClick={handleShow} variant='primary' color= "#3F72AF" >
+      <ListItemIcon>
+          <FlightIcon />
+        </ListItemIcon>
+        <ListItemText primary="Add Flight" />
+      </ListItemButton>
 
 
-      <Modal show={show} onHide={handleClose} animation={false} style={{ height: 700, marginTop: '70' }}>
-        <Modal.Header closeButton>
+      <Modal show={show} onHide={handleClose} animation={false} style={{ height: 500, marginTop: 150 }} >
+        <Modal.Header position="fixed" style={{ marginTop: '20' }} closeButton >
           <Modal.Title>Add a new flight</Modal.Title>
         </Modal.Header>
         <Modal.Body> <div border="solid">
@@ -120,9 +128,9 @@ function AddFlightForm(props) {
 
               required
               id="outlined-size-small"
-             
+
               size="small"
-             
+
               label="Flight Number"
               defaultValue=""
               onChange={event => setFlightNum(event.target.value)}
@@ -138,7 +146,7 @@ function AddFlightForm(props) {
 
               required
               id="outlined-size-small"
-             
+
               size="small"
               label="Departure Airport"
               defaultValue=""
@@ -153,7 +161,7 @@ function AddFlightForm(props) {
 
               required
               id="outlined-size-small"
-             
+
               size="small"
               label="Arrival Airport"
               defaultValue=""
@@ -166,7 +174,7 @@ function AddFlightForm(props) {
 
               required
               id="outlined-size-small"
-             
+
               size="small"
               label="Date"
               defaultValue=""
@@ -174,13 +182,27 @@ function AddFlightForm(props) {
             />
 
             <br />
+            <br />
 
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Departure time"
+              defaultValue=""
+              onChange={event => setDep(event.target.value)}
+            />
+
+
+            <br />
             <br />
             <TextField
 
               required
               id="outlined-size-small"
-             
+
               size="small"
               label="Arrival time"
               defaultValue=""
@@ -190,27 +212,14 @@ function AddFlightForm(props) {
 
 
             <br />
-            <br />
-            <TextField
 
-              required
-              id="outlined-size-small"
-             
-              size="small"
-              label="Departure time"
-              defaultValue=""
-              onChange={event => setDep(event.target.value)}
-            />
-
-
-            <br />
 
             <br />
             <TextField
 
               required
               id="outlined-size-small"
-             
+
               size="small"
               label="Departure Terminal"
               defaultValue=""
@@ -224,7 +233,7 @@ function AddFlightForm(props) {
 
               required
               id="outlined-size-small"
-             
+
               size="small"
               label="Arrival Terminal"
               defaultValue=""
@@ -240,7 +249,7 @@ function AddFlightForm(props) {
 
               required
               id="outlined-size-small"
-             
+
               size="small"
               label="Economy Seats"
               defaultValue=""
@@ -248,19 +257,32 @@ function AddFlightForm(props) {
             />
 
             <br />
-            
             <br />
             <TextField
 
               required
               id="outlined-size-small"
-             
+
+              size="small"
+              label="Economy Seats Price"
+              defaultValue=""
+              onChange={event => setEcPrice(event.target.value)}
+            />
+
+            <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
               size="small"
               label="Business Seats"
               defaultValue=""
               onChange={event => setBs(event.target.value)}
             />
-            
+
 
             <br />
             <br />
@@ -268,32 +290,69 @@ function AddFlightForm(props) {
 
               required
               id="outlined-size-small"
-             
+
+              size="small"
+              label="Business Seats Price"
+              defaultValue=""
+              onChange={event => setBsPrice(event.target.value)}
+            />
+
+            <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
               size="small"
               label="First Class Seats"
               defaultValue=""
               onChange={event => setFirst(event.target.value)}
             />
-            
-
-            <br />
 
 
             <br />
+
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="First Class Seats Price"
+              defaultValue=""
+              onChange={event => setFirstPrice(event.target.value)}
+            />
+
+            <br />
+            <br />
+            <TextField
+
+              required
+              id="outlined-size-small"
+
+              size="small"
+              label="Trip Duration"
+              defaultValue=""
+              onChange={event => setTripDuration(event.target.value)}
+            />
+
+
 
           </form>
         </div></Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{ marginTop: 10 }}>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          
           <Button variant="primary" onClick={(event) => setClicked(true)}>
             ADD
           </Button>
-          
 
-         
+
+
         </Modal.Footer>
       </Modal>
     </>
