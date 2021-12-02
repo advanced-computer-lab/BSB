@@ -118,34 +118,7 @@ app.post("/searchFlights", async (req, res) => {
     }
 
 });
-var search = function (element) {
-    seats.find({ FlightNu: element })
-    console.log(data);
-    //console.log(squery);//print 6, should be 3
-    let cond = data.length == 0;//if flight has no reserved seats yet
-    if (c == "Economy") {
-        c2 = (data[0].reservedEcoSeats.length == 56) || ((56 - data[0].reservedEcoSeats.length) < total)//not enough pass
-    }
-    else if (c == "Business") {
-        c2 = (data[0].reservedBusSeats.length == 12) || ((12 - data[0].reservedBusSeats.length) < total)
-    }
-    else {
-        c2 = (data[0].reservedFstSeats.length == 4) || ((4 - data[0].reservedFstSeats.length) < total);
-    }
-    console.log(cond);//print 7, should be 4
-    console.log(!c2);//print 8, should be 5
-    return (cond || (!c2));//law true, keeps the value, false removes the value
-}
 
-//{"FlightNu":"AC543", "From": "LHR","To": "CDG", "cabin":"Economy","adults":2,"child":1}
-// app.post("/searchDepartureFlights", async (req, res) => {
-//     const criteria = { From: req.body.From, To: req.body.To, FlightDate: req.body.departureDate, DepartBool: true };
-//     let c = req.body.cabin;
-//     let total = req.body.adults + req.body.child;
-//     var myPromise(){
-
-//     }
-// })
 app.post("/searchDepartureFlights", async (req, res) => {
     const criteria = { From: req.body.From, To: req.body.To, FlightDate: req.body.departureDate, DepartBool: true };
     let c = req.body.cabin;
@@ -160,7 +133,6 @@ app.post("/searchDepartureFlights", async (req, res) => {
             console.log(f);//print 2
             const squery = await seats.find({ FlightNu: f });
             console.log(squery);
-            //console.log(squery);//print 6, should be 3
             let cond = squery.length == 0;//if flight has no reserved seats yet
             if (c == "Economy") {
                 c2 = (squery[0].reservedEcoSeats.length == 56) || ((56 - squery[0].reservedEcoSeats.length) < total)//not enough pass
@@ -171,17 +143,40 @@ app.post("/searchDepartureFlights", async (req, res) => {
             else {
                 c2 = (squery[0].reservedFstSeats.length == 4) || ((4 - squery[0].reservedFstSeats.length) < total);
             }
-            console.log(cond);//print 7, should be 4
-            console.log(!c2);//print 8, should be 5
+            console.log(cond);
+            console.log(!c2);
             if (cond || (!c2)) {
                 r.push(fquery[i]);
             }
         }
-         console.log(fquery);//print 3, should be 6
-        console.log("xxxx111");//print 4, should be 7
-        console.log(r);//print 5, should be 8
-        // console.log(fc);//print 5, should be 8
-        res.json(r);
+        console.log(fquery);
+        console.log("xxxx111");
+        console.log(r);
+        let re = [];
+        for (var i = 0; i < r.length; i++) {
+            x = r[i];
+            x = x.toJSON();
+            console.log(x);
+            if (c == "Economy") {
+                p = x.EcoPrice;
+            }
+            else if (c == "Business") {
+                p = x.BusPrice;
+            }
+            else {
+                p = x.FPrice;
+            }
+            console.log(p);
+            delete x.EcoPrice;
+            delete x.BusPrice;
+            delete x.FPrice;
+            console.log(x);
+            x.price = p;
+            console.log(x);
+            re.push(x);
+        }
+        console.log(re);
+        res.json(re);
     } catch (err) {
         res.json({ message: err });
     }
@@ -189,50 +184,148 @@ app.post("/searchDepartureFlights", async (req, res) => {
 
 app.post("/searchReturnFlights", async (req, res) => {
 
-    const criteria = req.body;
-    console.log(req.body);
-    const d = { ReturnBool: true };
-    const finalResult = Object.assign(criteria, d);
-    console.log(finalResult);
+    const criteria = { From: req.body.From, To: req.body.To, FlightDate: req.body.departureDate, ReturnBool: true };
+    let c = req.body.cabin;
+    let total = req.body.adults + req.body.child;
     try {
-        const query = await flight.find(finalResult);//result set is query
-        console.log(query);
+        const fquery = await flight.find(criteria);//result set is query
+        //sends each one as an object in an array
+        console.log(fquery);//print 1
+        let r = [];
+        for (var i = 0; i < fquery.length; i++) {
+            let f = fquery[i].FlightNu;
+            console.log(f);//print 2
+            const squery = await seats.find({ FlightNu: f });
+            console.log(squery);
+            let cond = squery.length == 0;//if flight has no reserved seats yet
+            if (c == "Economy") {
+                c2 = (squery[0].reservedEcoSeats.length == 56) || ((56 - squery[0].reservedEcoSeats.length) < total)//not enough pass
+            }
+            else if (c == "Business") {
+                c2 = (squery[0].reservedBusSeats.length == 12) || ((12 - squery[0].reservedBusSeats.length) < total)
+            }
+            else {
+                c2 = (squery[0].reservedFstSeats.length == 4) || ((4 - squery[0].reservedFstSeats.length) < total);
+            }
+            console.log(cond);
+            console.log(!c2);
+            if (cond || (!c2)) {
+                r.push(fquery[i]);
+            }
+        }
+        console.log(fquery);
         console.log("xxxx111");
-        res.json(query);
-
+        console.log(r);
+        let re = [];
+        for (var i = 0; i < r.length; i++) {
+            x = r[i];
+            x = x.toJSON();
+            console.log(x);
+            if (c == "Economy") {
+                p = x.EcoPrice;
+            }
+            else if (c == "Business") {
+                p = x.BusPrice;
+            }
+            else {
+                p = x.FPrice;
+            }
+            console.log(p);
+            delete x.EcoPrice;
+            delete x.BusPrice;
+            delete x.FPrice;
+            console.log(x);
+            x.price = p;
+            console.log(x);
+            re.push(x);
+        }
+        console.log(re);
+        res.json(re);
     } catch (err) {
         res.json({ message: err });
     }
 
 });
 app.post("/AddDepartureFlight", (req, res) => {
-
     const newFlight = new chosenFlights({
-        'userId': req.body.userID,
-        'DepartFlightNu': req.body.FlightNu,
+        //'userId': req.body.userID,
+        'DepartId': req.body.FlightId,
         "DepartPassengersAdult": req.body.adultPass,
         'DepartPassengersChild': req.body.childPass,
         'DepartCabin': req.body.cabin,
         'DepartSeats': req.body.seats
     })
     newFlight.save().then((result) => {
+        console.log(result);
+        chosenFlights.find({ _id: result._id }).populate("DepartId").then((p) => {
+            console.log(p);
+            let c = req.body.cabin;
+            let total = req.body.adultPass + req.body.childPass;
+            if (c == "Economy") {
+                ticket = p[0].DepartId.EcoPrice;
+            }
+            else if (c == "Business") {
+                ticket = p[0].DepartId.BusPrice;
+            }
+            else {
+                ticket = p[0].DepartId.FPrice;
+            }
+            ticketT = (req.body.adultPass * ticket) + (req.body.childPass * ticket * constantData.childPriceRatio);
+            chosenFlights.updateOne({ _id: result._id }, { DepartPrice: ticket, DepartPriceTotal: ticketT }).exec(function (err, q) {
+                console.log("prices updated");
+            })
+
+        }).catch(error => console.log(error));
         res.send(result)
     })
         .catch((err) => {
             console.log(err)
         })
 
-    setDepartPrice(req.body.cabin, req.body.FlightNu, req.body.userID, req.body.adultPass, req.body.childPass);
+});
+app.post("/AddReturnFlight", async (req, res) => {//places chosen return flight into db
+    chosenFlights.updateOne({ _id: req.body._id }, {
+        'ReturnId': req.body.FlightId,
+        "ReturnPassengersAdult": req.body.adultPass,
+        'ReturnPassengersChild': req.body.childPass,
+        'ReturnCabin': req.body.cabin,
+        'ReturnSeats': req.body.seats
+    }).exec(function (err, leads) {
+        res.status(201).send(leads);
+    });
+    chosenFlights.find({ _id: result._id }).populate("DepartId").then(async (p) => {
+        console.log(p);
+        let c = req.body.cabin;
+        let total = req.body.adultPass + req.body.childPass;
+        if (c == "Economy") {
+            ticket = p[0].DepaReturnIdrtId.EcoPrice;
+        }
+        else if (c == "Business") {
+            ticket = p[0].ReturnId.BusPrice;
+        }
+        else {
+            ticket = p[0].ReturnId.FPrice;
+        }
+        ticketT = (req.body.adultPass * ticket) + (req.body.childPass * ticket * constantData.childPriceRatio);
+        const query = await chosenFlights.find({ _id: req.body._id });
+        sub = ticket + query[0].departId;
+        total = ticketT + query[0].DepartPriceTotal;
+        chosenFlights.updateOne({ _id: result._id }, { ReturnPrice: ticket, ReturnPriceTotal: ticketT, SubTotal: sub, Total: total }).exec(function (err, q) {
+            console.log("prices updated");
+        })
+
+    }).catch(error => console.log(error));
+    //setReturnPrice(req.body.ReturnCabin, req.body.ReturnFlightNu, req.body.userID, req.body.ReturnPassengersAdult, req.body.ReturnPassengersChild);
+
 });
 
 function remove(array, element) {
     const index = array.indexOf(element);
     array.splice(index, 1);
 }
-
 app.post("/getAvailableCabinSeats", (req, res) => {//gets available seats left on specific flight,given a specific cabin
     let c = req.body.cabin;
-    seats.find({ FlightNu: req.body.FlightNu }).lean().exec(function (err, data) {
+    seats.find({ FlightID: req.body.FlightID }).lean().exec(function (err, data) {
         if (c == "Economy") {
             st = seatsData.Economy;
             rs = data[0].reservedEcoSeats;
@@ -251,12 +344,25 @@ app.post("/getAvailableCabinSeats", (req, res) => {//gets available seats left o
         }
         // return st; 
         res.send(st);
-
-        //aseats = data[0].reservedSeats;
-        //availableSeats = checkSeats(aseats, c);
-
     })
 
+})
+app.post("/showReservedCabinSeats", (req, res) => {
+    let c = req.body.cabin;
+    seats.find({ FlightID: req.body.FlightID }).lean().exec(function (err, data) {
+        if (c == "Economy") {
+            rs = data[0].reservedEcoSeats;
+        }
+        else if (c == "First") {
+            rs = data[0].reservedFstSeats;
+        }
+        else {
+            rs = data[0].reservedBusSeats;
+        }
+        console.log(rs)
+        // return st; 
+        res.send(rs);
+    })
 })
 app.get("/showReservedSeats", (req, res) => {//shows all the seat reservation database => each flight and its reserved seats
     seats.find({}).exec(function (err, data) {
@@ -264,14 +370,14 @@ app.get("/showReservedSeats", (req, res) => {//shows all the seat reservation da
     })
 });
 app.post("/showFlightReservedSeats", (req, res) => {//shows the reserved seats of a specific flight (all cabin types)
-    seats.find({ FlightNu: req.body.FlightNu }).exec(function (err, data) {
+    seats.find({ FlightID: req.body.FlightID }).exec(function (err, data) {
         res.send(data);
     })
 })
 app.post("/reserveSeats", (req, res) => {//reserves seats, doesn't make sure it's already in the data
     c = req.body.cabin;
 
-    seats.find({ FlightNu: req.body.FlightNu }).lean().exec(function (err, data) {
+    seats.find({ FlightID: req.body.FlightID }).lean().exec(function (err, data) {
         if (data.length != 0) {
             a = data[0].reservedSeats;
             rSeats = a.concat(req.body.seats);
@@ -282,7 +388,7 @@ app.post("/reserveSeats", (req, res) => {//reserves seats, doesn't make sure it'
         }
         else {
             const sts = new seats({
-                "FlightNu": req.body.FlightNu,
+                "FlightID": req.body.FlightID,
                 "reservedSeats": req.body.seats
             })
             sts.save().then((result) => {
@@ -294,14 +400,6 @@ app.post("/reserveSeats", (req, res) => {//reserves seats, doesn't make sure it'
 
         }
         if (c == "Economy") {
-            flight.find({ FlightNu: req.body.FlightNu }).lean().exec(function (err, data1) {
-                l = data1[0].ecoSeatsLeft;
-                lc = req.body.seats.length;
-                flight.updateOne({ FlightNu: req.body.FlightNu }, { ecoSeatsLeft: l - lc }).exec(function (err, leads) {
-                    console.log("ok")
-                })
-            })
-
             if (data[0].reservedEcoSeats != null && data[0].reservedEcoSeats.length != 0) {
                 b = data[0].reservedEcoSeats; b.concat(req.body.seats);
             } else {
@@ -314,13 +412,6 @@ app.post("/reserveSeats", (req, res) => {//reserves seats, doesn't make sure it'
             });
         }
         else if (c == "First") {
-            flight.find({ FlightNu: req.body.FlightNu }).lean().exec(function (err, data1) {
-                l = data1[0].fstSeatsLeft;
-                lc = req.body.seats.length;
-                flight.updateOne({ FlightNu: req.body.FlightNu }, { fstSeatsLeft: l - lc }).exec(function (err, leads) {
-                    console.log("ok")
-                })
-            })
             if (data[0].reservedFstSeats != null && data[0].reservedFstSeats.length != 0) {
                 b = data[0].reservedFstSeats;
                 b.concat(req.body.seats);
@@ -333,13 +424,6 @@ app.post("/reserveSeats", (req, res) => {//reserves seats, doesn't make sure it'
             });
         }
         else {
-            light.find({ FlightNu: req.body.FlightNu }).lean().exec(function (err, data1) {
-                l = data1[0].busSeatsLeft;
-                lc = req.body.seats.length;
-                flight.updateOne({ FlightNu: req.body.FlightNu }, { busSeatsLeft: l - lc }).exec(function (err, leads) {
-                    console.log("ok")
-                })
-            })
             if (data[0].reservedBusSeats != null && data[0].reservedBusSeats.length != 0) {
                 b = data[0].reservedBusSeats; b.concat(req.body.seats);
             } else {
@@ -356,7 +440,7 @@ app.post("/reserveSeats", (req, res) => {//reserves seats, doesn't make sure it'
 })
 app.post("/getPrice", (req, res) => {//gets price of specific flight, given specific cabin
     const cabin = req.body.cabin;
-    var query = getPrice(req.body.FlightNu);
+    var query = getPrice(req.body._id);
     query.exec(function (err, data) {
         if (err)
             return console.log(err);
@@ -367,171 +451,77 @@ app.post("/getPrice", (req, res) => {//gets price of specific flight, given spec
             price = data[0].FPrice;
         }
         else {
-
             price = data[0].BusPrice;
         }
         res.send({ price });
     });
 })
-function getPrice(FlightNu) {
-    var query = flight.find({ FlightNu: FlightNu }).lean();
+function getPrice(id) {
+    var query = flight.find({ _id: id }).lean();
     return query;
 }
 
-function setDepartPrice(cabin, FlightNu, userID, adults, child) { //updates the database of the prices of the chosen Departure flight
-    var query = getPrice(FlightNu);
-    query.exec(function (err, data) {
-        if (err)
-            return console.log(err);
-        if (cabin == "Economy") {
-            price = data[0].EcoPrice;
-        }
-        else if (cabin == "First") {
-            price = data[0].FPrice;
-        }
-        else {
-            price = data[0].BusPrice;
-        }
-        //res.send({price});
-        let totalAdults = adults * price;
-        console.log(constantData.childPriceRatio);
-        let children = (price * constantData.childPriceRatio) * child
-        let total = totalAdults + children;
-        console.log(price);//price per 1 adult ticket
-        console.log(total);//price per all passengers
-        chosenFlights.updateOne({ 'userId': userID }, { DepartPrice: price, DepartPriceTotal: total }).exec(function (err, leads) {
-            console.log("updated one");
-            //res.status(201).send(leads);
-        });
-
-    });
-}
-function setReturnPrice(cabin, FlightNu, userID, adults, child) {//updates the database of the prices of the chosen Return flight
-    var query = getPrice(FlightNu);
-    query.exec(function (err, data) {
-        if (err)
-            return console.log(err);
-        if (cabin == "Economy") {
-            price = data[0].EcoPrice;
-        }
-        else if (cabin == "First") {
-            price = data[0].FPrice;
-        }
-        else {
-            price = data[0].BusPrice;
-        }
-        let totalAdults = adults * price;
-        console.log(constantData.childPriceRatio);
-        let children = (price * constantData.childPriceRatio) * child
-        let total = totalAdults + children;
-        console.log(price);
-        console.log(total);
-        //res.send({price});
-        chosenFlights.find({ 'userId': userID }).lean().exec(function (err, dataR) {
-            if (err)
-                return console.log(err);
-            st = dataR[0].DepartPrice;
-            subtotal = st + price;
-            gt = dataR[0].DepartPriceTotal;
-            gross = gt + total;
-            chosenFlights.updateOne({ 'userId': userID }, { ReturnPrice: price, ReturnPriceTotal: total, SubTotal: subtotal, Total: gross }).exec(function (err, leads) {
-                console.log("updated");
-                //res.status(201).send(leads);
-            });
-        });
-    });
-}
-
-
-app.post("/AddReturnFlight", (req, res) => {//places chosen return flight into db
-    chosenFlights.updateOne({ userId: req.body.userID }, req.body).exec(function (err, leads) {
-        res.status(201).send(leads);
-    });
-    setReturnPrice(req.body.ReturnCabin, req.body.ReturnFlightNu, req.body.userID, req.body.ReturnPassengersAdult, req.body.ReturnPassengersChild);
-
-});
-
 app.post("/getChosenFlights", (req, res) => { //prints chosenflights database
-    chosenFlights.find({ userId: req.body.userID }).exec(function (err, data) {
+    chosenFlights.find({}).exec(function (err, data) {
         res.send(data)
     })
 });
-
+app.post("/getChosenFlight", (req, res) => { //prints chosenflights database
+    chosenFlights.find({_id:req.body._id}).exec(function (err, data) {
+        res.send(data)
+    })
+});
+function calcTotalPrice(price, children, adults) {//cabin price as input per 1 ticket
+    a = price * adults;
+    b = children * constantData.childPriceRatio * price;
+    return a + b;
+}
 
 app.post("/getFlightDetails", (req, res) => {//flightNumber, Departure,arrival Time, Trip Duration, Cabin class,baggage allowance
-    flight.find({ FlightNu: req.body.FlightNu }).lean().exec(function (err, data) {
-        let c = data3[0].DepartCabin;
+    flight.find({ _id: req.body._id }).lean().exec(function (err, data) {
+        c = req.body.cabin;
         if (c == "First") {
             baggage = constantData.bagallowanceFst;
+            price = data[0].FPrice;
         }
         else if (c == "Business") {
             baggage = constantData.bagallowanceBus;
+            price = data[0].BusPrice;
         }
         else {
             baggage = constantData.bagallowanceEco;
+            price = data[0].EcoPrice;
         }
-        let tresult = {
-            FlightNu: data[0].FlightNu,
-            FlightDate: data[0].FlightDate,
-            DepartureTime: data[0].DepartureTime,
-            ArrivalTime: data[0].ArrivalTime,
-            BaggageAllowance: baggage,
-            TotalPriceAdult: data3[0].SubTotal,
-            TotalPricePassengers: data3[0].Total
-
-        };
-        res.send(tresult);
+        total = calcTotalPrice(price, req.body.childPass, req.body.adultPass)
+        data[0].baggageAllowance = baggage;
+        data[0].totalPrice = total;
+        data[0].cabin = c;
+        res.send(data);
     })
-});
-
-//view flight details before reserving it
+})
+function getBaggage(cabin) {
+    if (cabin == "First") {
+        Baggage = constantData.bagallowanceFst;
+    }
+    else if (cabin == "Business") {
+        Baggage = constantData.bagallowanceBus;
+    }
+    else {
+        Baggage = constantData.bagallowanceEco;
+    }
+    return Baggage;
+}
 app.post("/ViewTicketSummary", (req, res) => { //summary of chosen flights
-    //flightnumberdeparture, flightnumberreturn
-    flight.find({ FlightNu: req.body.FlightNuDepart }).lean().exec(function (err, data) {
-        flight.find({ FlightNu: req.body.FlightNuReturn }).lean().exec(function (err, data2) {
-            chosenFlights.find({ userId: req.body.userID }).lean().exec(function (err, data3) {
-                //res.send(data,data2)
-                //dates and times, price of each, chosenCabin, chosenSeat, priceOfEntireTicket
-                let c = data3[0].DepartCabin;
-                if (c == "First") {
-                    baggage = constantData.bagallowanceFst;
-                }
-                else if (c == "Business") {
-                    baggage = constantData.bagallowanceBus;
-                }
-                else {
-                    baggage = constantData.bagallowanceEco;
-                }
-                let tresult = {
-                    DepartureFlightDate: data[0].FlightDate,
-                    DepartureFrom: data[0].From,
-                    DepartureTo: data[0].To,
-                    DepartureTimeDeparture: data[0].DepartureTime,
-                    DepartureArrivalTime: data[0].ArrivalTime,
-                    DepartureTicketPrice: data3[0].DepartPrice,
-                    DepartureCabin: data3[0].DepartCabin,
-                    DepartureSeats: data3[0].DepartSeats,
-                    ReturnFlightDate: data2[0].FlightDate,
-                    DepartureFrom: data2[0].From,
-                    DepartureTo: data2[0].To,
-                    ReturnTimeDeparture: data2[0].DepartureTime,
-                    ReturnArrivalTime: data2[0].ArrivalTime,
-                    ReturnTicketPrice: data3[0].ReturnPrice,
-                    CabinReturn: data3[0].ReturnCabin,
-                    ReturnSeats: data3[0].ReturnSeats,
-                    BaggageAllowance: baggage,
-                    TotalPriceAdult: data3[0].SubTotal,
-                    TotalPricePassengers: data3[0].Total
-
-                };
-                res.send(tresult);
-
-            })
-        })
+    chosenFlights.find({ _id: req.body._id }).populate("DepartId").populate("ReturnId").then((p) => {
+        let c = p[0].DepartCabin;
+        departBaggage = getBaggage(c);
+        let c2 = p[0].ReturnCabin;
+        returnBag = getBaggage(c2);
+        p[0] = p[0].toJSON();
+        p[0].departureBaggage = departBaggage;
+        p[0].returnBaggage = returnBag;
+        res.send(p);
     })
-});
-app.get('/reservedFlights', (req, res) => {
-    reserved.find({ userID: req.body.userID }).exec(function (err, data) {
-        res.send(data)
-    })
-});
+
+})
+

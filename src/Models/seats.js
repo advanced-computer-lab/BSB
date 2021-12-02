@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const seatsSchema = new Schema({
-    FlightNu:{
-        type:String,
-        required:true
+    FlightID:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "flights"
     },
     reservedEcoSeats:{
         type:Object,

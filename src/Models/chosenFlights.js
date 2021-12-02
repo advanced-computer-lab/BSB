@@ -2,14 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const chosenFlightSchema = new Schema({
-    userId:{
-        type:String,
-        required:true
+    DepartId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "flights"
     },
-     DepartFlightNu: {
-        type: String,
-        required: false
-      },
      DepartPassengersAdult:{
         type: Number,
         required: false
@@ -34,9 +30,9 @@ const chosenFlightSchema = new Schema({
         type: Number,
         required: false
       },
-      ReturnFlightNu: {
-        type: String,
-        required: false
+      ReturnId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "flights"
       },
      ReturnPassengersAdult:{
         type: Number,
@@ -64,11 +60,11 @@ const chosenFlightSchema = new Schema({
       },
       SubTotal:{
         type:Number,
-        required:true
+        required:false
     },
     Total:{
       type:Number,
-      required:true
+      required:false
     }
 },
     { timestamps: false });
