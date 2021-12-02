@@ -73,7 +73,8 @@ import Avatar from '@mui/material/Avatar';
 
 import Tooltip from '@mui/material/Tooltip';
 
-import Navbar from './Navbar';
+
+
 
 
 
@@ -81,7 +82,7 @@ export default function App() {
     const [userClicked, setUserClicked] = useState(false);
     const [adminClicked, setAdminClicked] = useState(false);
     const [logoutClicked, setLogoutClicked] = useState(false);
-
+    const settings = ['Logout'];
     //buttom nav bar
     const [bNavBar, setBNavBar] = useState('recents');
 
@@ -101,6 +102,23 @@ export default function App() {
         { icon: <PrintIcon />, name: 'Print' },
         { icon: <ShareIcon />, name: 'Share' },
     ];
+    const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+    const handleOpenNavMenu = (event) => {
+        setAnchorElNav(event.currentTarget);
+    };
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
 
 
     //profile 
@@ -133,7 +151,14 @@ export default function App() {
     };
 
     //navigation bar
+function handleLogout()
+{
+   
+        setAdminClicked(false);
+        setUserClicked(false);
+    
 
+}
 
 
 
@@ -141,7 +166,8 @@ export default function App() {
     return (
         <div>
             <header>
-                
+
+               
 
 
                 <div
@@ -157,7 +183,7 @@ export default function App() {
                         <div className='d-flex justify-content-center align-items-center h-100'>
                             <div className='text-white'>
                                 <h5 className='mb-4'></h5>
-                                {adminClicked ? <Admin></Admin> : (userClicked ? <User></User> : <div>
+                                {adminClicked  ? <Admin></Admin> : (userClicked  ? <User></User> : <div>
                                     <Button variant="secondary" data-target="#myModal" data-toggle="modal" data-backdrop="static" onClick={(event) => setUserClicked(true)} data-keyboard="false" style={{
                                         position: 'absolute',
                                         right: 790,

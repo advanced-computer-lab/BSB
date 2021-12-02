@@ -34,8 +34,8 @@ import SearchBody from './SearchBody';
 import ShowMap from './ShowMap';
 import Logout from './Logout';
 import App from './App';
-import Navbar from './Navbar';
-import AdminNavBar from './AdminNavBar';
+
+
 import { Grid } from '@material-ui/core';
 import Box from '@mui/material/Box';
 
@@ -53,6 +53,7 @@ import ListItemText from '@mui/material/ListItemText';
 import SearchIcon from '@mui/icons-material/Search';
 import FlightIcon from '@mui/icons-material/Flight';
 import { Stack } from 'react-bootstrap';
+import Top from './Top';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -104,7 +105,8 @@ function Admin() {
   return (
 
     <div>
-      <AdminNavBar />
+    
+     
       <Box>
 
 

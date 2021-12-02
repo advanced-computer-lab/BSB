@@ -35,8 +35,35 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import DepartureList from './DepartureList';
 import axios from 'axios';
-import UserNavBar from './UserNavBar';
+import AppBar from '@mui/material/AppBar';
 
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+
+import Tooltip from '@mui/material/Tooltip';
+import App from './App';
+import EditProfile from './EditProfile';
+import ViewResFlights from './ViewResFlights';
+import SearchIcon from '@mui/icons-material/Search';
+import LanguageIcon from '@mui/icons-material/Language';
+import Language from '@mui/icons-material/Language';
+import UpgradeIcon from '@mui/icons-material/Upgrade';
+import Anchor from '@restart/ui/esm/Anchor';
+import LuggageIcon from '@mui/icons-material/Luggage';
+import RoomServiceIcon from '@mui/icons-material/RoomService';
+import HotelIcon from '@mui/icons-material/Hotel';
+import CarRentalIcon from '@mui/icons-material/CarRental';
+import GroupsIcon from '@mui/icons-material/Groups';
+import Groups from '@mui/icons-material/Groups';
+import PeopleIcon from '@mui/icons-material/People';
+import CardTravelIcon from '@mui/icons-material/CardTravel';
+import SchoolIcon from '@mui/icons-material/School';
+import HubIcon from '@mui/icons-material/Hub';
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
         marginTop: theme.spacing(3),
@@ -193,6 +220,26 @@ function User() {
         setOpenAlert(false);
     };
 
+    //navbar
+    const [anchorElNav, setAnchorElNav] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
+
+    const handleOpenNavMenu = (event) => {
+        setAnchorElNav(event.currentTarget);
+    };
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
+
+
     //flight detailsconst [from, setFrom] = useState("");
     const [to, setTo] = useState("");
 
@@ -208,6 +255,61 @@ function User() {
     const [cabin, setCabin] = useState("");
     const [clicked, setClicked] = useState(false);
     const [show, setShow] = useState(false);
+    const [logoutClicked, setlogOutClicked] = useState(false);
+    const handleLogout = () => {
+        setlogOutClicked(true);
+        handleCloseNavMenu();
+    };
+    const [editProfile, setEditProfileClicked] = useState(false);
+    const handleEditProfile = () => {
+        setEditProfileClicked(true);
+        handleCloseNavMenu();
+    };
+    const [viewResFlights, setResFlights] = useState(false);
+    const handleResFlights = () => {
+        setResFlights(true);
+        handleCloseNavMenu();
+    };
+    const [homeClicked, setHomeClicked] = useState(false);
+    const [exploreClicked, setExploreClicked] = useState(false);
+    const [help, setHelpClicked] = useState(false);
+
+    //experience button
+    const [experienceClicked, setExperienceClicked] = useState(null);
+    const openEClicked = Boolean(experienceClicked);
+    const handleClickExperience = (event) => {
+        setExperienceClicked(event.currentTarget);
+    };
+    const handleCloseExperience = () => {
+        setExperienceClicked(null);
+    };
+
+
+    //book button
+    const [bookClicked, setBookClicked] = useState(null);
+    const openBClicked = Boolean(bookClicked);
+    const handleClickBook = (event) => {
+        setBookClicked(event.currentTarget);
+    };
+    const handleCloseBook = () => {
+        setBookClicked(null);
+    };
+
+    //privilege button
+    const [priClicked, setPriClicked] = React.useState(null);
+    const openPri = Boolean(priClicked);
+    const handleClickPri = (event) => {
+        setPriClicked(event.currentTarget);
+    };
+    const handleClosePri = () => {
+        setPriClicked(null);
+    };
+
+
+
+
+
+
 
 
 
@@ -240,8 +342,165 @@ function User() {
 
     return (
         <div>
-            <UserNavBar/>
-            {searchClicked ? <DepartureList /> :
+            <AppBar position="fixed" style={{ width: window.screen.width }}>
+                <Container maxWidth="xl">
+                    <Toolbar disableGutters>
+                        <h3 style={{ marginLeft: 15 }}>BSB Airways</h3>
+                        <Button
+                            variant="secondary"
+                            id="basic-button"
+                            aria-controls="basic-menu"
+                            aria-haspopup="true"
+                            aria-expanded={openEClicked ? 'true' : undefined}
+                            onClick={handleClickExperience}
+                            style={{ marginLeft: 120, marginRight: 20 }}
+                        >
+
+                            Experience
+                        </Button>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={experienceClicked}
+                            open={openEClicked}
+                            onClose={handleCloseExperience}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                        >
+                            <MenuItem onClick={handleClose}>
+                                <LuggageIcon />
+
+                                Baggage allowance</MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <UpgradeIcon />Upgrade your journey</MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <RoomServiceIcon />
+                                Special services</MenuItem>
+                        </Menu>
+
+                        <Button
+                            variant="secondary"
+                            id="secondary"
+                            aria-controls="basic-menu"
+                            aria-haspopup="true"
+                            aria-expanded={openBClicked ? 'true' : undefined}
+                            onClick={handleClickBook}
+                            style={{marginRight:20}}
+                        >
+                            Book
+                        </Button>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={bookClicked}
+                            open={openBClicked}
+                            onClose={handleCloseBook}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                            style={{ marginLeft: 100 }}
+                        >
+                            <MenuItem onClick={handleClose}>
+                                <HotelIcon />
+                                Hotels
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <CarRentalIcon />
+                                Car Rentals
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <GroupsIcon />
+                                Meet and greet</MenuItem>
+                        </Menu>
+                        <Button
+                            variant="secondary"
+                            id="secondary"
+                            aria-controls="basic-menu"
+                            aria-haspopup="true"
+                            aria-expanded={openPri ? 'true' : undefined}
+                            onClick={handleClickPri}
+                        >
+                            Privilege Club
+                        </Button>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={priClicked}
+                            open={openPri}
+                            onClose={handleClosePri}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                            style={{ marginLeft: 100 }}
+                        >
+                            <MenuItem onClick={handleClose}>
+                                <HubIcon />
+                                About Privilege Club
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <PeopleIcon />
+                                Family Programs
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <CardTravelIcon />
+                                Cash and Miles</MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <SchoolIcon />
+                                Student Programs</MenuItem>
+                        </Menu>
+
+
+
+                        
+
+
+
+
+
+
+
+
+
+                        <Box sx={{ flexGrow: 0 }} style={{ marginLeft: 800 }}>
+                            <Tooltip title="Open settings">
+                            
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar  />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                <MenuItem onClick={handleEditProfile}>
+                                    Edit Profile
+                                </MenuItem>
+
+                                <MenuItem onClick={handleLogout}>
+                                    Logout</MenuItem>
+                                <MenuItem onClick={handleResFlights}>
+                                    View reserved flights</MenuItem>
+
+
+                            </Menu>
+                        </Box>
+                    </Toolbar>
+                </Container>
+            </AppBar>
+
+
+
+            {searchClicked ? <DepartureList /> : (logoutClicked || homeClicked ? <App> </App> : (editProfile ? <EditProfile /> : (viewResFlights ? <ViewResFlights /> :
                 <div>
 
 
@@ -281,7 +540,7 @@ function User() {
                                     onChange={event => setArr(event.target.value)}
 
                                 />
-                               
+
                                 <br />
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DatePicker
@@ -434,6 +693,7 @@ function User() {
                                 <Button variant="secondary" style={{ position: 'center', marginLeft: 270, marginTop: -90 }} onClick={(event) => setSearchClicked(true)}>
                                     Search
                                 </Button>
+
                                 <Paper sx={{ p: 2, margin: 'auto', maxWidth: 500, flexGrow: 1, marginLeft: 200, marginTop: -60 }}>
                                     <Grid container spacing={2}>
                                         <Grid item>
@@ -534,7 +794,7 @@ function User() {
 
                     </div>
                 </div>
-            }
+            )))}
         </div>
 
 

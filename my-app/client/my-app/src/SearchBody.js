@@ -344,7 +344,7 @@ function SearchBody() {
             />
 
 
-            <Button  variant="contained" onClick={event => setSearchClicked(true)} style={{marginLeft:230}}>Search</Button>
+            <Button  variant="primary" onClick={event => setSearchClicked(true)} style={{marginLeft:230}}>Search</Button>
 
 
           </form>
