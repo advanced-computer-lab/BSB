@@ -64,6 +64,8 @@ import PeopleIcon from '@mui/icons-material/People';
 import CardTravelIcon from '@mui/icons-material/CardTravel';
 import SchoolIcon from '@mui/icons-material/School';
 import HubIcon from '@mui/icons-material/Hub';
+import ChooseSeat from './ChooseSeat';
+
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
         marginTop: theme.spacing(3),
@@ -500,7 +502,7 @@ function User() {
 
 
 
-            {searchClicked ? <DepartureList /> : (logoutClicked || homeClicked ? <App> </App> : (editProfile ? <EditProfile /> : (viewResFlights ? <ViewResFlights /> :
+            {searchClicked ? <ChooseSeat /> : (logoutClicked || homeClicked ? <App> </App> : (editProfile ? <EditProfile /> : (viewResFlights ? <ViewResFlights /> :
                 <div>
 
 
