@@ -5,13 +5,17 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-
+import App from './App';
 import { useState } from 'react';
+import Layout from './Layout';
+import { useEffect } from 'react';
+import axios from 'axios';
+
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function EditProfile() {
+function EditProfile(props) {
     const [openSnackBar, setOpenSnackBar] = useState(false);
 
     const handleClickSB = () => {
@@ -25,60 +29,109 @@ function EditProfile() {
 
         setOpenSnackBar(false);
     };
+    const [editLastName, setLastName] = useState(props.editLastName);
+    const [editFirstName, setFirstName] = useState(props.editFirstName);
+    const [editEmail, setEmail] = useState(props.editEmail);
+    const [editPassport, setEditPassport] = useState(props.editPassport);
+    const [clicked, setClicked] = useState(false);
+
+    useEffect(() => {
+        if (clicked) {
+
+            axios.post('http://localhost:8000/editProfile', {
+                _id: "61a8eb41f5dd19c155fc67d6",
+                firstName: editFirstName,
+                lastName: editLastName,
+                email: editEmail,
+                passport: editPassport
+
+            })
+                .then(function (response) {
+                    console.log("xxx");
+                    console.log(response.data)
+                })
+            setClicked(false);
+        }
+
+
+
+
+    })
+
+
     return (
         <div>
-            <div>
-            <h1 style={{marginTop:-50}}>Edit your profile</h1>
-            </div>
-            <Box
-                component="form"
-                sx={{
-                    '& .MuiTextField-root': { m: 1, width: '30ch' },
-                }}
-                noValidate
-                autoComplete="off"
-                style={{marginLeft:-1000, marginTop:-40}}
-                
-            >
-                <div>
-                    <TextField
+            {props.logout ? <App /> : (props.back ? props.component :
+                <div style={{ marginTop: -100 }}>
+                    <Layout />
 
-                        id="outlined"
-                        label="Email"
-                        defaultValue=""
-                        style={{ marginTop: 20 }} />
-                    <br />
-                    <br />
-                    <TextField
+                    <div>
+                        <h1 style={{ marginTop: -690, marginLeft: 80 }}>Edit your profile</h1>
+                    </div>
+                    <Box
+                        component="form"
+                        sx={{
+                            '& > :not(style)': { m: 1, width: '25ch' },
+                        }}
+                        noValidate
+                        autoComplete="off"
+                        style={{ marginLeft: 120, marginTop: 30 }}
+                    >
+                        <TextField
 
+                            required
+                            id="outlined-error"
+                            label="First Name"
+                            style={{width:300}}
+                            defaultValue={props.firstName}
+                            onChange={event => setFirstName(event.target.value)}
+                        />
+                        <br />
+                        <TextField
 
-                        id="outlined"
-                        label="First Name"
-                        defaultValue="" />
-                    <br />
-                    <br />
-                    <TextField
+                            required
+                            id="outlined-error"
+                            label="Last Name"
+                            style={{width:300}}
+                            defaultValue={props.lastName}
+                            onChange={event => setLastName(event.target.value)}
 
-                        id="outlined"
-                        label="Last Name"
-                        defaultValue="" />
-                    <br />
-                    <br />
+                        />
+                        <br />
+                        <TextField
 
+                            required
+                            id="outlined-error"
+                            style={{width:300}}
+                            label="Email"
+                            defaultValue={props.email}
+                            onChange={event => setEmail(event.target.value)}
 
-                    <TextField
+                        />
+                        <br />
+                        <TextField
 
-                        id="outlined"
-                        label="Passport Number"
-                        defaultValue="" />
+                            required
+                            id="outlined-error"
+                            label="Passport"
+                            style={{width:300}}
+                            defaultValue={props.passport}
+                            onChange={event => setEditPassport(event.target.value)}
+
+                        />
+
+                        <br />
+                    </Box>
+                    );
+
 
                     <br />
                     <br />
                     <Stack spacing={2} sx={{ width: '20' }}>
-                        <Button  variant="contained" style={{marginLeft:1000}} onClick={handleClickSB}>
+                        <Button variant="contained" style={{ marginLeft: 700, width: 200, marginTop: 100 }} onClick={e => { handleClickSB(); setClicked(true) }} >
                             Submit
                         </Button>
-                        <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSB}>
+                        <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSB} anchorOrigin={ {vertical:'bottom' , horizontal:'center'}} >
                             <Alert onClose={handleCloseSB} severity="success" sx={{ width: '100%' }}>
                                 Changes submitted successfully!
                             </Alert>
@@ -87,8 +140,9 @@ function EditProfile() {
                     </Stack>
 
                 </div>
-            </Box>
 
+
+            )}
         </div>
     )
 }

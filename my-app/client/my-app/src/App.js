@@ -74,7 +74,7 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 
 
-
+import Layout from './Layout'
 
 
 
@@ -170,20 +170,16 @@ function handleLogout()
                
 
 
-                <div
-                    id='intro-example'
-                    className='p-5 text-center bg-image'
-                    style={{
-                        background: `url(${flight})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", height: window.screen.height, width: window.screen.width
-                    }}
-
-                >
-                    <div className='mask' style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', marginTop: 100, height: 600, width: 1450 }}>
+                <div>
+                   
+                    
 
                         <div className='d-flex justify-content-center align-items-center h-100'>
                             <div className='text-white'>
                                 <h5 className='mb-4'></h5>
-                                {adminClicked  ? <Admin></Admin> : (userClicked  ? <User></User> : <div>
+                                {adminClicked  ? <Admin></Admin> : (userClicked  ? <User></User>  : <div>
+
+                                    <Layout/>
                                     <Button variant="secondary" data-target="#myModal" data-toggle="modal" data-backdrop="static" onClick={(event) => setUserClicked(true)} data-keyboard="false" style={{
                                         position: 'absolute',
                                         right: 790,
@@ -194,51 +190,21 @@ function handleLogout()
                                         right: 650,
                                         top: 350,
                                     }} data-target="#myModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" onClick={(event) => setAdminClicked(true)} >Admin</Button>
+                                
+                                
+                                
+                                
+                                
                                 </div>
                                 )}
                             </div>
-                        </div>
-                        <SpeedDial
-                            ariaLabel="SpeedDial openIcon example"
-                            sx={{ position: 'absolute', bottom: 70, right: 9 }}
-                            icon={<SpeedDialIcon openIcon={<EditIcon />} />}
-                        >
-                            {actions.map((action) => (
-                                <SpeedDialAction
-                                    key={action.name}
-                                    icon={action.icon}
-                                    tooltipTitle={action.name}
-                                />
-                            ))}
-                        </SpeedDial>
+                      
+                       
 
                     </div>
                 </div>
 
-                <BottomNavigation sx={{ width: window.screen.width, height: 70, marginLeft: 0, marginTop: -5 }} value={bNavBar} onChange={handleChangeBNavBar}>
-                    <BottomNavigationAction
-                        label="Send us an email"
-                        value="Send us an email"
-                        icon={<Mail />}
-                    />
-
-                    <BottomNavigationAction
-                        label="Find us"
-                        value="Find us"
-                        icon={<LocationOnIcon />}
-                    />
-
-                    <BottomNavigationAction
-                        label="Contact Us"
-                        value="Contact Us"
-                        icon={<PhoneInTalkIcon />} />
-                    <BottomNavigationAction
-                        label=" Language"
-                        value=" Language"
-                        icon={<LanguageIcon />}
-                    />
-                </BottomNavigation>
-
+                
 
             </header>
 

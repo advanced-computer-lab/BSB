@@ -17,7 +17,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import App from './App';
+import EditProfile from './EditProfile';
+import Layout from './Layout';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -37,7 +39,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-function ViewResFlights() {
+function ViewResFlights(props) {
     const [flightNum, setFlightNum] = useState("");
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
@@ -49,6 +51,19 @@ function ViewResFlights() {
     const [tripDuration, setTripDuration] = useState("");
     const [flightlist, setFlightlist] = useState([]);
     const [openPopUp, setOpen] = useState(false);
+    const [depFlights, setDepFlight] = useState([{
+        flightnumber:"",
+        adults: "", children: "", cabin: "",
+        depprice: "", tripduration: "", deptime: "", arrterminal: "", from: "", to: "", date: ""
+    }])
+
+    const [returnFlight, setReturnFlight] = useState({
+        adultsreturn: "", childrenreturn: "", cabinreturn: "",
+        returnprice: "", returndepterminal: "", returnarrterminal: "",
+        returntripduration: "", returndeptime: "", returnarrterminal: "", returnfrom: "", returnto: "", returndate: ""
+    })
+
+
 
     const handleClickOpenPopUp = () => {
         setOpen(true);
@@ -60,88 +75,127 @@ function ViewResFlights() {
 
 
     useEffect(() => {
-        axios.get("http://localhost:8000/viewDepartureFlights").then(res => {
-            console.log("xxxx");
-            setFlightlist(res.data);
-        })
+        axios.get("http://localhost:8000/viewMyReservedFlights",
+            {
+
+            }).then(res => {
 
 
+
+                console.log("xxxx");
+                //console.log(res.data[1].ChosenFlight.DepartId.FlightNu)
+                for (var i = 1; i < (res.data).length; i++) {
+                    var x = {
+                        // flightnumber:res.data[i].ChosenFlight.DepartId.FlightNu,
+
+                        adults: res.data[i].ChosenFlight.DepartId.DepartPassengersAdults, children: res.data[i].ChosenFlight.DepartId.DepartPassengersChildren,
+                        cabin: res.data[i].ChosenFlight.DepartCabin,
+                        deptime: res.data[i].ChosenFlight.DepartId.DepartureTime, arrtime: res.data[i].ChosenFlight.DepartId.ArrivalTime,
+                        from: res.data[i].ChosenFlight.DepartId.From, to: res.data[i].ChosenFlight.DepartId.To,
+                        date: res.data[i].ChosenFlight.DepartId.FlightDate
+
+                    }
+                    var y = {
+                        flightnumber:res.data[i].ChosenFlight.ReturnId.FlightNu,
+                        adults: res.data[i].ChosenFlight.ReturnId.DepartPassengersAdults, children: res.data[i].ChosenFlight.ReturnId.DepartPassengersChildren,
+                        cabin: res.data[i].ChosenFlight.ReturnCabin,
+                        deptime: res.data[i].ChosenFlight.ReturnId.DepartureTime, arrtime: res.data[i].ChosenFlight.ReturnId.ArrivalTime,
+                        from: res.data[i].ChosenFlight.ReturnId.From, to: res.data[i].ChosenFlight.ReturnId.To,
+                        date: res.data[i].ChosenFlight.ReturnId.FlightDate
+                    }
+                    setDepFlight(depFlights.push(x))
+                    setDepFlight(depFlights.push(y))
+                    console.log(depFlights);
+                }
+                
+
+
+      })
     })
-    return (
-        < div >
+        
+        return (
+            <div style={{ marginTop: -250 }}>
+                {props.logout ? <App /> : (props.edit ? <EditProfile logout={props.logout} /> : (props.back ? props.component :
 
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 500 }} aria-label="customized table" size='m'>
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell align="center">Flight Number</StyledTableCell>
-                            <StyledTableCell align="center">Flight Date</StyledTableCell>
+                    < div >
+                        <Layout />
 
-                            <StyledTableCell align="center">Departure Airport</StyledTableCell>
-                            <StyledTableCell align="center">Arrival Airport</StyledTableCell>
+                        <TableContainer component={Paper} style={{ marginTop: -600, width: 1000, marginLeft: 250 }}>
+                            <Table sx={{ minWidth: 300 }} aria-label="customized table" size='m'>
+                                <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell align="center">Flight Number</StyledTableCell>
+                                        <StyledTableCell align="center">Flight Date</StyledTableCell>
 
-                            <StyledTableCell align="center">Departure Terminal</StyledTableCell>
-                            <StyledTableCell align="center">Arrival Terminal</StyledTableCell>
-                            <StyledTableCell align="center">Departure Time</StyledTableCell>
-                            <StyledTableCell align="center">Arrival Time</StyledTableCell>
-                            <StyledTableCell align="center">Trip Duration</StyledTableCell>
-                            <StyledTableCell align="center">Number of tickets</StyledTableCell>
-                            <StyledTableCell align="center">Cabin Type</StyledTableCell>
-                            <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                            <StyledTableCell align="center">&nbsp;</StyledTableCell>
+                                        <StyledTableCell align="center">Departure Airport</StyledTableCell>
+                                        <StyledTableCell align="center">Arrival Airport</StyledTableCell>
+                                        <StyledTableCell align="center">Departure Time</StyledTableCell>
+                                        <StyledTableCell align="center">Arrival Time</StyledTableCell>
+                                        
+                                        <StyledTableCell align="center">Number of Adults</StyledTableCell>
+                                        <StyledTableCell align="center">Number of Children</StyledTableCell>
+                                        <StyledTableCell align="center">Cabin Type</StyledTableCell>
+                                       
+                                        <StyledTableCell align="center">&nbsp;</StyledTableCell>
+                                        <StyledTableCell align="center">&nbsp;</StyledTableCell>
 
-                            <StyledTableCell align="center"></StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableRow> </TableRow>
+                                        <StyledTableCell align="center"></StyledTableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableRow> </TableRow>
 
-                    {flightlist.map(u => {
-                        return <TableRow key={u._id}>
-                            <StyledTableCell align="center">{u.FlightNu}</StyledTableCell>
-                            <StyledTableCell align="center">{u.FlightDate}</StyledTableCell>
-                            <StyledTableCell align="center">{u.From} </StyledTableCell>
-                            <StyledTableCell align="center">{u.To}</StyledTableCell>
-                            <StyledTableCell align="center">{u.TerminalDeparture}</StyledTableCell>
-                            <StyledTableCell align="center">{u.TerminalArrival}</StyledTableCell>
-                            <StyledTableCell align="center">{u.ArrivalTime}</StyledTableCell>
-                            <StyledTableCell align="center">{u.DepartureTime}</StyledTableCell>
-                            <StyledTableCell align="center">{u.TripDuration}</StyledTableCell>
-                            <StyledTableCell align="center">
-                                <Button variant="outlined" onClick={handleClickOpenPopUp}>
-                                    Cancel flight
-                                </Button>
-                                <Dialog
-                                    open={openPopUp}
-                                    
-                                    onClose={handleClosePopUp}
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
-                                >
-                                    <DialogTitle id="alert-dialog-title">
-                                        {"Are you sure you want to cancel your ticket?"}
-                                    </DialogTitle>
-
-                                    <DialogActions>
-                                        <Button onClick={handleClosePopUp}>Cancel</Button>
-                                        <Button onClick={handleClosePopUp} autoFocus>
-                                            Confirm
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
-
-                            </StyledTableCell>
+                                {depFlights.map(u => {
+                                    return <TableRow>
+                                        <StyledTableCell align="center">{u.flightnumber}</StyledTableCell>
+                                        <StyledTableCell align="center">{u.date}</StyledTableCell>
+                                        <StyledTableCell align="center">{u.from} </StyledTableCell>
+                                        <StyledTableCell align="center">{u.to}</StyledTableCell>
+                                        <StyledTableCell align="center">{u.deptime}</StyledTableCell>
+                                        <StyledTableCell align="center">{u.arrtime}</StyledTableCell>
+                                        <StyledTableCell align="center">{u.adults}</StyledTableCell>
+                                        <StyledTableCell align="center">{u.children}</StyledTableCell>
+                                        <StyledTableCell align="center">{u.cabin}</StyledTableCell>
+  
 
 
+                                        <StyledTableCell align="center">
+                                            <Button variant="outlined" onClick={handleClickOpenPopUp}>
+                                                Cancel flight
+                                            </Button>
+                                            <Dialog
+                                                open={openPopUp}
 
-                        </TableRow>
-                    })}
-                </Table>
-            </TableContainer>
+                                                onClose={handleClosePopUp}
+                                                aria-labelledby="alert-dialog-title"
+                                                aria-describedby="alert-dialog-description"
+                                            >
+                                                <DialogTitle id="alert-dialog-title">
+                                                    {"Are you sure you want to cancel your ticket?"}
+                                                </DialogTitle>
+
+                                                <DialogActions>
+                                                    <Button onClick={handleClosePopUp}>Cancel</Button>
+                                                    <Button onClick={handleClosePopUp} autoFocus>
+                                                        Confirm
+                                                    </Button>
+                                                </DialogActions>
+                                            </Dialog>
+
+                                        </StyledTableCell>
 
 
 
-        </div>
-    )
-}
+                                    </TableRow>
+                                })}
+                            </Table>
+                        </TableContainer>
+
+
+
+                    </div>
+                ))}
+            </div>
+        )
+    }
 
 export default ViewResFlights
