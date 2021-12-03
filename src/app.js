@@ -16,7 +16,8 @@ mongoose = require('mongoose');
 const flight = require('./Models/flights.js')
 const chosenFlights = require('./Models/chosenFlights.js')
 const seats = require('./Models/seats.js')
-const reserved = require('./Models/reservedFlights.js')
+const existing = require('./Models/existingUser.js');
+const reserved = require('./Models/reservedFlights.js');
 require('dotenv').config(); // configures dotenv
 app.use(express.json());
 // MongoDB connection with ATLAS and Mongoose
@@ -38,26 +39,6 @@ let constantData = JSON.parse(dt);
 let st = fs.readFileSync('./seats.json');
 let seatsData = JSON.parse(st);
 //console.log(data);
-
-app.get("/addFlight", (req, res) => {
-    const flight1 = new flight({
-        From: "LAX",
-        To: "JFK",
-        FlightDate: 12 - 1 - 2022,
-        Cabin: "Economy",
-        SeatsAvailableonFlight: 20
-    })
-    const flight2 = new flight({
-        From: "LAX",
-        To: "JFK",
-        FlightDate: 12 - 1 - 2022,
-        Cabin: "Business",
-        SeatsAvailableonFlight: 10
-    })
-    flight1.save();
-    flight2.save();
-    res.send("Flight successfully added!")
-})
 
 app.get("/showFlights", (req, res) => {
     ``
@@ -90,7 +71,13 @@ app.post("/addFlight", (req, res) => {
         'TerminalArrival': req.body.TerminalArrival,
         'FlightNu': req.body.FlightNu,
         'ArrivalTime': req.body.ArrivalTime,
-        'DepartureTime': req.body.DepartureTime
+        'DepartureTime': req.body.DepartureTime,
+        'EcoPrice': req.body.ecoPrice,
+          'BusPrice': req.body.busPrice,
+          'FPrice':req.body.FPrice,
+            'DepartBool': req.body.DepartBool,
+          'ReturnBool':req.body.ReturnBool,
+          'TripDuration':req.body.TripDuration
 
     })
     newFlight.save().then((result) => {
@@ -101,7 +88,23 @@ app.post("/addFlight", (req, res) => {
         })
 
 })
+// function toDate(dStr,format) {
+// 	var now = new Date();
+// 	if (format == "h:m") {
+//  		now.setHours(dStr.substr(0,dStr.indexOf(":")));
+//  		now.setMinutes(dStr.substr(dStr.indexOf(":")+1));
+//  		now.setSeconds(0);
+//  		return now;
+// 	}else 
+// 		return "Invalid Format";
+// }
+// function checkTime(arrival,departure,duration){
+//     const arri = arrival.split(" ");
+//     const dept = departure.split(" ");
+//     arrivalTime = toDate(arri[0],"h:m");
+//     departureTime = toDate(dept[0],"h:m");
 
+// }
 app.post("/searchFlights", async (req, res) => {
 
     const criteria = req.body;
@@ -257,7 +260,6 @@ app.post("/searchReturnFlights", async (req, res) => {
 });
 app.post("/AddDepartureFlight", (req, res) => {
     const newFlight = new chosenFlights({
-        //'userId': req.body.userID,
         'DepartId': req.body.FlightId,
         "DepartPassengersAdult": req.body.adultPass,
         'DepartPassengersChild': req.body.childPass,
@@ -349,8 +351,6 @@ app.post("/getAvailableCabinSeats", async (req, res) => {//gets available seats 
         remove(st, rs[i]);
     }
     res.send(st);
-
-
 })
 app.post("/showReservedCabinSeats", async (req, res) => {
     let c = req.body.cabin;
@@ -370,6 +370,72 @@ app.post("/showReservedCabinSeats", async (req, res) => {
     res.send(rs);
 
 })
+app.post("/showFlightReservedSeats", async (req, res) => {
+    const data = await seats.find({ FlightID: req.body.FlightID });
+    let eco = data[0].reservedEcoSeats;
+    let bus = data[0].reservedBusSeats;
+    let f = data[0].reservedFstSeats;
+    if (f == undefined) {
+        f = [];
+    }
+    if (bus == undefined) {
+        bus = [];
+    }
+    if (eco == undefined) {
+        eco = []
+    }
+    ob = { Economy: eco, Business: bus, First: f };
+    res.send(ob);
+})
+
+app.post("/showFlightAvailableSeatsNumber", async (req, res) => {
+    eco = await getAvailableCabinSeat("Economy", req.body.FlightID);
+    console.log(eco);
+    bus = await getAvailableCabinSeat("Business", req.body.FlightID);
+    console.log(bus);
+    fst = await getAvailableCabinSeat("First", req.body.FlightID);
+    console.log(fst)
+    ob = { Economy: eco.length, Business: bus.length, First: fst.length };
+    res.send(ob);
+})
+app.post("/showFlightAvailableSeats", async (req, res) => {
+    eco = await getAvailableCabinSeat("Economy", req.body.FlightID);
+    console.log(eco);
+    bus = await getAvailableCabinSeat("Business", req.body.FlightID);
+    console.log(bus);
+    fst = await getAvailableCabinSeat("First", req.body.FlightID);
+    console.log(fst)
+    ob = { Economy: eco, Business: bus, First: fst };
+    res.send(ob);
+})
+
+async function getAvailableCabinSeat(c, id) {
+    const data = await seats.find({ FlightID: id });
+    console.log(data);
+    if (c == "Economy") {
+        st = seatsData.Economy;
+        rs = data[0].reservedEcoSeats;
+    }
+    else if (c == "First") {
+        st = seatsData.First;
+        rs = data[0].reservedFstSeats;
+    }
+    else {
+        st = seatsData.Business;
+        rs = data[0].reservedBusSeats;
+    }
+    console.log(st)
+    console.log(rs);
+    if (rs == undefined) {
+        return st;
+    }
+    for (var i = 0; i < rs.length; i++) {
+        remove(st, rs[i]);
+    }
+    console.log(st);
+    return st;
+}
+
 app.get("/showReservedSeats", (req, res) => {//shows all the seat reservation database => each flight and its reserved seats
     seats.find({}).exec(function (err, data) {
         res.send(data);
@@ -381,14 +447,14 @@ app.post("/showFlightReservedSeats", (req, res) => {//shows the reserved seats o
     })
 })
 
-app.post("/checkSeat", (req,res)=>{
+app.post("/checkSeat", (req, res) => {
     seats.find({ FlightID: req.body.FlightID }).lean().exec(function (err, data) {
         seat = req.body.seat;
         a = data[0].reservedSeats;
-        if(a.includes(seat)){
+        if (a.includes(seat)) {
             res.send("reserved");
         }
-        else{
+        else {
             res.send("not reserved");
         }
     })
@@ -532,4 +598,65 @@ app.post("/ViewTicketSummary", (req, res) => { //summary of chosen flights
     })
 
 })
+app.get("/sendUserInfo", (req, res) => {
+    existing.find({}).exec(function (err, data) {
+        res.send(data);
+    })
+})
+app.post("/editProfile", (req, res) => {
+    existing.updateOne({ _id: req.body._id }, req.body).exec(function (err, leads) {
+        res.status(201).send(leads);
+    })
+})
 
+app.post("/viewMyReservedFlights", async (req, res) => {
+
+    reserved.find({ User: req.body._id }).populate("User").populate("ChosenFlight").then(async (p) => {
+        console.log(p);//p returns array of user's reservations
+        for (var i = 0; i < p.length; i++) {
+            console.log(p[i]);
+            const query = await chosenFlights.find({ _id: p[i].ChosenFlight._id }).populate("DepartId").populate("ReturnId");
+            console.log(query);
+            p[i].ChosenFlight.DepartId = query[0].DepartId;
+            p[i].ChosenFlight.ReturnId = query[0].ReturnId;
+        }
+        res.send(p);
+    })
+        .catch(error => console.log(error))
+})
+app.post("/addReservedFlight", (req, res) => {
+    const res1 = new reserved({
+        ChosenFlight: req.body.chosenFlightId,
+        User: req.body.user
+    })
+    res1.save().then((result) => {
+        res.send(result)
+    }).catch((err) => {
+        console.log(err)
+    })
+})
+app.post("/cancelReservation", (req, res) => {
+    reserved.deleteOne({ _id: req.body.ReservationId }).exec(function (err, leads) {
+        res.status(201).send("You have successfully cancelled your reservation");
+    });
+});
+
+app.post("/ReservedFlightSummary", (req, res) => {
+    reserved.find({ _id: req.body._id }).populate("User").populate("ChosenFlight").then(async (p) => {
+        console.log(p);//p returns array of user's reservations
+        console.log(p[0]);
+        const query = await chosenFlights.find({ _id: p[0].ChosenFlight._id }).populate("DepartId").populate("ReturnId");
+        console.log(query);
+        p[0].ChosenFlight.DepartId = query[0].DepartId;
+        p[0].ChosenFlight.ReturnId = query[0].ReturnId;
+        let c = p[0].ChosenFlight.DepartCabin;
+        departBaggage = getBaggage(c);
+        let c2 = p[0].ChosenFlight.ReturnCabin;
+        returnBag = getBaggage(c2);
+        p[0] = p[0].toJSON();
+        p[0].departureBaggage = departBaggage;
+        p[0].returnBaggage = returnBag;
+        res.send(p);
+    })
+        .catch(error => console.log(error))
+})
