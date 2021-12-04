@@ -123,7 +123,7 @@ app.post("/searchDepartureFlights", async (req, res) => {
             let cond = squery.length == 0;//if flight has no reserved seats yet
             console.log(cond);
             if (!cond) {
-                ob = getSeatNumbers(fquery[i]);
+                ob = await getSeatNumbers(f);
                 if (c == "Economy") {
                     capacity = ob.e;
                     c2 = (squery[0].reservedEcoSeats.length == capacity) || ((capacity - squery[0].reservedEcoSeats.length) < total)//not enough pass
@@ -196,7 +196,7 @@ app.post("/searchReturnFlights", async (req, res) => {
             let cond = squery.length == 0;//if flight has no reserved seats yet
             console.log(cond);
             if (!cond) {
-                ob = getSeatNumbers(fquery[i]);
+                ob = await getSeatNumbers(f);
                 if (c == "Economy") {
                     capacity = ob.e;
                     c2 = (squery[0].reservedEcoSeats.length == capacity) || ((capacity - squery[0].reservedEcoSeats.length) < total)//not enough pass
