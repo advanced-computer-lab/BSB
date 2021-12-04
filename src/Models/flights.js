@@ -72,6 +72,7 @@ const flightSchema = new Schema({
         type:String,
         required:true
       }
+
 },
     { timestamps: false });
 

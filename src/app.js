@@ -36,8 +36,8 @@ connection.once('open', () => {
 });
 let dt = fs.readFileSync('./constantData.json');
 let constantData = JSON.parse(dt);
-let st = fs.readFileSync('./seats.json');
-let seatsData = JSON.parse(st);
+let sc = fs.readFileSync('./seatChart.json');
+let seatsChart = JSON.parse(sc);
 //console.log(data);
 
 app.get("/showFlights", (req, res) => {
@@ -82,29 +82,14 @@ app.post("/addFlight", (req, res) => {
     })
     newFlight.save().then((result) => {
         res.send(result)
+        assignFlightSeats(req.body.NuofAvailableEconomySeats,req.body.NuofAvailableBuisnessSeats,req.body.NuofAvailableFirstSeats,result._id);
     })
         .catch((err) => {
             console.log(err)
         })
 
 })
-// function toDate(dStr,format) {
-// 	var now = new Date();
-// 	if (format == "h:m") {
-//  		now.setHours(dStr.substr(0,dStr.indexOf(":")));
-//  		now.setMinutes(dStr.substr(dStr.indexOf(":")+1));
-//  		now.setSeconds(0);
-//  		return now;
-// 	}else 
-// 		return "Invalid Format";
-// }
-// function checkTime(arrival,departure,duration){
-//     const arri = arrival.split(" ");
-//     const dept = departure.split(" ");
-//     arrivalTime = toDate(arri[0],"h:m");
-//     departureTime = toDate(dept[0],"h:m");
 
-// }
 app.post("/searchFlights", async (req, res) => {
 
     const criteria = req.body;
@@ -138,14 +123,18 @@ app.post("/searchDepartureFlights", async (req, res) => {
             let cond = squery.length == 0;//if flight has no reserved seats yet
             console.log(cond);
             if (!cond) {
+                ob = getSeatNumbers(fquery[i]);
                 if (c == "Economy") {
-                    c2 = (squery[0].reservedEcoSeats.length == 56) || ((56 - squery[0].reservedEcoSeats.length) < total)//not enough pass
+                    capacity = ob.e;
+                    c2 = (squery[0].reservedEcoSeats.length == capacity) || ((capacity - squery[0].reservedEcoSeats.length) < total)//not enough pass
                 }
                 else if (c == "Business") {
-                    c2 = (squery[0].reservedBusSeats.length == 12) || ((12 - squery[0].reservedBusSeats.length) < total)
+                    capacity = ob.b;
+                    c2 = (squery[0].reservedBusSeats.length == capacity) || ((capacity - squery[0].reservedBusSeats.length) < total)
                 }
                 else {
-                    c2 = (squery[0].reservedFstSeats.length == 4) || ((4 - squery[0].reservedFstSeats.length) < total);
+                    capacity = ob.f;
+                    c2 = (squery[0].reservedFstSeats.length == capacity) || ((capacity - squery[0].reservedFstSeats.length) < total);
                 }
                 console.log(c2);
                 if (!c2) {
@@ -207,14 +196,18 @@ app.post("/searchReturnFlights", async (req, res) => {
             let cond = squery.length == 0;//if flight has no reserved seats yet
             console.log(cond);
             if (!cond) {
+                ob = getSeatNumbers(fquery[i]);
                 if (c == "Economy") {
-                    c2 = (squery[0].reservedEcoSeats.length == 56) || ((56 - squery[0].reservedEcoSeats.length) < total)//not enough pass
+                    capacity = ob.e;
+                    c2 = (squery[0].reservedEcoSeats.length == capacity) || ((capacity - squery[0].reservedEcoSeats.length) < total)//not enough pass
                 }
                 else if (c == "Business") {
-                    c2 = (squery[0].reservedBusSeats.length == 12) || ((12 - squery[0].reservedBusSeats.length) < total)
+                    capacity = ob.b;
+                    c2 = (squery[0].reservedBusSeats.length == capacity) || ((capacity - squery[0].reservedBusSeats.length) < total)
                 }
                 else {
-                    c2 = (squery[0].reservedFstSeats.length == 4) || ((4 - squery[0].reservedFstSeats.length) < total);
+                    capacity = ob.f;
+                    c2 = (squery[0].reservedFstSeats.length == capacity) || ((capacity - squery[0].reservedFstSeats.length) < total);
                 }
                 console.log(c2);
                 if (!c2) {
@@ -263,8 +256,7 @@ app.post("/AddDepartureFlight", (req, res) => {
         'DepartId': req.body.FlightId,
         "DepartPassengersAdult": req.body.adultPass,
         'DepartPassengersChild': req.body.childPass,
-        'DepartCabin': req.body.cabin,
-        'DepartSeats': req.body.seats
+        'DepartCabin': req.body.cabin
     })
     newFlight.save().then((result) => {
         console.log(result);
@@ -300,7 +292,7 @@ app.post("/AddReturnFlight", async (req, res) => {//places chosen return flight 
         "ReturnPassengersAdult": req.body.adultPass,
         'ReturnPassengersChild': req.body.childPass,
         'ReturnCabin': req.body.cabin,
-        'ReturnSeats': req.body.seats
+
     })
     console.log(cf);
     chosenFlights.find({ _id: req.body._id }).populate("ReturnId").populate("DepartId").then(async (p) => {
@@ -324,33 +316,29 @@ app.post("/AddReturnFlight", async (req, res) => {//places chosen return flight 
     }).catch(error => console.log(error));
 
 });
+function getFlightSeats(eco, bus, fst){
+    const f = seatsChart.FirstSeats.slice(0, fst);
+    const b = seatsChart.BusinessSeats.slice(0, bus);
+    const e  = seatsChart.EconomySeats.slice(0, eco);
+    ob = {economy:e, first:f, business : b};
+    return ob;
 
+}
+async function getSeatNumbers(flightID){
+    const data = await flight.find({_id:flightID});
+    fst = data[0].NuofAvailableFirstSeats;
+    bus =data[0].NuofAvailableBuisnessSeats;
+    eco = data[0].NuofAvailableEconomySeats;
+    ob = {f:fst,b:bus,e:eco};
+    return ob;
+}
 function remove(array, element) {
     const index = array.indexOf(element);
     array.splice(index, 1);
 }
-app.post("/getAvailableCabinSeats", async (req, res) => {//gets available seats left on specific flight,given a specific cabin
-    let c = req.body.cabin;
-    const data = await seats.find({ FlightID: req.body.FlightID });
-    console.log(data);
-    if (c == "Economy") {
-        st = seatsData.Economy;
-        rs = data[0].reservedEcoSeats;
-    }
-    else if (c == "First") {
-        st = seatsData.First;
-        rs = data[0].reservedFstSeats;
-    }
-    else {
-        st = seatsData.Business;
-        rs = data[0].reservedBusSeats;
-    }
-    console.log(st)
-    console.log(rs);
-    for (var i = 0; i < rs.length; i++) {
-        remove(st, rs[i]);
-    }
-    res.send(st);
+app.post("/getAvailableCabinSeats", async (req, res) => {
+    c = await getAvailableCabinSeat(req.body.cabin, req.body.FlightID);
+    res.send(c);
 })
 app.post("/showReservedCabinSeats", async (req, res) => {
     let c = req.body.cabin;
@@ -365,10 +353,12 @@ app.post("/showReservedCabinSeats", async (req, res) => {
     else {
         rs = data[0].reservedBusSeats;
     }
-    console.log(rs)
-    // return st; 
-    res.send(rs);
-
+    console.log(rs); 
+    if(rs==undefined){
+        res.send([]);
+    }
+    else{
+    res.send(rs);}
 })
 app.post("/showFlightReservedSeats", async (req, res) => {
     const data = await seats.find({ FlightID: req.body.FlightID });
@@ -389,39 +379,31 @@ app.post("/showFlightReservedSeats", async (req, res) => {
 })
 
 app.post("/showFlightAvailableSeatsNumber", async (req, res) => {
-    eco = await getAvailableCabinSeat("Economy", req.body.FlightID);
-    console.log(eco);
-    bus = await getAvailableCabinSeat("Business", req.body.FlightID);
-    console.log(bus);
-    fst = await getAvailableCabinSeat("First", req.body.FlightID);
-    console.log(fst)
-    ob = { Economy: eco.length, Business: bus.length, First: fst.length };
+    ob = { Economy: (await getAvailableCabinSeat("Economy", req.body.FlightID)).length, Business: (await getAvailableCabinSeat("Business", req.body.FlightID)).length, First: (await getAvailableCabinSeat("First", req.body.FlightID)).length };
     res.send(ob);
 })
 app.post("/showFlightAvailableSeats", async (req, res) => {
-    eco = await getAvailableCabinSeat("Economy", req.body.FlightID);
-    console.log(eco);
-    bus = await getAvailableCabinSeat("Business", req.body.FlightID);
-    console.log(bus);
-    fst = await getAvailableCabinSeat("First", req.body.FlightID);
-    console.log(fst)
-    ob = { Economy: eco, Business: bus, First: fst };
+    ob = { Economy: (await getAvailableCabinSeat("Economy", req.body.FlightID)), Business: (await getAvailableCabinSeat("Business", req.body.FlightID)), First: (await getAvailableCabinSeat("First", req.body.FlightID))};
     res.send(ob);
 })
-
 async function getAvailableCabinSeat(c, id) {
     const data = await seats.find({ FlightID: id });
     console.log(data);
+    s =  await getSeatNumbers(id);
+    console.log(s);
+    ob = getFlightSeats(s.e,s.b,s.f);
+    console.log(ob);
     if (c == "Economy") {
-        st = seatsData.Economy;
+        st = ob.economy;
         rs = data[0].reservedEcoSeats;
+        console.log("reserved seats are "+rs);
     }
     else if (c == "First") {
-        st = seatsData.First;
+        st = ob.first;
         rs = data[0].reservedFstSeats;
     }
     else {
-        st = seatsData.Business;
+        st = ob.business;
         rs = data[0].reservedBusSeats;
     }
     console.log(st)
@@ -430,12 +412,24 @@ async function getAvailableCabinSeat(c, id) {
         return st;
     }
     for (var i = 0; i < rs.length; i++) {
+        if(st.includes(rs[i])){
         remove(st, rs[i]);
+    }
     }
     console.log(st);
     return st;
 }
-
+app.post("/flightSeating" , async (req,res)=>{
+   const query = await flight.find({_id:req.body._id});
+    fst = query[0].NuofAvailableFirstSeats;
+    bus =query[0].NuofAvailableBuisnessSeats;
+    eco = query[0].NuofAvailableEconomySeats;
+    capacity = fst+bus+eco;
+    ob = getFlightSeats(eco, bus, fst, req.body_id);
+    o = {firstNu:fst, businessNu:bus, economyNu: eco, totalcapacity:capacity}
+    re = Object.assign(ob,o);
+    res.send(re);
+})
 app.get("/showReservedSeats", (req, res) => {//shows all the seat reservation database => each flight and its reserved seats
     seats.find({}).exec(function (err, data) {
         res.send(data);
@@ -660,3 +654,27 @@ app.post("/ReservedFlightSummary", (req, res) => {
     })
         .catch(error => console.log(error))
 })
+
+//{"seats":["a1","a2","a3","a4","a5","a6","b1","b2","b3","b4","b5","b6","c1","c2","c3","c4","c5","c6","d1","d2","d3","d4","d5","d6","e1","e2","e3","e4","e5","e6","f1","f2","f3","f4","f5","f6","g1","g2","g3","g4","g5","g6","h1","h2","h3","h4","h5","h6","i1","i2","i3","i4","i5","i6","j1","j2","j3","j4","j5","j6","k1","k2","k3","k4","k5","k6","l1","l2","l3","l4","l5","l6","m1","m2","m3","m4","m5","m6","n1","n2","n3","n4","n5","n6","o1","o2","o3","o4","o5","o6","p1","p2","p3","p4","p5","p6"]}
+
+// "FirstSeats": [],
+// "BusinessSeats": [],
+// "EconomySeats": [],
+// "_id": "618cd502e46abcc99dde1ccb",
+// "From": "LAX",
+// "To": "FGF",
+// "FlightDate": "2021-11-10T00:00:00.000Z",
+// "NuofAvailableFirstSeats": 10,
+// "NuofAvailableBuisnessSeats": 6,
+// "NuofAvailableEconomySeats": 12,
+// "TerminalDeparture": 2,
+// "TerminalArrival": 3,
+// "FlightNu": "CC208",
+// "ArrivalTime": "3:00 AM",
+// "DepartureTime": "12:00 AM",
+// "DepartBool": false,
+// "ReturnBool": false,
+// "TripDuration": "3",
+// "BusPrice": 50,
+// "EcoPrice": 25,
+// "FPrice": 100
