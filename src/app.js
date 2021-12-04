@@ -73,16 +73,16 @@ app.post("/addFlight", (req, res) => {
         'ArrivalTime': req.body.ArrivalTime,
         'DepartureTime': req.body.DepartureTime,
         'EcoPrice': req.body.ecoPrice,
-          'BusPrice': req.body.busPrice,
-          'FPrice':req.body.FPrice,
-            'DepartBool': req.body.DepartBool,
-          'ReturnBool':req.body.ReturnBool,
-          'TripDuration':req.body.TripDuration
+        'BusPrice': req.body.busPrice,
+        'FPrice': req.body.FPrice,
+        'DepartBool': req.body.DepartBool,
+        'ReturnBool': req.body.ReturnBool,
+        'TripDuration': req.body.TripDuration
 
     })
     newFlight.save().then((result) => {
         res.send(result)
-        assignFlightSeats(req.body.NuofAvailableEconomySeats,req.body.NuofAvailableBuisnessSeats,req.body.NuofAvailableFirstSeats,result._id);
+        assignFlightSeats(req.body.NuofAvailableEconomySeats, req.body.NuofAvailableBuisnessSeats, req.body.NuofAvailableFirstSeats, result._id);
     })
         .catch((err) => {
             console.log(err)
@@ -316,20 +316,20 @@ app.post("/AddReturnFlight", async (req, res) => {//places chosen return flight 
     }).catch(error => console.log(error));
 
 });
-function getFlightSeats(eco, bus, fst){
+function getFlightSeats(eco, bus, fst) {
     const f = seatsChart.FirstSeats.slice(0, fst);
     const b = seatsChart.BusinessSeats.slice(0, bus);
-    const e  = seatsChart.EconomySeats.slice(0, eco);
-    ob = {economy:e, first:f, business : b};
+    const e = seatsChart.EconomySeats.slice(0, eco);
+    ob = { economy: e, first: f, business: b };
     return ob;
 
 }
-async function getSeatNumbers(flightID){
-    const data = await flight.find({_id:flightID});
+async function getSeatNumbers(flightID) {
+    const data = await flight.find({ _id: flightID });
     fst = data[0].NuofAvailableFirstSeats;
-    bus =data[0].NuofAvailableBuisnessSeats;
+    bus = data[0].NuofAvailableBuisnessSeats;
     eco = data[0].NuofAvailableEconomySeats;
-    ob = {f:fst,b:bus,e:eco};
+    ob = { f: fst, b: bus, e: eco };
     return ob;
 }
 function remove(array, element) {
@@ -353,12 +353,13 @@ app.post("/showReservedCabinSeats", async (req, res) => {
     else {
         rs = data[0].reservedBusSeats;
     }
-    console.log(rs); 
-    if(rs==undefined){
+    console.log(rs);
+    if (rs == undefined) {
         res.send([]);
     }
-    else{
-    res.send(rs);}
+    else {
+        res.send(rs);
+    }
 })
 app.post("/showFlightReservedSeats", async (req, res) => {
     const data = await seats.find({ FlightID: req.body.FlightID });
@@ -383,20 +384,20 @@ app.post("/showFlightAvailableSeatsNumber", async (req, res) => {
     res.send(ob);
 })
 app.post("/showFlightAvailableSeats", async (req, res) => {
-    ob = { Economy: (await getAvailableCabinSeat("Economy", req.body.FlightID)), Business: (await getAvailableCabinSeat("Business", req.body.FlightID)), First: (await getAvailableCabinSeat("First", req.body.FlightID))};
+    ob = { Economy: (await getAvailableCabinSeat("Economy", req.body.FlightID)), Business: (await getAvailableCabinSeat("Business", req.body.FlightID)), First: (await getAvailableCabinSeat("First", req.body.FlightID)) };
     res.send(ob);
 })
 async function getAvailableCabinSeat(c, id) {
     const data = await seats.find({ FlightID: id });
     console.log(data);
-    s =  await getSeatNumbers(id);
+    s = await getSeatNumbers(id);
     console.log(s);
-    ob = getFlightSeats(s.e,s.b,s.f);
+    ob = getFlightSeats(s.e, s.b, s.f);
     console.log(ob);
     if (c == "Economy") {
         st = ob.economy;
         rs = data[0].reservedEcoSeats;
-        console.log("reserved seats are "+rs);
+        console.log("reserved seats are " + rs);
     }
     else if (c == "First") {
         st = ob.first;
@@ -412,22 +413,22 @@ async function getAvailableCabinSeat(c, id) {
         return st;
     }
     for (var i = 0; i < rs.length; i++) {
-        if(st.includes(rs[i])){
-        remove(st, rs[i]);
-    }
+        if (st.includes(rs[i])) {
+            remove(st, rs[i]);
+        }
     }
     console.log(st);
     return st;
 }
-app.post("/flightSeating" , async (req,res)=>{
-   const query = await flight.find({_id:req.body._id});
+app.post("/flightSeating", async (req, res) => {
+    const query = await flight.find({ _id: req.body._id });
     fst = query[0].NuofAvailableFirstSeats;
-    bus =query[0].NuofAvailableBuisnessSeats;
+    bus = query[0].NuofAvailableBuisnessSeats;
     eco = query[0].NuofAvailableEconomySeats;
-    capacity = fst+bus+eco;
+    capacity = fst + bus + eco;
     ob = getFlightSeats(eco, bus, fst, req.body_id);
-    o = {firstNu:fst, businessNu:bus, economyNu: eco, totalcapacity:capacity}
-    re = Object.assign(ob,o);
+    o = { firstNu: fst, businessNu: bus, economyNu: eco, totalcapacity: capacity }
+    re = Object.assign(ob, o);
     res.send(re);
 })
 app.get("/showReservedSeats", (req, res) => {//shows all the seat reservation database => each flight and its reserved seats
@@ -440,7 +441,6 @@ app.post("/showFlightReservedSeats", (req, res) => {//shows the reserved seats o
         res.send(data);
     })
 })
-
 app.post("/checkSeat", (req, res) => {
     seats.find({ FlightID: req.body.FlightID }).lean().exec(function (err, data) {
         seat = req.body.seat;
@@ -453,7 +453,8 @@ app.post("/checkSeat", (req, res) => {
         }
     })
 })
-app.post("/reserveSeats", (req, res) => {//reserves seats, doesn't make sure it's already in the data
+//61abc8483adf3477c707345a
+app.post("/reserveSeats", async (req, res) => {//reserves seats, doesn't make sure it's already in the data
     c = req.body.cabin;
 
     seats.find({ FlightID: req.body.FlightID }).lean().exec(function (err, data) {
@@ -496,11 +497,22 @@ app.post("/reserveSeats", (req, res) => {//reserves seats, doesn't make sure it'
             });
         }
         else {
+            if(c=="Economy"){
+                o = "reservedEcoSeats";
+            }
+            else if(c=="Business"){
+                o = "reservedBusSeats";
+            }
+            else{
+                o="reservedFstSeats";
+            }
             const sts = new seats({
                 "FlightID": req.body.FlightID,
-                "reservedSeats": req.body.seats
+                "reservedSeats": req.body.seats,
+                o :req.body.seats
             })
             sts.save().then((result) => {
+                
                 res.send(result)
             })
                 .catch((err) => {
@@ -508,9 +520,21 @@ app.post("/reserveSeats", (req, res) => {//reserves seats, doesn't make sure it'
                 })
 
         }
-    })
 
+    })
+    const fl = await flight.find({ _id: req.body.FlightID });
+    d = fl[0].DepartBool;
+    if (d) {
+        ob = { DepartSeats: req.body.seats }
+    }
+    else {
+        ob = { ReturnSeats: req.body.seats };
+    }
+    chosenFlights.updateOne({ _id: req.body.chosenFlightID }, ob).exec(function (err, data) {
+        console.log("seats placed in chosen flights")
+    })
 })
+//6185af9d250c46b0fd2322ed
 app.post("/getPrice", async (req, res) => {//gets price of specific flight, given specific cabin
     const cabin = req.body.cabin;
     const data = await flight.find({ _id: req.body._id });
@@ -650,7 +674,7 @@ app.post("/ReservedFlightSummary", (req, res) => {
         p[0] = p[0].toJSON();
         p[0].departureBaggage = departBaggage;
         p[0].returnBaggage = returnBag;
-        res.send(p);
+        res.send(p[0]);
     })
         .catch(error => console.log(error))
 })
