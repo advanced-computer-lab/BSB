@@ -100,7 +100,7 @@ function AddFlightForm(props) {
 
 
   return (
-    <>
+    <div>
       <MenuItem onClick={handleShow} variant='primary'>
         Add Flight
       </MenuItem>
@@ -296,7 +296,7 @@ function AddFlightForm(props) {
          
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   );
 }
 

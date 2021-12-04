@@ -49,10 +49,14 @@ function DepartureList() {
     const [flightNum, setFlightNum] = useState("");
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
+    const [dep, setDep] = useState("");
+    const [arr, setArr] = useState("");
+    const [tripdur, settripdur] = useState("");
+    const [price, setprice] = useState("");
     const [flightlist, setFlightlist] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:8000/searchDepartureFlights").then(res => {
+        axios.get("http://localhost:8000/showFlights").then(res => {
             console.log("xxxx");
             setFlightlist(res.data);
         })
@@ -70,8 +74,8 @@ function DepartureList() {
                     <TableHead>
                         <TableRow>
                             <StyledTableCell align="center">Flight Number</StyledTableCell>
-                            <StyledTableCell align="center">From</StyledTableCell>
-                            <StyledTableCell align="center">To</StyledTableCell>
+                            <StyledTableCell align="center">Departaure Airport</StyledTableCell>
+                            <StyledTableCell align="center">Arrival Airport</StyledTableCell>
                             <StyledTableCell align="center">&nbsp;</StyledTableCell>
                             <StyledTableCell align="center">&nbsp;</StyledTableCell>
                             <StyledTableCell align="center">&nbsp;</StyledTableCell>

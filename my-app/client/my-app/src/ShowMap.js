@@ -38,7 +38,7 @@ function ShowMap() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
     return (
-        <>
+        <div>
         <Button variant="outline-secondary" onClick={handleShow}> Show Map</Button>
   
         <Modal show={show} onHide={handleClose} animation={false}>
@@ -55,7 +55,7 @@ function ShowMap() {
             
           </Modal.Footer>
         </Modal>
-      </>
+      </div>
     )
 }
 

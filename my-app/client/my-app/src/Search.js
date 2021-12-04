@@ -42,7 +42,7 @@ function Search(props) {
 
 
 
-        <>
+        <div>
           <Button variant="outline-primary" onClick={handleShow}> Search Flights </Button>
 
           <Modal show={show} onHide={handleClose} animation={false}>
@@ -65,7 +65,7 @@ function Search(props) {
               </Button>
             </Modal.Footer>
           </Modal>
-        </>
+        </div>
       );
     
   

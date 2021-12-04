@@ -47,6 +47,31 @@ const flightSchema = new Schema({
         type: String,
         required: true
       },
+      EcoPrice: {
+        type: Number,
+        required: true
+      },
+      BusPrice: {
+        type: Number,
+        required: true
+      },
+      FPrice: {
+        type: Number,
+        required: true
+      },
+
+      DepartBool: {
+        type: Boolean,
+        required: true
+      },
+      ReturnBool:{
+        type:Boolean,
+        required:true
+      },
+      TripDuration:{
+        type:String,
+        required:true
+      }
 },
     { timestamps: false });
 

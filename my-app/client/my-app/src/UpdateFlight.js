@@ -58,7 +58,7 @@ function UpdateFlight(props) {
     //.catch(err => {console.log(err)});
   })
   return (
-    <>
+    <div>
       <Button variant="outline-primary" onClick={handleShow}> Update</Button>
 
       <Modal show={show} onHide={handleClose} animation={false}>
@@ -134,7 +134,7 @@ function UpdateFlight(props) {
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   );
 }
 

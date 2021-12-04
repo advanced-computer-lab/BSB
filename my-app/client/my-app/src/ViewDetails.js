@@ -80,7 +80,7 @@ function ViewDetails(props) {
 
 
     return (
-        <>
+        <div>
             <Button variant="outline-primary" onClick={handleShow}> View Details</Button>
 
             <Modal show={show} onHide={handleClose} animation={false}>
@@ -143,7 +143,7 @@ function ViewDetails(props) {
 
                 </Modal.Footer>
             </Modal>
-        </>
+        </div>
     );
 }
 
