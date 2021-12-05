@@ -4,10 +4,11 @@ import './index.css';
 import App from './App';
 import Flightitinerary from './Flightitinerary'
 import reportWebVitals from './reportWebVitals';
+import ChooseSeat from './ChooseSeat';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ChooseSeat />
   </React.StrictMode>,
   document.getElementById('root')
 );

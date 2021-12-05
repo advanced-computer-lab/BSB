@@ -51,10 +51,12 @@ function ViewResFlights(props) {
     const [tripDuration, setTripDuration] = useState("");
     const [flightlist, setFlightlist] = useState([]);
     const [openPopUp, setOpen] = useState(false);
+    const [count, setCount] = useState(0);
+
     const [depFlights, setDepFlight] = useState([{
-        flightnumber:"",
+        flightnumber: "",
         adults: "", children: "", cabin: "",
-        depprice: "", tripduration: "", deptime: "", arrterminal: "", from: "", to: "", date: ""
+        depprice: "", tripduration: "", deptime: "", arrterminal: "", from: "", to: "", date: "", id: ""
     }])
 
     const [returnFlight, setReturnFlight] = useState({
@@ -72,11 +74,14 @@ function ViewResFlights(props) {
     const handleClosePopUp = () => {
         setOpen(false);
     };
-
-
+    const [id, setId] = useState("");
+    const [clicked, setClicked] = useState(false);
     useEffect(() => {
         axios.get("http://localhost:8000/viewMyReservedFlights",
             {
+
+                
+                
 
             }).then(res => {
 
@@ -84,118 +89,154 @@ function ViewResFlights(props) {
 
                 console.log("xxxx");
                 //console.log(res.data[1].ChosenFlight.DepartId.FlightNu)
-                for (var i = 1; i < (res.data).length; i++) {
+                var temp = [];
+                // console.log(res.data.length)
+                for (var i = 0; i < (res.data).length; i++) {
                     var x = {
                         // flightnumber:res.data[i].ChosenFlight.DepartId.FlightNu,
 
-                        adults: res.data[i].ChosenFlight.DepartId.DepartPassengersAdults, children: res.data[i].ChosenFlight.DepartId.DepartPassengersChildren,
+                        adults: res.data[i].ChosenFlight.DepartPassengersAdult, children: res.data[i].ChosenFlight.DepartPassengersChild,
                         cabin: res.data[i].ChosenFlight.DepartCabin,
                         deptime: res.data[i].ChosenFlight.DepartId.DepartureTime, arrtime: res.data[i].ChosenFlight.DepartId.ArrivalTime,
                         from: res.data[i].ChosenFlight.DepartId.From, to: res.data[i].ChosenFlight.DepartId.To,
-                        date: res.data[i].ChosenFlight.DepartId.FlightDate
+                        date: res.data[i].ChosenFlight.DepartId.FlightDate,
+                        id: res.data[i]._id
 
                     }
                     var y = {
-                        flightnumber:res.data[i].ChosenFlight.ReturnId.FlightNu,
-                        adults: res.data[i].ChosenFlight.ReturnId.DepartPassengersAdults, children: res.data[i].ChosenFlight.ReturnId.DepartPassengersChildren,
+                        flightnumber: res.data[i].ChosenFlight.ReturnId.FlightNu,
+                        adults: res.data[i].ChosenFlight.DepartPassengersAdult, children: res.data[i].ChosenFlight.DepartPassengersChild,
                         cabin: res.data[i].ChosenFlight.ReturnCabin,
                         deptime: res.data[i].ChosenFlight.ReturnId.DepartureTime, arrtime: res.data[i].ChosenFlight.ReturnId.ArrivalTime,
                         from: res.data[i].ChosenFlight.ReturnId.From, to: res.data[i].ChosenFlight.ReturnId.To,
-                        date: res.data[i].ChosenFlight.ReturnId.FlightDate
+                        date: res.data[i].ChosenFlight.ReturnId.FlightDate,
+                        id: res.data[i]._id
                     }
-                    setDepFlight(depFlights.push(x))
-                    setDepFlight(depFlights.push(y))
-                    console.log(depFlights);
+                    //console.log(res.data)
+
+                    temp.push(x, y);
+
+
+
+
                 }
-                
+                setDepFlight(temp);
 
 
-      })
+                 console.log(res.data)
+
+
+
+
+            })
     })
-        
-        return (
-            <div style={{ marginTop: -250 }}>
-                {props.logout ? <App /> : (props.edit ? <EditProfile logout={props.logout} /> : (props.back ? props.component :
-
-                    < div >
-                        <Layout />
-
-                        <TableContainer component={Paper} style={{ marginTop: -600, width: 1000, marginLeft: 250 }}>
-                            <Table sx={{ minWidth: 300 }} aria-label="customized table" size='m'>
-                                <TableHead>
-                                    <TableRow>
-                                        <StyledTableCell align="center">Flight Number</StyledTableCell>
-                                        <StyledTableCell align="center">Flight Date</StyledTableCell>
-
-                                        <StyledTableCell align="center">Departure Airport</StyledTableCell>
-                                        <StyledTableCell align="center">Arrival Airport</StyledTableCell>
-                                        <StyledTableCell align="center">Departure Time</StyledTableCell>
-                                        <StyledTableCell align="center">Arrival Time</StyledTableCell>
-                                        
-                                        <StyledTableCell align="center">Number of Adults</StyledTableCell>
-                                        <StyledTableCell align="center">Number of Children</StyledTableCell>
-                                        <StyledTableCell align="center">Cabin Type</StyledTableCell>
-                                       
-                                        <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                                        <StyledTableCell align="center">&nbsp;</StyledTableCell>
-
-                                        <StyledTableCell align="center"></StyledTableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableRow> </TableRow>
-
-                                {depFlights.map(u => {
-                                    return <TableRow>
-                                        <StyledTableCell align="center">{u.flightnumber}</StyledTableCell>
-                                        <StyledTableCell align="center">{u.date}</StyledTableCell>
-                                        <StyledTableCell align="center">{u.from} </StyledTableCell>
-                                        <StyledTableCell align="center">{u.to}</StyledTableCell>
-                                        <StyledTableCell align="center">{u.deptime}</StyledTableCell>
-                                        <StyledTableCell align="center">{u.arrtime}</StyledTableCell>
-                                        <StyledTableCell align="center">{u.adults}</StyledTableCell>
-                                        <StyledTableCell align="center">{u.children}</StyledTableCell>
-                                        <StyledTableCell align="center">{u.cabin}</StyledTableCell>
-  
-
-
-                                        <StyledTableCell align="center">
-                                            <Button variant="outlined" onClick={handleClickOpenPopUp}>
-                                                Cancel flight
-                                            </Button>
-                                            <Dialog
-                                                open={openPopUp}
-
-                                                onClose={handleClosePopUp}
-                                                aria-labelledby="alert-dialog-title"
-                                                aria-describedby="alert-dialog-description"
-                                            >
-                                                <DialogTitle id="alert-dialog-title">
-                                                    {"Are you sure you want to cancel your ticket?"}
-                                                </DialogTitle>
-
-                                                <DialogActions>
-                                                    <Button onClick={handleClosePopUp}>Cancel</Button>
-                                                    <Button onClick={handleClosePopUp} autoFocus>
-                                                        Confirm
-                                                    </Button>
-                                                </DialogActions>
-                                            </Dialog>
-
-                                        </StyledTableCell>
 
 
 
-                                    </TableRow>
-                                })}
-                            </Table>
-                        </TableContainer>
 
 
 
-                    </div>
-                ))}
-            </div>
-        )
-    }
+
+    return (
+        <div style={{ marginTop: -250 }}>
+            {props.logout ? <App /> : (props.edit ? <EditProfile logout={props.logout} /> : (props.back ? props.component :
+
+                < div >
+                    <Layout />
+
+                    <TableContainer component={Paper} style={{ marginTop: -600, width: 1000, marginLeft: 250, opacity: 0.9 }}>
+                        <Table sx={{ minWidth: 300 }} aria-label="customized table" size='m'>
+                            <TableHead>
+                                <TableRow>
+                                    <StyledTableCell align="center">Flight Number</StyledTableCell>
+                                    <StyledTableCell align="center">Flight Date</StyledTableCell>
+
+                                    <StyledTableCell align="center">Departure Airport</StyledTableCell>
+                                    <StyledTableCell align="center">Arrival Airport</StyledTableCell>
+                                    <StyledTableCell align="center">Departure Time</StyledTableCell>
+                                    <StyledTableCell align="center">Arrival Time</StyledTableCell>
+
+                                    <StyledTableCell align="center">Number of Adults</StyledTableCell>
+                                    <StyledTableCell align="center">Number of Children</StyledTableCell>
+                                    <StyledTableCell align="center">Cabin Type</StyledTableCell>
+
+                                    <StyledTableCell align="center">&nbsp;</StyledTableCell>
+                                    <StyledTableCell align="center">&nbsp;</StyledTableCell>
+
+                                    <StyledTableCell align="center"></StyledTableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableRow> </TableRow>
+
+
+                            {depFlights.map(u => {
+                                return <TableRow>
+                                    <StyledTableCell align="center">{u.flightnumber}</StyledTableCell>
+                                    <StyledTableCell align="center">{u.date}</StyledTableCell>
+                                    <StyledTableCell align="center">{u.from} </StyledTableCell>
+                                    <StyledTableCell align="center">{u.to}</StyledTableCell>
+                                    <StyledTableCell align="center">{u.deptime}</StyledTableCell>
+                                    <StyledTableCell align="center">{u.arrtime}</StyledTableCell>
+                                    <StyledTableCell align="center">{u.adults}</StyledTableCell>
+                                    <StyledTableCell align="center">{u.children}</StyledTableCell>
+                                    <StyledTableCell align="center">{u.cabin}</StyledTableCell>
+
+
+
+                                    <StyledTableCell align="center">
+                                        <Button id={u._id} variant="outlined" onClick={e => {
+                                            handleClickOpenPopUp();
+                                        }}>
+                                            Cancel flight
+
+                                        </Button>
+                                        <Dialog
+                                            open={openPopUp}
+
+                                            onClose={handleClosePopUp}
+                                            aria-labelledby="alert-dialog-title"
+                                            aria-describedby="alert-dialog-description"
+                                        >
+                                            <DialogTitle id="alert-dialog-title">
+                                                {"Are you sure you want to cancel your ticket?"}
+                                            </DialogTitle>
+
+                                            <DialogActions>
+                                                <Button onClick={handleClosePopUp}>Cancel</Button>
+                                                <Button  onClick={e => {
+                                                    handleClosePopUp(); axios.post("http://localhost:8000/cancelReservation",
+                                                        {
+
+                                                            _id: u.id
+
+                                                        }).then(res => {
+                                                            // console.log(res.data)
+                                                            // console.log('alo');
+                                                            // console.log(u.id)
+
+
+                                                        },[])
+                                                }} autoFocus>
+                                                    Confirm
+                                                </Button>
+                                            </DialogActions>
+                                        </Dialog>
+
+                                    </StyledTableCell>
+
+
+
+                                </TableRow>
+                            })}
+                        </Table>
+                    </TableContainer>
+
+
+
+                </div>
+            ))}
+        </div>
+    )
+}
 
 export default ViewResFlights
