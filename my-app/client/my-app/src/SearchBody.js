@@ -2,11 +2,12 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import SearchResults from './SearchResults';
 import axios from 'axios';
+import Layout from './Layout';
+import { TextField } from '@mui/material';
+import { Button } from '@material-ui/core';
 
-
-
-function SearchBody() {
-  const [flights,setFlights]= useState({from : "", to:"", date: "",arr: "",dep: "",tdep:"",tarr:"",ec: "",bs:"",first:"",flightNum: ""})
+function SearchBody(props) {
+  const [flights, setFlights] = useState({ from: "", to: "", date: "", arr: "", dep: "", tdep: "", tarr: "", ec: "", bs: "", first: "", flightNum: "" })
   const [flightlist, setFlightlist] = useState([]);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -24,60 +25,59 @@ function SearchBody() {
   const [flightNum, setFlightNum] = useState("");
   const [searchClicked, setSearchClicked] = useState(false);
   const [searchRes, setSearchRes] = useState(false);
- useEffect(() => {
-  if(!searchClicked) {
-    return false;
- }
-    if(searchClicked)
-    {
-      setFlights({from:from,to:to,date:date,arr:arr,dep:dep,tdep:tdep,tarr:tarr,ec:ec,bs:bs,first:first,flightNum:flightNum,})
-      if(flights.from===""){
+  useEffect(() => {
+    if (!searchClicked) {
+      return false;
+    }
+    if (searchClicked) {
+      setFlights({ from: from, to: to, date: date, arr: arr, dep: dep, tdep: tdep, tarr: tarr, ec: ec, bs: bs, first: first, flightNum: flightNum, })
+      if (flights.from === "") {
         delete flights.from;
 
       }
-      if(flights.to===""){
+      if (flights.to === "") {
         delete flights.to;
-        
+
       }
-      if(flights.date===""){
+      if (flights.date === "") {
         delete flights.date;
-        
+
       }
-      if(flights.arr==""){
+      if (flights.arr == "") {
         delete flights.arr;
-        
+
       }
-      if(flights.dep===""){
+      if (flights.dep === "") {
         delete flights.dep;
-        
+
       }
-      if(flights.tarr===""){
+      if (flights.tarr === "") {
         delete flights.tarr;
-        
+
       }
-      if(flights.tdep===""){
+      if (flights.tdep === "") {
         delete flights.tdep;
-        
+
       }
-      if(flights.ec===""){
+      if (flights.ec === "") {
         delete flights.ec;
-        
+
       }
-      if(flights.bs===""){
+      if (flights.bs === "") {
         delete flights.bs;
-        
-      }if(flights.first===""){
+
+      } if (flights.first === "") {
         delete flights.first;
-        
+
       }
-      if(flights.flightNum===""){
+      if (flights.flightNum === "") {
         delete flights.flightNum;
-        
+
       }
-     
+
       axios.post('http://localhost:8000/searchFlights', {
-      
-        FlightNu:flights.flightNum, 
+
+        FlightNu: flights.flightNum,
         From: flights.from,
         To: flights.to,
         FlightDate: flights.date,
@@ -89,7 +89,7 @@ function SearchBody() {
         NuofAvailableEconomySeats: flights.ec,
         NuofAvailableBuisnessSeats: flights.bs,
         NuofAvailableFirstSeats: flights.first
-      
+
       })
         .then(function (response) {
           console.log("xxx");
@@ -97,90 +97,170 @@ function SearchBody() {
           setSearchClicked(false)
           setSearchRes(true);
         }
-      
-       )
+
+        )
       //  return()=>{setSearchClicked(false)};
-      }
-  
+    }
+
 
     //.catch(err => {console.log(err)});
   });
   //useEffect(() => {search()});
   return (
-    <div>
-
-    {
-      searchRes?  <SearchResults flightlist={flightlist}/> :<div>
-        
-        
-     <form >
-    Flight Number:
-            <br />
-
-            <input type="text" id="from" name="FlightNo" onChange={event => setFlightNum( event.target.value)} />
-            <br />
-            Date of Arrival:
-            <br />
-
-            <input type="text" id="from" name="dateA" onChange={event => setDate(event.target.value)} />
-            <br />
-            
-     From:
-            <br />
-
-            <input type="text" id="from" name="from" onChange={event => setFrom(event.target.value)} />
-            <br />
-
-            To:
-            <br />
-
-            <input type="text" id="from" name="to" onChange={event => setTo(event.target.value)} />
-            <br />
-            Arrival Terminal:
-            <br />
-
-            <input type="text" id="from" name="Arrival" onChange={event => setTarr(event.target.value)} />
-            <br />
-            Departure Terminal:
-            <br />
-
-            <input type="text" id="from" name="Departure"onChange={event => setTdep(event.target.value)} />
-            <br />
-            Arrival Time:
-            <br />
-
-            <input type="text" id="from" name="ArrivalT" onChange={event => setArr(event.target.value)} />
-            <br />
-            Departure Time:
-            <br />
-
-            <input type="text" id="from" name="DepartureT" onChange={event => setDep( event.target.value)} />
-            <br />
-            Number of  Economy Seats:
-            <br />
-
-            <input type="text" id="from" name="noE" onChange={event => setEc(event.target.value)}/>
-            <br />
-            Number of  Business Seats:
-            <br />
-
-            <input type="text" id="from" name="noB" onChange={event => setBs( event.target.value)}/>
-            <br />
-            Number of  First Class Seats:
-            <br />
-
-            <input type="text" id="from" name="noF" onChange={event => setFirst(event.target.value)} />
-            <br />
-
-            <button type="button"  onClick={event =>setSearchClicked(true)}>Search</button>
-
-          
-     </form>
-
-    </div>
+    <div style={{marginTop:0}}>
     
-  }
-  </div>
+
+      {
+        searchRes ? <SearchResults flightlist={flightlist}  component= {<SearchResults/>}/> : (props.back? props.component :<div>
+
+          <div style={{marginTop:-800,marginLeft:500,marginRight:20}}>
+            <h1 style={{marginLeft:90}}>  Search your flight</h1>
+            <form >
+              <br />
+              <TextField
+
+                required
+                id="outlined-error"
+                label="Flight Number"
+                defaultValue=""
+                onChange={event => setFlightNum(event.target.value)}
+
+              />
+              
+              <TextField style={{marginLeft:40}}
+
+                required
+                id="outlined-error"
+                label="Date"
+                defaultValue=""
+                onChange={event => setDate(event.target.value)}
+
+              />
+
+              <br />
+
+
+              <br />
+
+              <TextField
+
+                required
+                id="outlined-error"
+                label="Depature Airport"
+                defaultValue=""
+                onChange={event => setFrom(event.target.value)}
+              />
+
+
+
+              
+              <TextField
+               style={{marginLeft:40}}
+                required
+                id="outlined-required"
+                label="Arrival Airport"
+                defaultValue=""
+                onChange={event => setTo(event.target.value)}
+
+              />
+
+
+              <br />
+
+              <br />
+            
+             
+              <TextField
+                required
+                id="outlined-required"
+                label="Departure Terminal"
+                defaultValue=""
+                onChange={event => setTdep(event.target.value)}
+
+              />
+                <TextField
+               style={{marginLeft:40}}
+                required
+                id="outlined-required"
+                label="Arrival Terminal"
+                defaultValue=""
+                onChange={event => setTarr(event.target.value)}
+
+              />
+
+
+              <br />
+              
+              <br />
+             
+
+
+               
+              <TextField
+                required
+                id="outlined-required"
+                label="Depature Time"
+                defaultValue=""
+                onChange={event => setDep(event.target.value)}
+
+              />
+               <TextField
+              style={{marginLeft:40}}
+                required
+                id="outlined-required"
+                label="Arrival Time"
+                defaultValue=""
+                onChange={event => setArr(event.target.value)}
+
+              />
+
+              <br />
+            
+              <br />
+              <TextField
+                required
+                id="outlined-required"
+                label="Economy Seats"
+                defaultValue=""
+                onChange={event => setEc(event.target.value)}
+
+              />
+
+              
+              <TextField
+                required
+                style={{marginLeft:40}}
+                id="outlined-required"
+                label="Business Seats"
+                defaultValue=""
+                onChange={event => setBs(event.target.value)}
+
+              />
+
+              <br />
+              
+              <br />
+              <TextField
+                required
+                id="outlined-required"
+                label="Arrival Time"
+                defaultValue=""
+                onChange={event => setFirst(event.target.value)}
+
+              />
+
+              <br />
+
+              <Button variant="contained" style={{ position: 'center', marginLeft: 390, marginTop: -90 }} onClick={(event) => setSearchClicked(true)}>
+                Search
+              </Button>
+
+            </form>
+          </div>
+        </div>
+
+         ) }
+    </div>
   )
 }
 

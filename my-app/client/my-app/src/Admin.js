@@ -55,6 +55,29 @@ import FlightIcon from '@mui/icons-material/Flight';
 import { Stack } from 'react-bootstrap';
 import Top from './Top';
 import Layout from './Layout';
+import { MenuItem, Menu } from '@material-ui/core';
+
+import { AppBar } from '@mui/material';
+import { Container } from '@material-ui/core';
+import { Toolbar } from '@material-ui/core';
+import Luggage from '@mui/icons-material/Luggage';
+import UpgradeIcon from '@mui/icons-material/Upgrade';
+import RoomServiceIcon from '@mui/icons-material/RoomService';
+import HotelIcon from '@mui/icons-material/Hotel';
+import CarRentalIcon from '@mui/icons-material/CarRental';
+import GroupsIcon from '@mui/icons-material/Groups';
+import Groups from '@mui/icons-material/Groups';
+import PeopleIcon from '@mui/icons-material/People';
+import CardTravelIcon from '@mui/icons-material/CardTravel';
+import SchoolIcon from '@mui/icons-material/School';
+import LuggageIcon from '@mui/icons-material/Luggage';
+import Avatar from '@mui/material/Avatar';
+
+import Tooltip from '@mui/material/Tooltip';
+
+import IconButton from '@mui/material/IconButton';
+import { blue } from '@material-ui/core/colors';
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -84,7 +107,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 function Admin() {
   const [flightlist, setFlightlist] = useState([]);
-  const [logoutClicked, setLogoutClicked] = useState(false);
+  //const [logoutClicked, setLogoutClicked] = useState(false);
   const [searchClicked, setSearchClicked] = useState(false);
   useEffect(() => {
     axios.get("http://localhost:8000/showFlights").then(res => {
@@ -99,155 +122,243 @@ function Admin() {
   const handleClickList = () => {
     setOpenList(!openList);
   };
+  const [logoutClicked, setlogOutClicked] = useState(false);
+  const handleLogout = () => {
+    setlogOutClicked(true);
+    handleCloseNavMenu();
+  };
+  const [editProfile, setEditProfileClicked] = useState(false);
+  const handleEditProfile = () => {
+    setEditProfileClicked(true);
+    handleCloseNavMenu();
+  };
 
+  //navbar
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+  //back button
+  const [backButton, setBackButton] = useState(false);
 
 
   return (
-
     <div>
-     
-
-    
-     
-      <Box>
-
-
-        {searchClicked ? <SearchBody /> :
-          <div style={{
-            position: 'center',
-            width: 1000,
-            height: 500,
-            right: 900,
-            top: 250
-          }} backgroundColor="white">
+      {logoutClicked || backButton ? <App /> :
+        <div style={{ marginTop: -200,marginLeft:60}}>
+          <Layout />
+          <AppBar position="fixed" style={{ width: window.screen.width, color:'primary'}} >
+            <Container maxWidth="xl">
+              <Toolbar disableGutters>
+                <h3 style={{ marginLeft: 15 }}>BSB Airways</h3>
 
 
+                <Box sx={{ flexGrow: 0 }} style={{ marginLeft: 1200 }}>
+                  <Tooltip title="Open settings">
 
-            <TableContainer component={Paper} style={{
-              padding: 0,
-              margin: 0,
-              width: 800,
-              height: 500,
-              marginLeft:-200
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }} style={{ marginRight: 20 }}>
+                      <Avatar />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
 
-            }} >
-              <Table stickyHeader sx={{
-                width: 500,
-                height: 300
-              }}
-                aria-label="customized table" size="small"
-              >
-                <TableHead position="fixed" >
-                  <TableRow>
-                    <StyledTableCell align="center" size="small">Flight Number</StyledTableCell>
-                    <StyledTableCell align="center" size="small">Departure Airport</StyledTableCell>
-                    <StyledTableCell align="center">Arrival Airport</StyledTableCell>
-                    <StyledTableCell align="center">Flight Date&nbsp; </StyledTableCell>
-                    <StyledTableCell align="center">Departure Time</StyledTableCell>
-                    <StyledTableCell align="center">Arrival time&nbsp; </StyledTableCell>
-                    <StyledTableCell align="center">Trip Duration&nbsp; </StyledTableCell>
 
-                    <StyledTableCell align="center">Departure Terminal</StyledTableCell>
-                    <StyledTableCell align="center">Arrival Terminal</StyledTableCell>
-                    <StyledTableCell align="center">Economy seats </StyledTableCell>
-                    <StyledTableCell align="center">Economy seats price</StyledTableCell>
-                    <StyledTableCell align="center">Business seats &nbsp; </StyledTableCell>
-                    <StyledTableCell align="center">Business seats price &nbsp; </StyledTableCell>
-                    <StyledTableCell align="center">First seats </StyledTableCell>
-                    <StyledTableCell align="center">First seats price </StyledTableCell>
-                    <StyledTableCell align="center">&nbsp; </StyledTableCell>
-                    <StyledTableCell align="center">&nbsp; </StyledTableCell>
-                    <StyledTableCell align="center">&nbsp; </StyledTableCell>
-                    <StyledTableCell align="center">&nbsp; </StyledTableCell>
-                    <StyledTableCell align="center">&nbsp; </StyledTableCell>
-                    <StyledTableCell align="center">&nbsp; </StyledTableCell>
+                    <MenuItem>
+                      Edit Profile</MenuItem>
+                    <MenuItem>
+                      My Account</MenuItem>
+                    <MenuItem onClick={handleLogout}>
+                      Logout</MenuItem>
 
 
 
 
-                    <StyledTableCell align="center"> &nbsp; </StyledTableCell>
-                    
-                  </TableRow>
-                </TableHead>
-                <TableRow> </TableRow>
+
+                  </Menu>
+                </Box>
+
+                <Button onClick={(event) => setBackButton(true)}  >
+                  Back
+                </Button>
+
+              </Toolbar>
+            </Container>
+          </AppBar>
 
 
 
-                {flightlist.map(u => {
-                  return <TableRow key={u._id}>
-                    <StyledTableCell align="center" size="small">{u.FlightNu}</StyledTableCell>
-                    <StyledTableCell align="center">{u.From} </StyledTableCell>
-                    <StyledTableCell align="center">{u.To}</StyledTableCell>
-                    <StyledTableCell align="center">{u.FlightDate}</StyledTableCell>
-                    <StyledTableCell align="center">{u.DepartureTime}</StyledTableCell>
-                    <StyledTableCell align="center">{u.ArrivalTime}</StyledTableCell>
-                    <StyledTableCell align="center">{u.TripDuration}</StyledTableCell>
 
-                    <StyledTableCell align="center">{u.TerminalDeparture}</StyledTableCell>
-                    <StyledTableCell align="center">{u.TerminalArrival}</StyledTableCell>
-                    <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
-                    <StyledTableCell align="center">{u.EcoPrice}</StyledTableCell>
 
-                    <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
-                    <StyledTableCell align="center">{u.BusPrice}</StyledTableCell>
-                    <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
-                    <StyledTableCell align="center">{u.FPrice}</StyledTableCell>
-                    <StyledTableCell align="center" size='small'><ShowMap></ShowMap> </StyledTableCell>
+          <Box>
 
-                    <StyledTableCell align="center"> <UpdateFlight idd={u._id} from={u.From} to={u.To}
-                      flightNum={u.FlightNu}
-                      date={u.FlightDate}
-                      arr={u.ArrivalTime}
-                      dep={u.DepartureTime}
-                      tdep={u.TerminalDeparture}
-                      tarr={u.TerminalArrival}
-                      ec={u.NuofAvailableEconomySeats}
-                      bs={u.NuofAvailableBuisnessSeats}
-                      first={u.NuofAvailableFirstSeats}
-                    /></StyledTableCell>
-                    <StyledTableCell align="center">
-                      <Popup trigger={<Button variant="outline-danger" data-target="#myModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Delete</Button>} position="right center">
-                        <div>Are you sure you want to delete?(if no click anywhere)</div>
-                        <DeleteFlight idd={u._id}></DeleteFlight>
-                      </Popup>
-                    </StyledTableCell>
-                  </TableRow>
-                })}
-              </Table>
-            </TableContainer>
-            <Paper sx={{ p: 2, margin: 'auto', maxWidth: 300, flexGrow: 1, marginLeft: 90, marginTop: -60 }}>
-              <Grid container spacing={2} sx={{ height: 200 }}>
 
-                <Grid item xs={12} sm container >
-                  <Grid item xs container direction="column" spacing={2}>
-                    <Grid item xs>
+            {searchClicked ? <SearchBody component={<Admin />} /> :
+              <div style={{
+                position: 'center',
+                width: 1600,
+                height: 500,
+                right: 900,
+                top: 600
+              }} backgroundColor="white">
 
+
+
+                <TableContainer component={Paper} style={{
+                  padding: 0,
+                  margin: 0,
+                  width: 800,
+                  height: 500,
+                  marginLeft: 100,
+                  marginTop: -750
+
+                }} >
+                  <Table stickyHeader sx={{
+                    width: 500,
+                    height: 300
+                  }}
+                    aria-label="customized table" size="small"
+                  >
+                    <TableHead position="fixed" >
+                      <TableRow>
+                        <StyledTableCell align="center" size="small">Flight Number</StyledTableCell>
+                        <StyledTableCell align="center" size="small">Departure Airport</StyledTableCell>
+                        <StyledTableCell align="center">Arrival Airport</StyledTableCell>
+                        <StyledTableCell align="center">Flight Date&nbsp; </StyledTableCell>
+                        <StyledTableCell align="center">Departure Time</StyledTableCell>
+                        <StyledTableCell align="center">Arrival time&nbsp; </StyledTableCell>
+                        <StyledTableCell align="center">Trip Duration&nbsp; </StyledTableCell>
+
+                        <StyledTableCell align="center">Departure Terminal</StyledTableCell>
+                        <StyledTableCell align="center">Arrival Terminal</StyledTableCell>
+                        <StyledTableCell align="center">Economy seats </StyledTableCell>
+                        <StyledTableCell align="center">Economy seats price</StyledTableCell>
+                        <StyledTableCell align="center">Business seats &nbsp; </StyledTableCell>
+                        <StyledTableCell align="center">Business seats price &nbsp; </StyledTableCell>
+                        <StyledTableCell align="center">First seats </StyledTableCell>
+                        <StyledTableCell align="center">First seats price </StyledTableCell>
+                        <StyledTableCell align="center">&nbsp; </StyledTableCell>
+                        <StyledTableCell align="center">&nbsp; </StyledTableCell>
+                        <StyledTableCell align="center">&nbsp; </StyledTableCell>
+                        <StyledTableCell align="center">&nbsp; </StyledTableCell>
+                        <StyledTableCell align="center">&nbsp; </StyledTableCell>
+                        <StyledTableCell align="center">&nbsp; </StyledTableCell>
+
+
+
+
+                        <StyledTableCell align="center"> &nbsp; </StyledTableCell>
+
+                      </TableRow>
+                    </TableHead>
+                    <TableRow> </TableRow>
+
+
+
+                    {flightlist.map(u => {
+                      return <TableRow key={u._id}>
+                        <StyledTableCell align="center" size="small">{u.FlightNu}</StyledTableCell>
+                        <StyledTableCell align="center">{u.From} </StyledTableCell>
+                        <StyledTableCell align="center">{u.To}</StyledTableCell>
+                        <StyledTableCell align="center">{u.FlightDate}</StyledTableCell>
+                        <StyledTableCell align="center">{u.DepartureTime}</StyledTableCell>
+                        <StyledTableCell align="center">{u.ArrivalTime}</StyledTableCell>
+                        <StyledTableCell align="center">{u.TripDuration}</StyledTableCell>
+
+                        <StyledTableCell align="center">{u.TerminalDeparture}</StyledTableCell>
+                        <StyledTableCell align="center">{u.TerminalArrival}</StyledTableCell>
+                        <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
+                        <StyledTableCell align="center">{u.EcoPrice}</StyledTableCell>
+
+                        <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
+                        <StyledTableCell align="center">{u.BusPrice}</StyledTableCell>
+                        <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
+                        <StyledTableCell align="center">{u.FPrice}</StyledTableCell>
+                        <StyledTableCell align="center" size='small'><ShowMap></ShowMap> </StyledTableCell>
+
+                        <StyledTableCell align="center"> <UpdateFlight idd={u._id} from={u.From} to={u.To}
+                          flightNum={u.FlightNu}
+                          date={u.FlightDate}
+                          arr={u.ArrivalTime}
+                          dep={u.DepartureTime}
+                          tdep={u.TerminalDeparture}
+                          tarr={u.TerminalArrival}
+                          ec={u.NuofAvailableEconomySeats}
+                          bs={u.NuofAvailableBuisnessSeats}
+                          first={u.NuofAvailableFirstSeats}
+                        /></StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Popup trigger={<Button variant="outline-danger" data-target="#myModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Delete</Button>} position="right center">
+                            <div>Are you sure you want to delete?(if no click anywhere)</div>
+                            <DeleteFlight idd={u._id}></DeleteFlight>
+                          </Popup>
+                        </StyledTableCell>
+                      </TableRow>
+                    })}
+                  </Table>
+                </TableContainer>
+                <div style={{ marginLeft: 0 }}>
+                  <Paper sx={{ p: 2, margin: 'auto', maxWidth: 300, flexGrow: 1, marginLeft: 130, marginTop: -50 }}>
+                    <Grid container spacing={2} sx={{ height: 200 }}>
+
+                      <Grid item xs={12} sm container >
+                        <Grid item xs container direction="column" spacing={2}>
+                          <Grid item xs>
+
+                          </Grid>
+                          <Grid item>
+                            <Stack spacing={2} sx={{ width: '100%' }}>
+                              <AddFlightForm />
+                              <hr />
+                              <ListItemButton onClick={(event) => setSearchClicked(true)}>
+                                <ListItemIcon>
+                                  <SearchIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Search Flights" />
+                              </ListItemButton>
+
+
+
+                            </Stack>
+
+
+
+                          </Grid>
+                        </Grid>
+                        <Grid item>
+
+                        </Grid>
+                      </Grid>
                     </Grid>
-                    <Grid item>
-                      <Stack spacing={2} sx={{ width: '100%' }}>
-                        <AddFlightForm />
-                        <hr />
-                        <ListItemButton onClick={(event) => setSearchClicked(true)}>
-                          <ListItemIcon>
-                            <SearchIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Search Flights" />
-                        </ListItemButton>
-
-
-
-                      </Stack>
-
-
-
-                    </Grid>
-                  </Grid>
-                  <Grid item>
-
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Paper>
+                  </Paper>
+                </div>
 
 
 
@@ -265,10 +376,14 @@ function Admin() {
 
 
 
-          </div>
-        }
-      </Box>
-    </div >);
+              </div>
+            }
+          </Box>
+        </div >}
+    </div>
+
+
+  );
 
 }
 

@@ -23,7 +23,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import UpdateButton from './UpdateButton'
-
+//import { Button } from '@material-ui/core';
 import { MDBCol, MDBIcon } from "mdbreact";
 
 
@@ -32,7 +32,7 @@ import { Button } from 'react-bootstrap';
 import AddFlightForm from './AddFlightForm';
 import UpdateFlight from './UpdateFlight';
 import SearchBody from './SearchBody';
-
+import Layout from './Layout';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -75,11 +75,13 @@ function SearchResults(props) {
     const [flightNum, setFlightNum] = useState("");
 
     const [clicked, setClicked] = useState(false);
-    return (<div>
-        {clicked ? <SearchBody /> : <div>
+    return (<div style={{marginTop:-500}}> 
+       
+        {clicked ? <SearchBody /> :  (props.back ? props.component :
+             <div>
 
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableContainer component={Paper} style={{marginTop:-650,width:1300,marginLeft:130,opacity:0.9}}>
+                <Table sx={{ minWidth: 500 }} aria-label="customized table">
                     <TableHead>
                         <TableRow>
                             <StyledTableCell align="center">Flight Number</StyledTableCell>
@@ -97,16 +99,7 @@ function SearchResults(props) {
                             <StyledTableCell align="center">Business seats price &nbsp; </StyledTableCell>
                             <StyledTableCell align="center">First seats available</StyledTableCell>
                             <StyledTableCell align="center">First seats price </StyledTableCell>
-                            <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                            <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                            <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                            <StyledTableCell align="center">&nbsp;</StyledTableCell>
-                            <StyledTableCell align="center">&nbsp; </StyledTableCell>
-                            
-                            
-                            <StyledTableCell align="center"> <button onClick={event => setClicked(true)}>Done</button>&nbsp;</StyledTableCell>
-                            <StyledTableCell align="center"> &nbsp;</StyledTableCell>
-                            <StyledTableCell align="center"></StyledTableCell>
+                    
                         </TableRow>
                     </TableHead>
                     <TableRow> </TableRow>
@@ -133,7 +126,10 @@ function SearchResults(props) {
                         </TableRow>
                     })}
                 </Table>
-            </TableContainer></div>}
+            </TableContainer>
+          <Button  variant ="primary" onClick={event => setClicked(true)} style={{marginLeft:730,marginTop:100}}>Done</Button>
+
+            </div>)}
     </div>)
 }
 

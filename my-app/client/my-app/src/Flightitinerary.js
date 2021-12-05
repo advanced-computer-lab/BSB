@@ -11,8 +11,9 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
 import { ImArrowRight2 } from "react-icons/im";
+import { useState , useEffect} from 'react';
+import axios from 'axios';
 import { GiCommercialAirplane } from 'react-icons/gi';
-
 // const Item = styled(Paper)(({ theme }) => ({
 //     ...theme.typography.body2,
 //     padding: theme.spacing(1),
@@ -21,6 +22,25 @@ import { GiCommercialAirplane } from 'react-icons/gi';
 //   }));
 
 function Flightitinerary() {
+    const [info, setInfo] = useState([{}]);
+    const [flight1, setFlight1] = useState({ flightnu: "", flightDate: "", from: "", to: "", arr: "", dep: "", passA: "", ChildA: "", price: "", dur: "", terd: "", tera: "", cabin: "", seat: [], total: {} });
+    const [flight2, setFlight2] = useState({ flightnu: "", flightDate: "", from: "", to: "", arr: "", dep: "", passA: "", ChildA: "", price: "", dur: "", terd: "", tera: "", cabin: "", seat: [] });
+    useEffect(() => {
+
+        axios.post('http://localhost:8000/ReservedFlightSummary',
+            { _id: "61aa1afb3b59fcb8e4a6557a" }).then(res => {
+                setInfo(res.data);
+
+                setFlight1({ flightnu: res.data[0].DepartId.FlightNu, flightDate: res.data[0].DepartId.FlightDate, from: res.data[0].DepartId.From, to: res.data[0].DepartId.To, arr: res.data[0].DepartId.ArrivalTime, dep: res.data[0].DepartId.DepartureTime, passA: res.data[0].DepartId.DepartPassengersAdult, ChildA: res.data[0].DepartId.DepartPassengersChild, price: res.data[0].DepartPrice, dur: res.data[0].DepartId.TripDuration, terd: res.data[0].DepartId.TerminalDeparture, terda: res.data[0].DepartId.TerminalArrival, cabin: res.data[0].DepartCabin, seat: res.data[0].DepartSeats, total: res.data[0].Total })
+                setFlight2({ flightnu: res.data[0].ReturnId.FlightNu, flightDate: res.data[0].ReturnId.FlightDate, from: res.data[0].ReturnId.From, to: res.data[0].ReturnId.To, arr: res.data[0].ReturnId.ArrivalTime, dep: res.data[0].ReturnId.DepartureTime, passA: res.data[0].DepartId.ReturnPassengersAdult, ChildA: res.data[0].DepartId.ReturnPassengersChild, price: res.data[0].ReturnPrice, dur: res.data[0].ReturnId.TripDuration, terd: res.data[0].ReturnId.TerminalDeparture, tera: res.data[0].ReturnId.TerminalArrival, cabin: res.data[0].DepartCabin, seat: res.data[0].ReturnSeats })
+
+                console.log(flight1.from);
+            })
+
+    }
+
+
+    )
     return (
         <div>
             <div style={{}}>
@@ -33,8 +53,8 @@ function Flightitinerary() {
 
                 >
                     <Card style={{
-                        width: 1400,
-                        height: 1600,
+                        width: 1000,
+                        height: 1000,
                         backgroundColor: "white"
                     }}>
                         <CardContent>
@@ -56,7 +76,7 @@ function Flightitinerary() {
                                 align="left"
                                 gutterBottom
                             >
-                                Trip to MRS
+                                Trip to {flight1.to}
                             </Typography>
 
 
@@ -84,7 +104,7 @@ function Flightitinerary() {
                                 color="textPrimary"
                                 gutterBottom
                             >
-                                Departure: 21 MAR 2022
+                                Departure: {flight1.flightDate}
                             </Typography>
 
 
@@ -92,7 +112,7 @@ function Flightitinerary() {
                                 <Grid item xs={8}>
                                     <Card
                                         style={{
-                                            width: 800,
+                                            width: 600,
                                             height: 70,
                                             backgroundColor: "#EBECF0"
                                         }}
@@ -104,7 +124,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                LHR < ImArrowRight2 /> MRS
+                                                {flight1.from} < ImArrowRight2 /> {flight1.to}
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -112,14 +132,14 @@ function Flightitinerary() {
                                 <Grid item xs={4}>
                                     <Card
                                         style={{
-                                            width: 400,
+                                            width: 200,
                                             height: 108,
                                             backgroundColor: "#EBECF0"
                                         }}
                                     >
                                         <CardContent>
                                             <Typography
-                                                style={{ fontSize: 20, fontWeight: "bold" }}
+                                                style={{ fontSize: 16, fontWeight: "bold" }}
                                                 color="textPrimary"
                                                 align="center"
                                                 gutterBottom
@@ -127,12 +147,12 @@ function Flightitinerary() {
                                                 price :
                                             </Typography>
                                             <Typography
-                                                style={{ fontSize: 40, fontWeight: "bold" }}
+                                                style={{ fontSize: 30, fontWeight: "bold" }}
                                                 color="textPrimary"
                                                 align="center"
                                                 gutterBottom
                                             >
-                                                5500 EGP
+                                                {flight1.price} EGP
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -147,7 +167,7 @@ function Flightitinerary() {
                                     >
                                         <CardContent>
                                             <Typography
-                                                style={{ fontSize: 35, fontWeight: "bold" }}
+                                                style={{ fontSize: 30, fontWeight: "bold" }}
                                                 color="textPrimary"
                                                 align="left"
                                                 gutterBottom
@@ -161,7 +181,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                BA455
+                                                {flight1.flightnu}
                                             </Typography>
                                             <Typography
                                                 style={{ fontSize: 16, fontWeight: "bold" }}
@@ -177,7 +197,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                1 hour 55 min
+                                                {flight1.dur}
                                             </Typography>
 
 
@@ -195,7 +215,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                Economy
+                                                {flight1.cabin}
                                             </Typography>
 
                                             <Typography
@@ -212,7 +232,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                A12
+                                                {flight1.seat}
                                             </Typography>
                                             <Typography
                                                 style={{ fontSize: 16, fontWeight: "bold" }}
@@ -259,7 +279,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                12:55 PM
+                                                {flight1.arr}
                                             </Typography>
 
                                             <Typography
@@ -268,7 +288,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                TERMINAL 3 </Typography>
+                                                {flight1.tera} </Typography>
                                             <br />
                                             <Typography
                                                 style={{ fontSize: 16, fontWeight: "bold" }}
@@ -284,7 +304,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                11:00 AM
+                                                {flight1.dep}
                                             </Typography>
 
                                             <Typography
@@ -293,7 +313,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                TERMINAL 2 </Typography>
+                                                {flight1.terd} </Typography>
 
 
                                         </CardContent>
@@ -317,7 +337,7 @@ function Flightitinerary() {
                                 color="textPrimary"
                                 gutterBottom
                             >
-                                Return: 21 JUN 2022
+                                Return: {flight2.flightDate}
                             </Typography>
                             <Grid container spacing={2}>
                                 <Grid item xs={8}>
@@ -335,7 +355,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                LHR < ImArrowRight2 /> MRS
+                                                {flight2.from} < ImArrowRight2 /> {flight2.to}
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -363,7 +383,7 @@ function Flightitinerary() {
                                                 align="center"
                                                 gutterBottom
                                             >
-                                                5500 EGP
+                                                {flight2.price} EGP
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -392,7 +412,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                BA455
+                                                {flight2.flightnu}
                                             </Typography>
                                             <Typography
                                                 style={{ fontSize: 16, fontWeight: "bold" }}
@@ -408,7 +428,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                1 hour 55 min
+                                                {flight2.dur}
                                             </Typography>
 
 
@@ -426,7 +446,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                Economy
+                                                {flight2.cabin}
                                             </Typography>
 
                                             <Typography
@@ -443,7 +463,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                A12
+                                                {flight2.seat}
                                             </Typography>
                                             <Typography
                                                 style={{ fontSize: 16, fontWeight: "bold" }}
@@ -490,7 +510,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                12:55 PM
+                                                {flight2.arr}
                                             </Typography>
 
                                             <Typography
@@ -499,7 +519,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                TERMINAL 3 </Typography>
+                                                {flight2.tera} </Typography>
                                             <br />
                                             <Typography
                                                 style={{ fontSize: 16, fontWeight: "bold" }}
@@ -515,7 +535,7 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                11:00 AM
+                                                {flight2.dep}
                                             </Typography>
 
                                             <Typography
@@ -524,13 +544,34 @@ function Flightitinerary() {
                                                 align="left"
                                                 gutterBottom
                                             >
-                                                TERMINAL 2 </Typography>
+                                                {flight2.terd} </Typography>
 
 
                                         </CardContent>
                                     </Card>
                                 </Grid>
                             </Grid>
+                            <Card
+                                style={{
+
+                                    width: 330,
+                                    height: 65,
+                                    backgroundColor: "#EBECF0",
+                                    opacity: 0.7
+                                }}
+                            >
+                                <CardContent>
+                                    <Typography
+                                        align="left"
+                                        style={{ fontSize: 20, fontWeight: "bold" }}
+                                        color="textPrimary"
+                                        gutterBottom
+                                    >
+                                        Total Price  : {flight1.total}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+
                         </div>
                         <hr />
 

@@ -151,14 +151,13 @@ export default function App() {
     };
 
     //navigation bar
-function handleLogout()
-{
-   
+    function handleLogout() {
+
         setAdminClicked(false);
         setUserClicked(false);
-    
 
-}
+
+    }
 
 
 
@@ -167,44 +166,53 @@ function handleLogout()
         <div>
             <header>
 
-               
+
 
 
                 <div>
-                   
-                    
 
-                        <div className='d-flex justify-content-center align-items-center h-100'>
-                            <div className='text-white'>
-                                <h5 className='mb-4'></h5>
-                                {adminClicked  ? <Admin></Admin> : (userClicked  ? <User></User>  : <div>
 
-                                    <Layout/>
-                                    <Button variant="secondary" data-target="#myModal" data-toggle="modal" data-backdrop="static" onClick={(event) => setUserClicked(true)} data-keyboard="false" style={{
-                                        position: 'absolute',
-                                        right: 790,
-                                        top: 350,
-                                    }}>User</Button>
-                                    <Button variant="outline-primary" style={{
-                                        position: 'absolute',
-                                        right: 650,
-                                        top: 350,
-                                    }} data-target="#myModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" onClick={(event) => setAdminClicked(true)} >Admin</Button>
-                                
-                                
-                                
-                                
-                                
-                                </div>
-                                )}
+
+
+                    <div className='d-flex justify-content-center align-items-center h-100'>
+
+                        <div className='text-white'>
+                            <h5 className='mb-4'></h5>
+                            {adminClicked ? <Admin></Admin> : (userClicked ? <User></User> : <div>
+
+                                <Layout />
+                                <AppBar position="fixed" style={{ width: window.screen.width }}>
+                                    <Container maxWidth="xl">
+                                        <Toolbar disableGutters>
+                                            <h3 style={{ marginLeft: 15 }}>BSB Airways</h3>
+                                        </Toolbar>
+                                    </Container>
+                                </AppBar>
+                                <Button variant="secondary" data-target="#myModal" data-toggle="modal" data-backdrop="static" onClick={(event) => setUserClicked(true)} data-keyboard="false" style={{
+                                    position: 'absolute',
+                                    right: 790,
+                                    top: 350,
+                                }}>User</Button>
+                                <Button variant="outline-primary" style={{
+                                    position: 'absolute',
+                                    right: 650,
+                                    top: 350,
+                                }} data-target="#myModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" onClick={(event) => setAdminClicked(true)} >Admin</Button>
+
+
+
+
+
                             </div>
-                      
-                       
+                            )}
+                        </div>
+
+
 
                     </div>
                 </div>
 
-                
+
 
             </header>
 

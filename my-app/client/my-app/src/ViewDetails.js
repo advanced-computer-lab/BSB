@@ -10,7 +10,7 @@ import ModalBody from 'react-bootstrap/ModalBody'
 import ModalFooter from 'react-bootstrap/ModalFooter'
 import { Button } from 'react-bootstrap';
 import logo from './logo.svg'
-import { styled  } from '@mui/system';
+import { styled } from '@mui/system';
 import { TableCell } from '@mui/material';
 import { tableCellClasses } from '@mui/material';
 import { TableRow } from '@material-ui/core';
@@ -85,7 +85,7 @@ function ViewDetails(props) {
 
             <Modal show={show} onHide={handleClose} animation={false}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Flight Number:{props.flightNum}</Modal.Title>
+                    <Modal.Title style={{color:'black'}}>Flight Number:{props.flightNum}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body> <div border="solid">
 
@@ -93,9 +93,10 @@ function ViewDetails(props) {
 
 
                     <form >
+                        <p style={{color:'black'}}>
 
                         <br />
-                        Flight Number:{props.flightNum}
+                        Flight Number:{props.fnumber }
                         <br />
 
                         <br />
@@ -103,7 +104,7 @@ function ViewDetails(props) {
                         <br />
 
                         <br />
-                        To: {props.To}
+                        To: {props.to}
                         <br />
 
                         <br />
@@ -116,24 +117,22 @@ function ViewDetails(props) {
                         Departure Time:{props.dep}
                         <br />
 
-                        <br />
-                        Trip Duration: {props.tripdur}
-                        <br />
+
 
 
                         <br />
-                        Cabin Class:{props.cabin}
+                        Cabin Class:First/Buisness/Economy
                         <br />
 
                         <br />
-                        Bag Allowance:{props.bagallow}
+                        Bag Allowance:100kg
 
                         <br />
 
 
 
                         <br />
-
+</p>
                     </form>
                 </div></Modal.Body>
                 <Modal.Footer>

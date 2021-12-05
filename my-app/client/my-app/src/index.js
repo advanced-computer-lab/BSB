@@ -5,10 +5,13 @@ import App from './App';
 import Flightitinerary from './Flightitinerary'
 import reportWebVitals from './reportWebVitals';
 import ChooseSeat from './ChooseSeat';
-
+import Summary from './Summary';
+import DepartureList from './DepartureList'
+import Search from './Search';
+//import Flightitinerary from './Flightitinerary'
 ReactDOM.render(
   <React.StrictMode>
-    <ChooseSeat />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
