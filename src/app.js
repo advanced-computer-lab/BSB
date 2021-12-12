@@ -2,6 +2,7 @@ const express = require('express'),
     app = express();
 app.use(express.json());
 const bodyParser = require('body-parser');
+var nodemailer = require('nodemailer');
 const fs = require('fs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,6 +19,8 @@ const chosenFlights = require('./Models/chosenFlights.js')
 const seats = require('./Models/seats.js')
 const existing = require('./Models/existingUser.js');
 const reserved = require('./Models/reservedFlights.js');
+const reservations = require('./Models/reservations.js');
+const { BlockList } = require('net');
 require('dotenv').config(); // configures dotenv
 app.use(express.json());
 // MongoDB connection with ATLAS and Mongoose
@@ -326,7 +329,6 @@ app.post("/searchFlights", async (req, res) => {
     }
 
 });
-
 app.post("/searchDepartureFlights", async (req, res) => {
     const criteria = { From: req.body.From, To: req.body.To, FlightDate: req.body.departureDate, DepartBool: true };
     let c = req.body.cabin;
@@ -335,37 +337,39 @@ app.post("/searchDepartureFlights", async (req, res) => {
         const fquery = await flight.find(criteria);//result set is query
         //sends each one as an object in an array
         console.log(fquery);//print 1
-        let r = [];
-        for (var i = 0; i < fquery.length; i++) {
-            let f = fquery[i]._id;
-            console.log(f);//print 2
-            const squery = await seats.find({ FlightID: f });
-            console.log(squery);
-            let cond = squery.length == 0;//if flight has no reserved seats yet
-            console.log(cond);
-            if (!cond) {
-                ob = await getSeatNumbers(f);
-                if (c == "Economy") {
-                    capacity = ob.e;
-                    c2 = (squery[0].reservedEcoSeats.length == capacity) || ((capacity - squery[0].reservedEcoSeats.length) < total)//not enough pass
-                }
-                else if (c == "Business") {
-                    capacity = ob.b;
-                    c2 = (squery[0].reservedBusSeats.length == capacity) || ((capacity - squery[0].reservedBusSeats.length) < total)
-                }
-                else {
-                    capacity = ob.f;
-                    c2 = (squery[0].reservedFstSeats.length == capacity) || ((capacity - squery[0].reservedFstSeats.length) < total);
-                }
-                console.log(c2);
-                if (!c2) {
-                    r.push(fquery[i]);
-                }
-            }
-            else {
-                r.push(fquery[i]);
-            }
-        }
+        let r =fquery;
+        // for (var i = 0; i < fquery.length; i++) {
+        //     let f = fquery[i]._id;
+        //     console.log(f);//print 2
+        //     const squery = await seats.find({ FlightID: f });
+        //     console.log(squery);
+        //     let cond = squery.length == 0;//if flight has no reserved seats yet
+        //     console.log(cond);
+        // //     if (!cond) {
+        // //         ob = await getSeatNumbers(f);
+        // //         if (c == "Economy") {
+        // //             capacity = ob.e;
+        // //             c2 = (squery[0].reservedEcoSeats.length == capacity) || ((capacity - squery[0].reservedEcoSeats.length) < total)//not enough pass
+        // //         }
+        // //         else if (c == "Business") {
+        // //             capacity = ob.b;
+        // //             c2 = (squery[0].reservedBusSeats.length == capacity) || ((capacity - squery[0].reservedBusSeats.length) < total)
+        // //         }
+        // //         else {
+        // //             capacity = ob.f;
+        // //             c2 = (squery[0].reservedFstSeats.length == capacity) || ((capacity - squery[0].reservedFstSeats.length) < total);
+        // //         }
+        // //         console.log(c2);
+        // //         if (c2==false) {
+        // //             console.log("Hi")
+        // //             r.push(fquery[i]);
+        // //             console.log(pushed)
+        // //         }
+        // //     }
+        // //     else {
+        // //         r.push(fquery[i]);
+        // //     }
+        // // }
         console.log(fquery);
         console.log("xxxx111");
         console.log(r);
@@ -477,7 +481,8 @@ app.post("/AddDepartureFlight", (req, res) => {
         'DepartId': req.body.FlightId,
         "DepartPassengersAdult": req.body.adultPass,
         'DepartPassengersChild': req.body.childPass,
-        'DepartCabin': req.body.cabin
+        'DepartCabin': req.body.cabin,
+        'DepartSeats':req.body.seats
     })
     newFlight.save().then((result) => {
         console.log(result);
@@ -513,6 +518,7 @@ app.post("/AddReturnFlight", async (req, res) => {//places chosen return flight 
         "ReturnPassengersAdult": req.body.adultPass,
         'ReturnPassengersChild': req.body.childPass,
         'ReturnCabin': req.body.cabin,
+        'ReturnSeats':req.body.seats
 
     })
     console.log(cf);
@@ -563,40 +569,36 @@ function remove(array, element) {
     array.splice(index, 1);
 }
 app.post("/getAvailableCabinSeats", async (req, res) => {
-    c = await getAvailableCabinSeat(req.body.cabin, req.body.FlightID);
-    if (c == null || c == undefined) {
-        res.send("Flight not found");
-    }
-    else {
-        res.send(c);
-    }
+    getAvailableCabinSeat(req.body.cabin, req.body.FlightID).then((result) => {
+        res.send(result)
+    })
+        .catch((err) => {
+            console.log(err)
+        })
 })
 app.post("/getEcoAvailableSeats", async (req, res) => {
-    c = await getAvailableCabinSeat("Economy", req.body.FlightID);
-    if (c == null || c == undefined) {
-        res.send("Flight not found");
-    }
-    else {
-        res.send(c);
-    }
+    getAvailableCabinSeat("Economy", req.body.FlightID).then((result) => {
+        res.send(result)
+    })
+        .catch((err) => {
+            console.log(err)
+        })
 })
 app.post("/getBusAvailableSeats", async (req, res) => {
-    c = await getAvailableCabinSeat("Business", req.body.FlightID);
-    if (c == null || c == undefined) {
-        res.send("Flight not found");
-    }
-    else {
-        res.send(c);
-    }
+    getAvailableCabinSeat("Business", req.body.FlightID).then((result) => {
+        res.send(result)
+    })
+        .catch((err) => {
+            console.log(err)
+        })
 })
 app.post("/getFstAvailableSeats", async (req, res) => {
-    c = await getAvailableCabinSeat("First", req.body.FlightID);
-    if (c == null || c == undefined) {
-        res.send("Flight not found");
-    }
-    else {
-        res.send(c);
-    }
+    getAvailableCabinSeat("First", req.body.FlightID).then((result) => {
+        res.send(result)
+    })
+        .catch((err) => {
+            console.log(err)
+        })
 })
 app.post("/showReservedCabinSeats", async (req, res) => {
     let c = req.body.cabin;
@@ -789,7 +791,7 @@ app.post("/checkSeat", async (req, res) => {
     }
 })
 //61abc8483adf3477c707345a
-app.post("/c", async (req, res) => {//reserves seats, doesn't make sure it's already in the data
+app.post("/reserveSeats", async (req, res) => {//reserves seats, doesn't make sure it's already in the data
     c = req.body.cabin;
     seats.find({ FlightID: req.body.FlightID }).lean().exec(function (err, data) {
         if (data.length != 0) {
@@ -802,7 +804,11 @@ app.post("/c", async (req, res) => {//reserves seats, doesn't make sure it's alr
                     bc = b.concat(req.body.seats);
                     console.log(bc);
                 } else {
-                    bc = req.body.seats;
+                    if (Array.isArray(req.body.seats)){
+                        bc = req.body.seats
+                    }
+                    else{
+                    bc = [req.body.seats];}
                 }
                 o = { reservedEcoSeats: bc }
             }
@@ -811,7 +817,11 @@ app.post("/c", async (req, res) => {//reserves seats, doesn't make sure it's alr
                     b = data[0].reservedFstSeats;
                     bc = b.concat(req.body.seats);
                 } else {
-                    bc = req.body.seats;
+                    if (Array.isArray(req.body.seats)){
+                        bc = req.body.seats
+                    }
+                    else{
+                    bc = [req.body.seats];}
                 }
                 o = { reservedFstSeats: bc };
             }
@@ -819,7 +829,13 @@ app.post("/c", async (req, res) => {//reserves seats, doesn't make sure it's alr
                 if (data[0].reservedBusSeats != null && data[0].reservedBusSeats.length != 0) {
                     b = data[0].reservedBusSeats; bc = b.concat(req.body.seats);
                 } else {
-                    bc = req.body.seats;
+                    if (Array.isArray(req.body.seats)){
+                        console.log(Array.isArray(req.body.seats));
+                        console.log(req.body.seats);
+                        bc = req.body.seats
+                    }
+                    else{
+                    bc = [req.body.seats];}
                 }
                 o = { reservedBusSeats: bc };
             }
@@ -831,26 +847,31 @@ app.post("/c", async (req, res) => {//reserves seats, doesn't make sure it's alr
             });
         }
         else {
-
+            if (Array.isArray(req.body.seats)){
+                bc = req.body.seats
+            }
+            else{
+            bc = [req.body.seats];}
             if (c == "Economy") {
+                console.log(req.body.seats);
                 ob = {
                     "FlightID": req.body.FlightID,
-                    "reservedSeats": req.body.seats,
-                    "reservedEcoSeats": req.body.seats
+                    "reservedSeats": bc,
+                    "reservedEcoSeats": bc
                 }
             }
             else if (c == "Business") {
                 ob = {
                     "FlightID": req.body.FlightID,
-                    "reservedSeats": req.body.seats,
-                    "reservedBusSeats": req.body.seats
+                    "reservedSeats": bc,
+                    "reservedBusSeats": BlockList
                 }
             }
             else {
                 ob = {
                     "FlightID": req.body.FlightID,
-                    "reservedSeats": req.body.seats,
-                    "reservedFstSeats": req.body.seats
+                    "reservedSeats": bc,
+                    "reservedFstSeats": bc
                 }
             }
             const sts = new seats(ob)
@@ -864,17 +885,6 @@ app.post("/c", async (req, res) => {//reserves seats, doesn't make sure it's alr
 
         }
 
-    })
-    const fl = await flight.find({ _id: req.body.FlightID });
-    d = fl[0].DepartBool;
-    if (d) {
-        ob = { DepartSeats: req.body.seats }
-    }
-    else {
-        ob = { ReturnSeats: req.body.seats };
-    }
-    chosenFlights.updateOne({ _id: req.body.chosenFlightID }, ob).exec(function (err, data) {
-        console.log("seats placed in chosen flights")
     })
 })
 //6185af9d250c46b0fd2322ed
@@ -959,6 +969,18 @@ app.post("/ViewTicketSummary", (req, res) => { //summary of chosen flights
     })
 
 })
+app.post("/ViewTicketSummary", (req, res) => { //summary of chosen flights
+    chosenFlights.find({DepartId: req.body.DepartId, ReturnId: req.body.ReturnId }).populate("DepartId").populate("ReturnId").then((p) => {
+        let c = p[0].DepartCabin;
+        departBaggage = getBaggage(c);
+        let c2 = p[0].ReturnCabin;
+        returnBag = getBaggage(c2);
+        p[0] = p[0].toJSON();
+        p[0].departureBaggage = departBaggage;
+        p[0].returnBaggage = returnBag;
+        res.send(p);
+    })
+})
 app.get("/sendUserInfo", (req, res) => {
 
     existing.find({}).exec(function (err, data) {
@@ -1032,7 +1054,7 @@ app.post("/editProfile", async (req, res) => {
 })
 app.post("/viewMyReservedFlights", async (req, res) => {
 
-    reserved.find({ User: req.body._id }).populate("User").populate("ChosenFlight").then(async (p) => {
+    reservations.find({ User: req.body._id }).populate("User").populate("ChosenFlight").then(async (p) => {
         console.log(p);//p returns array of user's reservations
         for (var i = 0; i < p.length; i++) {
             console.log(p[i]);
@@ -1056,12 +1078,6 @@ app.post("/addReservedFlight", (req, res) => {
         console.log(err)
     })
 })
-app.post("/cancelReservation", (req, res) => {
-    reserved.deleteOne({ _id: req.body.ReservationId }).exec(function (err, leads) {
-        res.status(201).send("You have successfully cancelled your reservation");
-    });
-});
-
 app.post("/ReservedFlightSummary", (req, res) => {
     reserved.find({ _id: req.body._id }).populate("User").populate("ChosenFlight").then(async (p) => {
         console.log(p);//p returns array of user's reservations
@@ -1082,3 +1098,98 @@ app.post("/ReservedFlightSummary", (req, res) => {
     })
         .catch(error => console.log("error", error))
 })
+
+app.post("/addReservation", (req, res) => {
+    const res1 = new reservations({
+        'DepartId': req.body.DepartId,
+        "DepartPassengersAdult": req.body.departAdult,
+        'DepartPassengersChild': req.body.departChild,
+        'DepartCabin': req.body.departCabin,
+        'DepartSeats':req.body.departSeats,
+        'ReturnId': req.body.ReturnId,
+        "ReturnPassengersAdult": req.body.returnAdult,
+        'ReturnPassengersChild': req.body.returnChild,
+        'ReturnCabin': req.body.returnCabin,
+        'ReturnSeats':req.body.returnSeats,
+        'User': "61abb8b7dda93117406ba763",
+         'Total':req.body.Total
+
+    })
+    res1.save().then((result) => {
+        res.send(result)
+    }).catch((err) => {
+        console.log(err)
+    })
+});
+app.post("/ReservationSummary",(req,res)=>{
+    reservations.find({_id:req.body.reservationId}).populate("User").populate("DepartId").populate("ReturnId").then((p) => {
+        console.log(p);
+        if(p.length == 0){
+            res.send("flight not found");
+            return;
+        }
+        let c = p[0].DepartCabin;
+        departBaggage = getBaggage(c);
+        let c2 = p[0].ReturnCabin;
+        returnBag = getBaggage(c2);
+        p[0] = p[0].toJSON();
+        p[0].departureBaggage = departBaggage;
+        p[0].returnBaggage = returnBag;
+        res.send(p[0]);
+    })
+})
+app.post("/cancelReservation",async (req, res) => {
+    const query = await reservations.find({ _id: req.body.reservationId }).populate("User").populate("DepartId").populate("ReturnId");
+    reservations.deleteOne({ _id: req.body.reservationId }).exec(function (err, leads) {
+        if(err){
+            console.log(err);
+        }
+        else{
+        console.log("reservation cancelled!!")}
+    });
+    if(query.length !=0){
+    res.send(query[0].User.email);
+    sub = "Reservation : "+ query[0]._id +" cancellation";
+    txt = "You have cancelled your reservation with booking number: "+query[0]._id+ " successfully!"+ "\n";
+    dep = query[0].DepartId.FlightNu;
+    ret = query[0].ReturnId.FlightNu;
+    price = query[0].Total;
+    txt += "Your cancelled ticket details: "+ "\n";
+    txt += "Departure Flight Number: "+ dep +"\n";
+    txt += "Return Flight Number: "+ ret +"\n";
+    txt += "Total amount to be refunded: "+price+"\n";
+    txt += "The refund has been requestd and will be processed within 14 days."+"\n"+ "Thank you for using BSB airlines. We're sad to see you cancel!"+"\n"+"BSB Airlines";
+    var mailOptions = {
+        from: 'bsbairlines@gmail.com',
+        to: query[0].User.email,
+        subject: sub,
+        text: txt
+      };
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'bsbairlines@gmail.com',
+          pass: 'BSBfarmers1'
+        }
+      });
+      transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+}
+else{
+    res.send("err")
+}
+});
+app.post("/viewUsersReservations", async (req, res) => {
+
+    reservations.find({ User: req.body.user }).populate("User").populate("DepartId").populate("ReturnId").then(async (p) => {
+        console.log(p);//p returns array of user's reservations
+        res.send(p);
+    })
+        .catch(error => console.log(error))
+})
+
