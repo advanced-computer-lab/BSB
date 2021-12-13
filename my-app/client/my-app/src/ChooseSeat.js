@@ -3,6 +3,7 @@ import { ModalFooter } from 'react-bootstrap';
 import './flightseatmap.css';
 import Checkbox from '@mui/material/Checkbox';
 import App from './App';
+import Summary from './Summary'
 import EditProfile from './EditProfile';
 import Layout from './Layout';
 import { CssBaseline } from '@mui/material';
@@ -29,6 +30,7 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 
 
+
 function ChooseSeat(props) {
     const [cabinSeats, setCabinSeats] = useState([]);
     const [temp, setTemp] = useState([]);
@@ -37,12 +39,31 @@ function ChooseSeat(props) {
     const [availableSeatsF, setAvailableSeats] = useState([]);
     const [isReserved, setisReserved] = useState("")
     const [bookClicked, setBookedClicked] = useState(false);
-    //economycheckboes
+    const [flightId, setFlightId] = useState("");
+    const [cabin, setCabin] = useState("");
+    const [returnFlight, setReturnFlight] = useState("");
+    const [retSeats, setRetSeatsClicked] = useState(false);
+    const [summary, setSummaryCicked] = useState(false);
+    const [id, setid] = useState(props.id)
+    const [seats, setSeats] = useState([]);
+    const [depseats, setDepseats] = useState([]);
+    const [retseats, setRetSeats] = useState([]);
+  const[clicked,setClicked]=useState(false)
+    useEffect(() => {
+        if (props.type == "Departure") {
+            setFlightId(props.FlightID)
+            setReturnFlight(props.retFlightID)
+            console.log("DEPPPPPPPPPPP")
+        }
+        else {
+            setFlightId(props.retFlightID)
+        }
+    }, [id])
 
-    const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [open, setOpen] = React.useState(false);
 
     const handleClickSB = () => {
-        setOpenSnackBar(true);
+        setOpen(true);
     };
 
     const handleCloseSB = (event, reason) => {
@@ -50,24 +71,21 @@ function ChooseSeat(props) {
             return;
         }
 
-        setOpenSnackBar(false);
+        setOpen(false);
     };
+
     const [checked, setChecked] = useState(true);
-
-    const handleChange = (event) => {
-        setChecked(event.target.checked);
-
-
+    const handleCheck = (event, u) => {
+        console.log("hereee");
+        console.log(u);
+        if (seats.indexOf(u) != -1) { setSeats(seats.push(u)) }
+        // else{setSeats(seats.filter((x)=>!(x)===u))}
     }
+
 
     //number of adults
     const [noOfAdults, setAduls] = useState({ adults: "" });
     const [noOfChildren, setChildren] = useState({ children: "" });
-
-    // const buttonSubmitted = (event) => {
-
-    // }
-
 
 
 
@@ -75,19 +93,13 @@ function ChooseSeat(props) {
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
             // backgroundColor: theme.palette.common.black,
-            // color: theme.palette.common.white,
-
+            //color: theme.palette.common.white,
         },
         [`&.${tableCellClasses.body}`]: {
-            fontSize: 6,
+            fontSize: 14,
         },
     }));
-    const Item = styled(Paper)(({ theme }) => ({
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    }));
+
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
         '&:nth-of-type(odd)': {
             backgroundColor: theme.palette.action.hover,
@@ -104,26 +116,23 @@ function ChooseSeat(props) {
 
 
     useEffect(() => {
-        axios.post("http://localhost:8000/getEcoAvailableSeats", {
-            _id: "6185ad7b250c46b0fd2322ea"
+        console.log("cdfvgbhnjkl;");
+        axios.post("http://localhost:8000/getAvailableCabinSeats", {
+
+            FlightID: id,
+            cabin: props.cabin
         }).then(res => {
             console.log("xxxx");
+            console.log(props.id);
             setMariam(res.data);
+            console.log("arrid is");
+            console.log(props.arrid);
         })
 
 
-    }, [])
+    },[])
 
 
-    // useEffect(() => {
-    //     axios.post("http://localhost:8000/reserveSeats", {
-    //         _id: "6185ad7b250c46b0fd2322ea",
-    //         DepartSeats:[],
-    //         cabin
-    //     }).then(res => {
-    //         console.log("xxxx");
-
-    //     })
 
 
     // }, [])
@@ -136,16 +145,6 @@ function ChooseSeat(props) {
 
 
 
-    //    axios.post('http://localhost:8000/ViewTicketSummary',
-    //         { _id: "61aa1afb3b59fcb8e4a6557a" }).
-    //         then(res => {
-    //             setInfo(res.data);
-
-    //             setAduls({ adults: res.data[0].DepartId.DepartPassengersAdult})
-    //             setChildren({ children: res.data[0].DepartId.DepartPassengersChild})
-
-
-    //         })
 
 
 
@@ -155,45 +154,44 @@ function ChooseSeat(props) {
 
 
 
-
-
-
-
-
+console.log(props.flightA)
 
     return (<div>
-        {props.logout ? <App /> : (props.edit ? <EditProfile logout={props.logout} /> :
+        {summary ? <Summary flightA={props.flightA} flightB={props.flightB} cabin={props.cabin} seatsA={depseats} seatsB={retseats}/> :
             <div>
-                <Layout />
+
+
+                {id === props.id ? <h1 style={{ color: "#112D4E" }}>RETURN FLIGHT SEAT RESERVATION:</h1> : <h1 style={{ color: "black" }}>DEPARTURE FLIGHT SEAT RESERVATION:</h1>}
                 {
                     <div>
-                        
+                        <h1 styles={{ color: '#112D4E' }}>Book your flight seats</h1>
+
                         <TableContainer component={Paper} style={{
                             padding: 0,
                             margin: 0,
-                            width: 800,
+                            width: 400,
                             height: 500,
-                            marginLeft: 100,
-                            marginTop: -750
+                            marginLeft: 470,
+                            opacity:0.9,
+
+                            marginTop: 280,
+                            marginLeft:430,
+                            backgroundColor: '#DBE2EF'
 
                         }} >
                             <Table stickyHeader sx={{
-                                width: 500,
+                                width: 600,
                                 height: 300
                             }}
                                 aria-label="customized table" size="small"
                             >
                                 <TableHead position="fixed" >
                                     <TableRow>
-                                        <StyledTableCell align="center" size="small">Seat Number</StyledTableCell>
+                                        <StyledTableCell align="center" size="small">seats</StyledTableCell>
                                         <StyledTableCell align="center" size="small">Choose Seat</StyledTableCell>
-                                        <StyledTableCell align="center" size="small">Book Seat</StyledTableCell>
+                                        <hr style={{ color: '#112D4E' }} />
 
 
-
-
-
-                                        <StyledTableCell align="center"> &nbsp; </StyledTableCell>
 
                                     </TableRow>
                                 </TableHead>
@@ -203,48 +201,64 @@ function ChooseSeat(props) {
 
 
                                 {mariam.map(u => {
-                                    return <TableRow key={u._id}>
+                                    return (<TableRow key={u._id}>
                                         <StyledTableCell align="center" size="small">{u}</StyledTableCell>
-                                        <StyledTableCell align="center" size="small" checked={checked}> <Checkbox {...label} onChange={handleChange}> </Checkbox></StyledTableCell>
+                                        {/* <StyledTableCell align="center" size="small" checked={checked}> <Checkbox {...label} onChange={handleChange}> </Checkbox></StyledTableCell> */}
                                         <StyledTableCell>
-                                            <Stack spacing={2} sx={{ width: '20' }}>
-                                                <Button variant="contained" onClick={axios.post("http://localhost:8000/reserveSeats", {
-                                                    FlightID: props._id,
-                                                    seats: u,
-                                                    cabin: "Economy"
+                                            <Stack spacing={2} sx={{ width: '100%' }}>
+                                                <Button variant="outlined" style={{marginLeft:160}} onClick={(event) => {
+                                                    axios.post("http://localhost:8000/reserveSeats", {
+                                                        FlightID: id,
+                                                        seats: u,
+                                                        cabin: props.cabin
 
-                                                }).then(res => {
-                                                    console.log("xxxx");
-                                                    console.log(res.data._id)
+                                                    }).then(res => {
+                                                        if(id===props.arrid )
+                                                        {
+                                                            setDepseats([...depseats,u])
+                                                        }
+                                                        else{
+                                                            setRetSeats([...retseats,u])
+                                                        }
+                                                        console.log("xxxx");
+                                                        console.log(u);
+                                                        setClicked(true);
 
-                                                })}> Submit</Button>
+                                                    });
+                                                    handleClickSB()
+                                                }
+                                                } >Reserve </Button>
                                             </Stack>
-                                            <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSB} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} >
+
+                                            <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSB}>
                                                 <Alert onClose={handleCloseSB} severity="success" sx={{ width: '100%' }}>
-                                                    Seat Reserved Successfully
+                                                    Seats reserved successfully
                                                 </Alert>
                                             </Snackbar>
-
                                         </StyledTableCell>
 
-                                    </TableRow>
+                                    </TableRow>)
                                 })}
 
                             </Table>
+
 
                         </TableContainer>
 
 
                     </div>
 
-                })
+                }
+                <br />
+
+                <Button variant="outlined" style={{ color: "#112d4e", background: "#DBE2EF", marginLeft: -190 }} onClick={(event) => {
+                    if (id === props.arrid) { setSummaryCicked(true) } else { setid(props.arrid) }
+                }} >Book Departure Flight Seats </Button>
 
 
-
-            </div>
-        )}
+            </div >
+        }
     </div>
-
     )
 }
 

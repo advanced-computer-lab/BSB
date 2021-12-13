@@ -77,6 +77,12 @@ import Tooltip from '@mui/material/Tooltip';
 
 import IconButton from '@mui/material/IconButton';
 import { blue } from '@material-ui/core/colors';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import FolderIcon from '@mui/icons-material/Folder';
+import RestoreIcon from '@mui/icons-material/Restore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -154,13 +160,18 @@ function Admin() {
   //back button
   const [backButton, setBackButton] = useState(false);
 
+  //buttom navigation
+  const [bottomvalue, setBottomValue] = useState('recents');
 
+  const handleChangeBNav = (event, newValue) => {
+    setBottomValue(newValue);
+  };
   return (
     <div>
       {logoutClicked || backButton ? <App /> :
-        <div style={{ marginTop: -200,marginLeft:60}}>
+        <div style={{ marginTop: -200, marginLeft: 60 }}>
           <Layout />
-          <AppBar position="fixed" style={{ width: window.screen.width, color:'primary'}} >
+          <AppBar position="fixed" style={{ width: window.screen.width, color: 'primary' }} >
             <Container maxWidth="xl">
               <Toolbar disableGutters>
                 <h3 style={{ marginLeft: 15 }}>BSB Airways</h3>
@@ -234,10 +245,11 @@ function Admin() {
                 <TableContainer component={Paper} style={{
                   padding: 0,
                   margin: 0,
-                  width: 800,
+                  width: 1100,
                   height: 500,
                   marginLeft: 100,
-                  marginTop: -750
+                  marginTop: -750,
+                  opacity:0.87
 
                 }} >
                   <Table stickyHeader sx={{
@@ -325,7 +337,7 @@ function Admin() {
                   </Table>
                 </TableContainer>
                 <div style={{ marginLeft: 0 }}>
-                  <Paper sx={{ p: 2, margin: 'auto', maxWidth: 300, flexGrow: 1, marginLeft: 130, marginTop: -50 }}>
+                  <Paper sx={{ p: 2, margin: 'auto', maxWidth: 300, flexGrow: 1, marginLeft: 130, marginTop: -50}} style={{opacity:0.87 }}>
                     <Grid container spacing={2} sx={{ height: 200 }}>
 
                       <Grid item xs={12} sm container >
@@ -379,6 +391,25 @@ function Admin() {
               </div>
             }
           </Box>
+          {/* <BottomNavigation sx={{ width: 1550, marginTop: 55, marginLeft: 4 }} value={bottomvalue} onChange={setBottomValue}>
+            <BottomNavigationAction
+              label="Recents"
+              value="recents"
+              icon={<RestoreIcon />}
+            />
+            <BottomNavigationAction
+              label="Favorites"
+              value="favorites"
+              icon={<FavoriteIcon />}
+            />
+            <BottomNavigationAction
+              label="Nearby"
+              value="nearby"
+              icon={<LocationOnIcon />}
+            />
+            <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
+          </BottomNavigation> */}
+
         </div >}
     </div>
 

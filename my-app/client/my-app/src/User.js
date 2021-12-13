@@ -67,6 +67,15 @@ import HubIcon from '@mui/icons-material/Hub';
 import ChooseSeat from './ChooseSeat';
 import Layout from './Layout'
 import Search from './Search'
+import SearchBody from './SearchBody';
+import Searchu from './Searchu'
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import FolderIcon from '@mui/icons-material/Folder';
+import RestoreIcon from '@mui/icons-material/Restore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
         marginTop: theme.spacing(3),
@@ -315,13 +324,19 @@ function User() {
     };
     //back button
     const [backButton, setBackButton] = useState(false);
+    //booknow button
+    const [bClicked, setBClicked] = useState(false);
+    //
+    const [searchBClicked, setSearchBClicked] = useState(false);
 
 
 
+    //buttom navigation
+    const [bottomvalue, setBottomValue] = useState('recents');
 
-
-
-
+    const handleChangeBNav = (event, newValue) => {
+        setBottomValue(newValue);
+    };
 
 
 
@@ -568,12 +583,12 @@ function User() {
 
                 {/* <ChooseSeat logout={logoutClicked} edit={editProfile} />  */}
 
-                {editProfile ? <EditProfile logout={logoutClicked} back={backButton} component={<User />} /> : (logoutClicked || backButton ? <App /> : (viewResFlights ? <ViewResFlights edit={editProfile} logout={logoutClicked} back={backButton} component={<User />} /> :
-                    <div style={{ marginTop: -200 }}>
+                {searchBClicked ? <Searchu style={{ marginLeft: 100 }} /> : (editProfile ? <EditProfile logout={logoutClicked} back={backButton} component={<User />} /> : (logoutClicked || backButton ? <App /> : (viewResFlights ? <ViewResFlights edit={editProfile} logout={logoutClicked} back={backButton} component={<User />} /> :
+                    <div style={{ marginTop: 100,marginLeft:30 }}>
                         <Layout />
-                        <Search />
-                        <h1 style={{ position: 'relative', marginTop: -530, marginLeft: 110 }}>Book your flight now</h1>
-                        <Paper sx={{ p: 2, margin: 'auto', maxWidth: 500, flexGrow: 1, marginLeft: 100 }}>
+
+                        <h1 style={{ position: 'relative', marginTop: -800, marginLeft: 110 }}>Book your flight now</h1>
+                        <Paper sx={{ p: 2, margin: 'auto', maxWidth: 500, flexGrow: 1, marginLeft: 110 }}>
                             <Grid container spacing={2}>
                                 <Grid item>
                                     <ButtonBase sx={{ width: 128, height: 128 }}>
@@ -606,13 +621,13 @@ function User() {
                             </Grid>
                         </Paper>
 
-                        <Paper sx={{ p: 2, margin: 'auto', maxWidth: 300, flexGrow: 1,marginLeft:100, marginTop:10 }}>
+                        <Paper sx={{ p: 2, margin: 'auto', maxWidth: 300, flexGrow: 1, marginLeft: 120, marginTop: 10 }}>
                             <Grid container spacing={2} sx={{ height: 200 }}>
 
                                 <Grid item xs={12} sm container >
                                     <Grid item xs container direction="column" spacing={2}>
                                         <Grid item xs>
-                                            <Typography gutterBottom variant="subtitle1" component="div" color="#112D4E" fontWeight="bold" style={{marginLeft:15}}>
+                                            <Typography gutterBottom variant="subtitle1" component="div" color="#112D4E" fontWeight="bold" style={{ marginLeft: 15 }}>
                                                 Enter your email to get the latest updates
                                             </Typography>
                                             <TextField
@@ -620,7 +635,7 @@ function User() {
                                                 required
                                                 id="outlined-error"
                                                 label="Email"
-                                                style={{marginLeft:15}}
+                                                style={{ marginLeft: 15 }}
                                                 defaultValue=""
 
                                             />
@@ -650,12 +665,55 @@ function User() {
                                 </Grid>
                             </Grid>
                         </Paper>
+                        <Paper style={{ marginLeft: 200, marginTop: -300 }} sx={{ p: 2, margin: 'auto', maxWidth: 300, flexGrow: 1, marginLeft: 110 }}>
+                            <Grid container spacing={2}>
+                                <Grid item>
+
+                                </Grid>
+                                <Grid item xs={12} sm container>
+                                    <Grid item xs container direction="column" spacing={2}>
+                                        <Grid item xs>
+                                            <Typography style={{ position: 'center', marginLeft: 40 }} gutterBottom variant="subtitle1" component="div" color="#112D4E" fontWeight="bold">
+                                                Book your trip now!
+                                            </Typography>
+
+                                        </Grid>
+                                        <Grid item>
+                                            <Button variant="secondary" style={{ position: 'center', marginLeft: 50, marginTop: -15 }} onClick={(event) => setSearchBClicked(true)}>
+                                                Search flights
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item>
+
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Paper>
+                        <BottomNavigation sx={{ width: 1550,marginTop:55,marginLeft:4 }} value={value} onChange={handleChange}>
+                            <BottomNavigationAction
+                                label="Recents"
+                                value="recents"
+                                icon={<RestoreIcon />}
+                            />
+                            <BottomNavigationAction
+                                label="Favorites"
+                                value="favorites"
+                                icon={<FavoriteIcon />}
+                            />
+                            <BottomNavigationAction
+                                label="Nearby"
+                                value="nearby"
+                                icon={<LocationOnIcon />}
+                            />
+                            <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
+                        </BottomNavigation>
 
 
 
 
                     </div>
-                ))}
+                )))}
             </div>
         </div>
 

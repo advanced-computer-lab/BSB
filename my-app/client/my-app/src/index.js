@@ -7,7 +7,9 @@ import reportWebVitals from './reportWebVitals';
 import ChooseSeat from './ChooseSeat';
 import Summary from './Summary';
 import DepartureList from './DepartureList'
-import Search from './Search';
+import Searchu from './Searchu';
+import User from './User';
+
 //import Flightitinerary from './Flightitinerary'
 ReactDOM.render(
   <React.StrictMode>

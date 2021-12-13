@@ -51,31 +51,31 @@ function ViewDetails(props) {
     const [flightlist, setFlightlist] = useState([]);
     const [clicked, setClicked] = useState(false);
 
-    useEffect(() => {
-        if (clicked) {
-            axios.post('http://localhost:8000/detailsofaflight', {
-                _id: props.idd,
-                FlightNumber: flightNu,
-                From: from,
-                To: to,
-                DepartureTime: dep,
-                ArrivalTime: arr,
-                TripDuration: tripdur,
-                CabinClass: cabin,
-                BagAllowance: bagallow
+    // useEffect(() => {
+    //     if (clicked) {
+    //         axios.post('http://localhost:8000/detailsofaflight', {
+    //             _id: props.idd,
+    //             FlightNumber: flightNu,
+    //             From: from,
+    //             To: to,
+    //             DepartureTime: dep,
+    //             ArrivalTime: arr,
+    //             TripDuration: tripdur,
+    //             CabinClass: cabin,
+    //             BagAllowance: bagallow
 
 
 
-            })
-                .then(function (response) {
-                    console.log("xxx");
-                })
-            setShow(false);
-            setClicked(false);
-        }
+    //         })
+    //             .then(function (response) {
+    //                 console.log("xxx");
+    //             })
+    //         setShow(false);
+    //         setClicked(false);
+    //     }
 
 
-    })
+    // })
 
 
 
@@ -85,18 +85,17 @@ function ViewDetails(props) {
 
             <Modal show={show} onHide={handleClose} animation={false}>
                 <Modal.Header closeButton>
-                    <Modal.Title style={{color:'black'}}>Flight Number:{props.flightNum}</Modal.Title>
+                    <Modal.Title>Flight Number:{props.flightNum}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body> <div border="solid">
 
 
 
 
-                    <form >
-                        <p style={{color:'black'}}>
+                    <form style={{ color: "black" }}>
 
                         <br />
-                        Flight Number:{props.fnumber }
+                        Flight Number:{props.fnumber}
                         <br />
 
                         <br />
@@ -132,7 +131,7 @@ function ViewDetails(props) {
 
 
                         <br />
-</p>
+
                     </form>
                 </div></Modal.Body>
                 <Modal.Footer>

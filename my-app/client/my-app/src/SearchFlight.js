@@ -31,6 +31,8 @@ function SearchFlight(props) {
   const [flightNum, setFlightNum] = useState("");
 
   const [clicked, setClicked] = useState(false);
+
+  
   useEffect(() => {
     if (clicked) {
       axios.post('http://localhost:8000/searchFlights', {

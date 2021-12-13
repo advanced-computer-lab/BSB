@@ -11,576 +11,642 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
 import { ImArrowRight2 } from "react-icons/im";
-import { useState , useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { GiCommercialAirplane } from 'react-icons/gi';
-// const Item = styled(Paper)(({ theme }) => ({
-//     ...theme.typography.body2,
-//     padding: theme.spacing(1),
-//     textAlign: 'center',
-//     color: theme.palette.text.secondary,
-//   }));
+import { Button } from '@material-ui/core';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import App from './App';
+function Flightitinerary(props) {
+    // const total = (props.flightA.price * seatsA.length()) + (props.flightB.price * seatsB.length());
+    const retPrice = props.flightB.price;
+    const depPrice = props.flightA.price;
+    const seatsA = props.seatsA;
+    const seatsB = props.seatsB;
+    const From = props.flightA.From;
+    const to = props.flightA.To;
+    const dateA = props.flightA.FlightDate;
+    const dateB = props.flightB.FlightDate;
 
-function Flightitinerary() {
-    const [info, setInfo] = useState([{}]);
-    const [flight1, setFlight1] = useState({ flightnu: "", flightDate: "", from: "", to: "", arr: "", dep: "", passA: "", ChildA: "", price: "", dur: "", terd: "", tera: "", cabin: "", seat: [], total: {} });
-    const [flight2, setFlight2] = useState({ flightnu: "", flightDate: "", from: "", to: "", arr: "", dep: "", passA: "", ChildA: "", price: "", dur: "", terd: "", tera: "", cabin: "", seat: [] });
+    const arrTerminalA = props.flightA.TerminalArrival;
+    const depTerminalA = props.flightA.TerminalDeparture;
+    const arrTerminalB = props.flightB.TerminalArrival
+    const depTerminalB = props.flightB.TerminalDeparture;
+    const durationA = props.flightA.Trip_Duration;
+    const durationB = props.flightB.Trip_Duration;
+    const cabin = props.cabin
+    const fnumberA = props.flightA.FNu;
+    const fnumberB = props.flightB.FNu;
+    const arrTimeFA = props.flightA.ArrivalTime;
+    const depTimeFA = props.flightA.DepartureTime;
+    const arrTimeFB = props.flightB.ArrivalTime;
+    const depTimeFB = props.flightB.DepartureTime;
+    const [confirmClicked, setConfirmClicked] = useState(false);
+    const [cancelClicked, setCancelClicked] = useState(false);
+    const [openPopUp, setOpen] = useState(false);
+    const [resID, setResID] = useState("");
+    const handleClickOpenPopUp = () => {
+        setOpen(true);
+    };
+
+    const handleClosePopUp = () => {
+        setOpen(false);
+    };
+
     useEffect(() => {
 
-        axios.post('http://localhost:8000/ReservedFlightSummary',
-            { _id: "61aa1afb3b59fcb8e4a6557a" }).then(res => {
-                setInfo(res.data);
+        axios.post('http://localhost:8000/addReservation', {
 
-                setFlight1({ flightnu: res.data[0].DepartId.FlightNu, flightDate: res.data[0].DepartId.FlightDate, from: res.data[0].DepartId.From, to: res.data[0].DepartId.To, arr: res.data[0].DepartId.ArrivalTime, dep: res.data[0].DepartId.DepartureTime, passA: res.data[0].DepartId.DepartPassengersAdult, ChildA: res.data[0].DepartId.DepartPassengersChild, price: res.data[0].DepartPrice, dur: res.data[0].DepartId.TripDuration, terd: res.data[0].DepartId.TerminalDeparture, terda: res.data[0].DepartId.TerminalArrival, cabin: res.data[0].DepartCabin, seat: res.data[0].DepartSeats, total: res.data[0].Total })
-                setFlight2({ flightnu: res.data[0].ReturnId.FlightNu, flightDate: res.data[0].ReturnId.FlightDate, from: res.data[0].ReturnId.From, to: res.data[0].ReturnId.To, arr: res.data[0].ReturnId.ArrivalTime, dep: res.data[0].ReturnId.DepartureTime, passA: res.data[0].DepartId.ReturnPassengersAdult, ChildA: res.data[0].DepartId.ReturnPassengersChild, price: res.data[0].ReturnPrice, dur: res.data[0].ReturnId.TripDuration, terd: res.data[0].ReturnId.TerminalDeparture, tera: res.data[0].ReturnId.TerminalArrival, cabin: res.data[0].DepartCabin, seat: res.data[0].ReturnSeats })
+            DepartId: props.flightA._id,
+            ReturnId: props.flightB._id,
+            departCabin: props.cabin,
+            departSeats: props.seatsA,
+            returnSeats: props.seatsB,
+            Total: (props.flightA.price * props.seatsA.length) + (props.flightB.price * props.seatsB.length)
 
-                console.log(flight1.from);
-            })
+            //  {_id:"61abb8b7dda93117406ba763"}
+        }).then(res => {
+            // setInfo(res.data);
+            console.log(res.data)
+            console.log("xxxx");
+            setResID(res.data._id)
+            console.log(res.data._id)
+
+            console.log(resID)
+            
+
+
+        })
 
     }
 
 
-    )
+
+
+        , [])
+
+
+
+
     return (
+
         <div>
-            <div style={{}}>
-                <div
-                    id='intro-example'
-                    className='p-5 text-center bg-image'
-                    style={{
-                        background: `url(${flight})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", height: window.screen.height, width: window.screen.width
-                    }}
+            {confirmClicked ? <App /> : <div style={{}}>
 
+                <Card style={{
+                    width: 1000,
+                    height: 800,
+                    backgroundColor: "#DBE2EF",
+                    opacity: 0.87,
+                    marginTop: 300
+                }}>
+                    <CardContent>
+
+                        <Typography
+                            style={{ fontSize: 30, fontWeight: "bold" }}
+                            color="textPrimary"
+                            align="left"
+                            gutterBottom
+                        >
+                            FLIGHT ITINERARY
+                        </Typography>
+
+
+                        <hr />
+                        <Typography
+                            align="left"
+                            style={{ fontSize: 20, fontWeight: 'bold' }}
+                            variant="h4" component="h2">
+                            BOOKING NUMBER : 99625
+                        </Typography>
+
+                        <hr />
+                        <Typography
+                            align="left"
+                            style={{ fontSize: 27 }}
+                            color="textPrimary"
+                            gutterBottom
+                        >
+                            <FaPlaneDeparture /> departure flight
+                        </Typography>
+
+
+
+                        <Grid container spacing={2} style={{ marginTop: -100 }}>
+                            <Grid item xs={8}>
+                                <Card
+                                    style={{
+                                        width: 600,
+                                        height: 60,
+                                        backgroundColor: "#EBECF0"
+                                    }}
+                                >
+                                    <CardContent>
+                                        <Typography
+                                            style={{ fontSize: 30, fontWeight: "bold", marginLeft: 100 }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            {From}< ImArrowRight2 /> {to}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Card
+                                    style={{
+                                        width: 200,
+                                        height: 90,
+                                        backgroundColor: "#EBECF0"
+                                    }}
+                                >
+                                    <CardContent>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="center"
+                                            gutterBottom
+                                        >
+                                            price :
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 30, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="center"
+                                            gutterBottom
+                                        >
+                                            EGP
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Card
+                                    style={{
+                                        width: 300,
+                                        height: 200,
+                                        backgroundColor: "#EBECF0"
+                                    }}
+                                >
+                                    <CardContent>
+
+                                        <Typography
+                                            style={{ fontSize: 25, fontWeight: "bold", marginTop: 10 }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Duration: {durationA}
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+
+
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Class: {cabin}
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Seat: {seatsA}
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Status:
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            confirmed
+                                        </Typography>
+
+
+
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Card
+                                    style={{
+                                        width: 350,
+                                        height: 230,
+                                        backgroundColor: "#EBECF0"
+                                    }}
+                                >
+                                    <CardContent>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Arriving At: {arrTimeFA}
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 25, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Arrival terminal:  {arrTerminalA}
+                                        </Typography>
+
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                        </Typography>
+                                        <br />
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Departuring At: {depTimeFA}
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Departure terminal:  {depTerminalA}
+                                        </Typography>
+
+
+
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                    <hr />
+
+
+
+                    <div style={{ marginLeft: 15 }}>
+                        <Typography
+                            align="left"
+                            style={{ fontSize: 27 }}
+                            color="textPrimary"
+                            gutterBottom
+                        >
+                            <FaPlaneArrival /> return flight
+                        </Typography>
+                        <Typography
+                            align="left"
+                            style={{ fontSize: 27 }}
+                            color="textPrimary"
+                            gutterBottom
+                        >
+                            Return: {dateB}
+                        </Typography>
+                        <Grid container spacing={2}>
+                            <Grid item xs={8}>
+                                <Card
+                                    style={{
+                                        width: 800,
+                                        height: 30,
+                                        backgroundColor: "#EBECF0"
+                                    }}
+                                >
+                                    <CardContent>
+                                        <Typography
+                                            style={{ fontSize: 30, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            {to} < ImArrowRight2 /> {From}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Card
+                                    style={{
+                                        width: 400,
+                                        height: 108,
+                                        backgroundColor: "#EBECF0"
+                                    }}
+                                >
+                                    <CardContent>
+                                        <Typography
+                                            style={{ fontSize: 20, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="center"
+                                            gutterBottom
+                                        >
+                                            price :
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 40, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="center"
+                                            gutterBottom
+                                        >
+                                            EGP
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Card
+                                    style={{
+                                        width: 300,
+                                        height: 300,
+                                        backgroundColor: "#EBECF0"
+                                    }}
+                                >
+                                    <CardContent>
+                                        <Typography
+                                            style={{ fontSize: 35, fontWeight: "bold", marginTop: -10 }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            BSB Airways
+                                        </Typography>
+
+                                        <Typography
+                                            style={{ fontSize: 25, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Duration: {durationB}
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+
+
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Class: {cabin}
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Seat: {seatsB}
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Status:
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            confirmed
+                                        </Typography>
+
+
+
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Card
+                                    style={{
+                                        width: 350,
+                                        height: 400,
+                                        backgroundColor: "#EBECF0"
+                                    }}
+                                >
+                                    <CardContent>
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Arriving At: {arrTimeFB}
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 25, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                        </Typography>
+                                        <br />
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                            Departuring At: {depTimeFB}
+                                        </Typography>
+                                        <Typography
+                                            style={{ fontSize: 25, fontWeight: "bold" }}
+                                            color="textPrimary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+
+                                        </Typography>
+
+                                        <Typography
+                                            style={{ fontSize: 16, fontWeight: "bold" }}
+                                            color="textSecondary"
+                                            align="left"
+                                            gutterBottom
+                                        >
+                                        </Typography>
+
+
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </Grid>
+                        <Card
+                            style={{
+
+                                width: 330,
+                                height: 65,
+                                backgroundColor: "#EBECF0",
+                                opacity: 0.7
+                            }}
+                        >
+                            <CardContent>
+                                <Typography
+                                    align="left"
+                                    style={{ fontSize: 20, fontWeight: "bold" }}
+                                    color="textPrimary"
+                                    gutterBottom
+                                >
+                                    Total Price  :
+                                </Typography>
+                            </CardContent>
+                        </Card>
+
+                    </div>
+                    <hr />
+
+                </Card>
+
+                <Button variant="outlined" onClick={(event) => { setConfirmClicked(true) }}>Confirm</Button>
+                <Button variant="outlined" onClick={e => {
+                    handleClickOpenPopUp();
+                }}>
+                    Cancel flight
+
+                </Button>
+                <Dialog
+                    open={openPopUp}
+
+                    onClose={handleClosePopUp}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
                 >
-                    <Card style={{
-                        width: 1000,
-                        height: 1000,
-                        backgroundColor: "white"
-                    }}>
-                        <CardContent>
+                    <DialogTitle id="alert-dialog-title">
+                        {"Are you sure you want to cancel your ticket?"}
+                    </DialogTitle>
 
-                            <Typography
-                                style={{ fontSize: 30, fontWeight: "bold" }}
-                                color="textPrimary"
-                                align="left"
-                                gutterBottom
-                            >
-                                FLIGHT ITINERARY
-                            </Typography>
+                    <DialogActions>
+                        <Button onClick={handleClosePopUp}>Cancel</Button>
+                        <Button onClick={e => {
+                            axios.post("http://localhost:8000/cancelReservation",
+                                {
+
+                                    reservationId: resID
 
 
-
-                            <Typography
-                                style={{ fontSize: 20, fontWeight: "bold" }}
-                                color="textSecondary"
-                                align="left"
-                                gutterBottom
-                            >
-                                Trip to {flight1.to}
-                            </Typography>
+                                }).then(res => {
+                                    // console.log(res.data)
+                                    // console.log('alo');
+                                    // console.log(u.id)
 
 
-
-                            <hr />
-                            <Typography
-                                align="left"
-                                style={{ fontSize: 20, fontWeight: 'bold' }}
-                                variant="h4" component="h2">
-                                BOOKING NUMBER : 99625
-                            </Typography>
-
-                            <hr />
-                            <Typography
-                                align="left"
-                                style={{ fontSize: 27 }}
-                                color="textPrimary"
-                                gutterBottom
-                            >
-                                <FaPlaneDeparture /> departure flight
-                            </Typography>
-                            <Typography
-                                align="left"
-                                style={{ fontSize: 27 }}
-                                color="textPrimary"
-                                gutterBottom
-                            >
-                                Departure: {flight1.flightDate}
-                            </Typography>
-
-
-                            <Grid container spacing={2}>
-                                <Grid item xs={8}>
-                                    <Card
-                                        style={{
-                                            width: 600,
-                                            height: 70,
-                                            backgroundColor: "#EBECF0"
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography
-                                                style={{ fontSize: 30, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight1.from} < ImArrowRight2 /> {flight1.to}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Card
-                                        style={{
-                                            width: 200,
-                                            height: 108,
-                                            backgroundColor: "#EBECF0"
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="center"
-                                                gutterBottom
-                                            >
-                                                price :
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 30, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="center"
-                                                gutterBottom
-                                            >
-                                                {flight1.price} EGP
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Card
-                                        style={{
-                                            width: 300,
-                                            height: 400,
-                                            backgroundColor: "#EBECF0"
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography
-                                                style={{ fontSize: 30, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                BSB Airways
-                                            </Typography>
-
-                                            <Typography
-                                                style={{ fontSize: 25, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight1.flightnu}
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Duration:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight1.dur}
-                                            </Typography>
-
-
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Class:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight1.cabin}
-                                            </Typography>
-
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Seat:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight1.seat}
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Status:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                confirmed
-                                            </Typography>
-
-
-
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                                <Grid item xs={8}>
-                                    <Card
-                                        style={{
-                                            width: 350,
-                                            height: 400,
-                                            backgroundColor: "#EBECF0"
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Arriving At:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 25, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight1.arr}
-                                            </Typography>
-
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight1.tera} </Typography>
-                                            <br />
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Departuring At:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 25, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight1.dep}
-                                            </Typography>
-
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight1.terd} </Typography>
-
-
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                        <hr />
-                        <div style={{ marginLeft: 15 }}>
-                            <Typography
-                                align="left"
-                                style={{ fontSize: 27 }}
-                                color="textPrimary"
-                                gutterBottom
-                            >
-                                <FaPlaneArrival /> return flight
-                            </Typography>
-                            <Typography
-                                align="left"
-                                style={{ fontSize: 27 }}
-                                color="textPrimary"
-                                gutterBottom
-                            >
-                                Return: {flight2.flightDate}
-                            </Typography>
-                            <Grid container spacing={2}>
-                                <Grid item xs={8}>
-                                    <Card
-                                        style={{
-                                            width: 800,
-                                            height: 70,
-                                            backgroundColor: "#EBECF0"
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography
-                                                style={{ fontSize: 30, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight2.from} < ImArrowRight2 /> {flight2.to}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Card
-                                        style={{
-                                            width: 400,
-                                            height: 108,
-                                            backgroundColor: "#EBECF0"
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography
-                                                style={{ fontSize: 20, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="center"
-                                                gutterBottom
-                                            >
-                                                price :
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 40, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="center"
-                                                gutterBottom
-                                            >
-                                                {flight2.price} EGP
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Card
-                                        style={{
-                                            width: 300,
-                                            height: 400,
-                                            backgroundColor: "#EBECF0"
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography
-                                                style={{ fontSize: 35, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                BSB Airways
-                                            </Typography>
-
-                                            <Typography
-                                                style={{ fontSize: 25, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight2.flightnu}
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Duration:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight2.dur}
-                                            </Typography>
-
-
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Class:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight2.cabin}
-                                            </Typography>
-
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Seat:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight2.seat}
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Status:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                confirmed
-                                            </Typography>
-
-
-
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                                <Grid item xs={8}>
-                                    <Card
-                                        style={{
-                                            width: 350,
-                                            height: 400,
-                                            backgroundColor: "#EBECF0"
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Arriving At:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 25, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight2.arr}
-                                            </Typography>
-
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight2.tera} </Typography>
-                                            <br />
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                Departuring At:
-                                            </Typography>
-                                            <Typography
-                                                style={{ fontSize: 25, fontWeight: "bold" }}
-                                                color="textPrimary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight2.dep}
-                                            </Typography>
-
-                                            <Typography
-                                                style={{ fontSize: 16, fontWeight: "bold" }}
-                                                color="textSecondary"
-                                                align="left"
-                                                gutterBottom
-                                            >
-                                                {flight2.terd} </Typography>
-
-
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            </Grid>
-                            <Card
-                                style={{
-
-                                    width: 330,
-                                    height: 65,
-                                    backgroundColor: "#EBECF0",
-                                    opacity: 0.7
-                                }}
-                            >
-                                <CardContent>
-                                    <Typography
-                                        align="left"
-                                        style={{ fontSize: 20, fontWeight: "bold" }}
-                                        color="textPrimary"
-                                        gutterBottom
-                                    >
-                                        Total Price  : {flight1.total}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-
-                        </div>
-                        <hr />
-
-                    </Card>
+                                }, [])
+                        }} autoFocus>
+                            Send a confirmation email
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
 
 
 
-                </div></div> </div>
+
+            </div>}
+        </div >
     )
 }
 

@@ -80,7 +80,7 @@ function SearchResults(props) {
         {clicked ? <SearchBody /> :  (props.back ? props.component :
              <div>
 
-            <TableContainer component={Paper} style={{marginTop:-650,width:1300,marginLeft:130,opacity:0.9}}>
+            <TableContainer component={Paper} style={{marginTop:200,width:1300,marginLeft:130,opacity:0.9}}>
                 <Table sx={{ minWidth: 500 }} aria-label="customized table">
                     <TableHead>
                         <TableRow>
@@ -93,13 +93,13 @@ function SearchResults(props) {
                             <StyledTableCell align="center">Trip Duration&nbsp; </StyledTableCell>
                             <StyledTableCell align="center">Departure Terminal</StyledTableCell>
                             <StyledTableCell align="center">Arrival Terminal</StyledTableCell>
-                            <StyledTableCell align="center">Economy seats available</StyledTableCell>
+                            {/* <StyledTableCell align="center">Economy seats available</StyledTableCell>
                             <StyledTableCell align="center">Economy seats price</StyledTableCell>
                             <StyledTableCell align="center">Business seats available&nbsp;</StyledTableCell>
                             <StyledTableCell align="center">Business seats price &nbsp; </StyledTableCell>
                             <StyledTableCell align="center">First seats available</StyledTableCell>
                             <StyledTableCell align="center">First seats price </StyledTableCell>
-                    
+                     */}
                         </TableRow>
                     </TableHead>
                     <TableRow> </TableRow>
@@ -117,12 +117,12 @@ function SearchResults(props) {
                             <StyledTableCell align="center">{u.TripDuration}</StyledTableCell>
                             <StyledTableCell align="center">{u.TerminalDeparture}</StyledTableCell>
                             <StyledTableCell align="center">{u.TerminalArrival}</StyledTableCell>
-                            <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
+                            {/* <StyledTableCell align="center">{u.NuofAvailableEconomySeats}</StyledTableCell>
                             <StyledTableCell align="center">{u.EcoPrice}</StyledTableCell>
                             <StyledTableCell align="center">{u.NuofAvailableBuisnessSeats}</StyledTableCell>
                             <StyledTableCell align="center">{u.BusPrice}</StyledTableCell>
                             <StyledTableCell align="center">{u.NuofAvailableFirstSeats}</StyledTableCell>
-                            <StyledTableCell align="center">{u.FPrice}</StyledTableCell>
+                            <StyledTableCell align="center">{u.FPrice}</StyledTableCell> */}
                         </TableRow>
                     })}
                 </Table>

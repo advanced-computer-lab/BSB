@@ -93,7 +93,10 @@ function SearchBody(props) {
       })
         .then(function (response) {
           console.log("xxx");
+          
+          
           setFlightlist(response.data);
+          console.log(flightlist);
           setSearchClicked(false)
           setSearchRes(true);
         }
