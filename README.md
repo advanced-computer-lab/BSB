@@ -191,6 +191,55 @@ From dining to amenities, we have modified our Economy Class experience to ensur
       </Accordion>
 
 ```
+### `Table`
+```
+//before the function
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: ' #5c0931',
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+
+//Inside the function in the return
+<TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell style={{fontSize: 20}} >Country</StyledTableCell>
+            <StyledTableCell style={{fontSize: 20}} align="left">Claims office*</StyledTableCell>
+            <StyledTableCell style={{fontSize: 20}} align="right">24-hour emergency medical assistance</StyledTableCell>
+           
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <StyledTableRow key={row.country}>
+              {/* <StyledTableCell component="th" scope="row">
+                {row.name}
+              </StyledTableCell> */}
+             <StyledTableCell style={{fontSize: 18}} align="right">{row.country}</StyledTableCell> 
+              <StyledTableCell align="right">{row.claimsoffice}</StyledTableCell>
+              <StyledTableCell align="right">{row.assistance}</StyledTableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+```
 ## Running Tests
 
 >Note: this feature is available with `react-scripts@0.3.0` and higher.<br>
