@@ -23,7 +23,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import App from './App';
 function Flightitinerary(props) {
     // const total = (props.flightA.price * seatsA.length()) + (props.flightB.price * seatsB.length());
-    const retPrice = props.flightB.price;
+    // const retPrice = props.flightB.price;
     const depPrice = props.flightA.price;
     const seatsA = props.seatsA;
     const seatsB = props.seatsB;
@@ -77,7 +77,7 @@ function Flightitinerary(props) {
             console.log(res.data._id)
 
             console.log(resID)
-            
+
 
 
         })

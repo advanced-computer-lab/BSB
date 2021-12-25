@@ -5,9 +5,11 @@ import ModalDialog from 'react-bootstrap/ModalDialog'
 import ModalHeader from 'react-bootstrap/ModalHeader'
 import ModalBody from 'react-bootstrap/ModalBody'
 import ModalFooter from 'react-bootstrap/ModalFooter'
-import { Button } from 'react-bootstrap';
+import { Button, Tooltip } from 'react-bootstrap';
 import axios from 'axios';
-import { TextField } from '@mui/material';
+import { IconButton, TextField } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+
 
 function UpdateFlight(props) {
   const [show, setShow] = useState(false);
@@ -25,11 +27,11 @@ function UpdateFlight(props) {
   const [ec, setEc] = useState(props.ec);
   const [bs, setBs] = useState(props.bs);
   const [first, setFirst] = useState(props.first);
-  const [ecPrice, setEcPrice] = useState("");
-  const [bsPrice, setBsPrice] = useState("");
-  const [firstPrice, setFirstPrice] = useState("");
-  const [tripDuration, setTripDuration] = useState("");
-
+  const [ecPrice, setEcPrice] = useState(props.ecPrice);
+  const [bsPrice, setBsPrice] = useState(props.bsPrice);
+  const [firstPrice, setFirstPrice] = useState(props.firstPrice);
+  const [tripDuration, setTripDuration] = useState(props.tripDuration);
+  const [error, setError] = useState("");
 
 
   const [clicked, setClicked] = useState(false);
@@ -56,8 +58,12 @@ function UpdateFlight(props) {
       })
         .then(function (response) {
           console.log("xxx");
-        })
-      setShow(false);
+          setShow(false);
+        }).catch(error => {
+          console.log(error.response)
+          setError(error.response.data);
+        });
+
       setClicked(false);
     }
 
@@ -65,11 +71,12 @@ function UpdateFlight(props) {
   })
   return (
     <>
-      <Button variant="outline-primary" onClick={handleShow}> Update</Button>
 
-      <Modal show={show} onHide={handleClose} animation={false} style={{height:500 , marginTop:150} }>
-        <Modal.Header closeButton>
-          <Modal.Title>Flight Number:{props.flightNum}</Modal.Title>
+      <IconButton size="small" onClick={handleShow}> <EditIcon /></IconButton>
+
+      <Modal show={show} onHide={handleClose} animation={false} style={{ height: 500, marginTop: 150 }}>
+        <Modal.Header style={{ marginTop: '20', backgroundColor: '#e0dfdf' }} closeButton>
+          <Modal.Title style={{ color: '#5c0931' }}>Flight Number:{props.flightNum}</Modal.Title>
         </Modal.Header>
         <Modal.Body> <div border="solid">
 
@@ -91,14 +98,12 @@ function UpdateFlight(props) {
               onChange={event => setFrom(event.target.value)}
             />
 
-            <br />
 
-            <br />
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
               size="small"
               label="Arrival Airport"
               defaultValue={props.to}
@@ -106,7 +111,7 @@ function UpdateFlight(props) {
             />
 
             <br />
-            
+
             <br />
             <TextField
 
@@ -118,15 +123,12 @@ function UpdateFlight(props) {
               defaultValue={props.date}
               onChange={event => setDate(event.target.value)}
             />
-            <br />
 
-
-            <br />
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
               size="small"
               label="Departure time"
               defaultValue={props.dep}
@@ -147,14 +149,12 @@ function UpdateFlight(props) {
               defaultValue={props.arr}
               onChange={event => setArr(event.target.value)}
             />
-            <br />
 
-            <br />
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
               size="small"
               label="Departure Terminal"
               defaultValue={props.tdep}
@@ -176,14 +176,12 @@ function UpdateFlight(props) {
               onChange={event => setTarr(event.target.value)}
             />
 
-            <br />
 
-            <br />
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
               size="small"
               label="Economy Seats"
               defaultValue={props.ec}
@@ -204,14 +202,12 @@ function UpdateFlight(props) {
               defaultValue={props.ecPrice}
               onChange={event => setEcPrice(event.target.value)}
             />
-            <br />
 
-            <br />
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
               size="small"
               label="Business Seats"
               defaultValue={props.bs}
@@ -232,14 +228,12 @@ function UpdateFlight(props) {
               onChange={event => setBsPrice(event.target.value)}
             />
 
-            <br />
 
-            <br />
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
               size="small"
               label="First Class Seats"
               defaultValue={props.first}
@@ -261,27 +255,19 @@ function UpdateFlight(props) {
               onChange={event => setFirstPrice(event.target.value)}
             />
 
+
+            
             <br />
-            <br />
-            <TextField
-
-              required
-              id="outlined-size-small"
-
-              size="small"
-              label="Trip Duration"
-              defaultValue=""
-              onChange={event => setTripDuration(event.target.value)}
-            />
-            <br/>
-
+            <p style={{ color: 'red' }}>
+              {error}
+            </p>
           </form>
         </div></Modal.Body>
-        <Modal.Footer position="fixed">
+        <Modal.Footer position="fixed" style={{ marginTop: 10, backgroundColor: '#e0dfdf' }}>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={(event) => setClicked(true)}>
+          <Button style={{ backgroundColor: '#5c0931', color: 'white' }} onClick={(event) => setClicked(true)}>
             Save Changes
           </Button>
         </Modal.Footer>

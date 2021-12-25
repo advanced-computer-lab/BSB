@@ -35,7 +35,7 @@ import Typography from '@mui/material/Typography';
 import search from './images/search.jpg'
 import cappadocia from './images/cappadocia.jpg'
 import { ButtonGroup } from '@material-ui/core';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import homepage from './images/homepage.jpg'
 import { Card } from 'react-bootstrap';
 import homepagee from './images/homepagee.jpg'
@@ -85,24 +85,23 @@ const images = [
 
 
 
-
-
-const safetravel=[{
-    url: 'https://www.qatarairways.com/content/dam/images/renditions/horizontal-1/campaigns/global/safety-measures/h1-crew-new-ppe.jpg',
-    title: 'Safe travel',
-    width: '25%',
-},
-]
-const travelReq=[ {
-    url: 'https://i.pinimg.com/originals/db/d7/65/dbd7657550f6c3e8d23b6f869ca3b94a.jpg',
-    title: 'Travel requirments ',
-    width: '25%',
-},]
-const whereWeTravel=[{
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/QR_Destinations_2021Jan.png/800px-QR_Destinations_2021Jan.png',
-    title: 'Where we travel',
-    width: '25%',
-},]
+const buttonImages = [
+    {
+        url: 'https://www.qatarairways.com/content/dam/images/renditions/horizontal-1/campaigns/global/safety-measures/h1-crew-new-ppe.jpg',
+        title: 'Safe travel',
+        width: '25%',
+    },
+    {
+        url: 'https://i.pinimg.com/originals/db/d7/65/dbd7657550f6c3e8d23b6f869ca3b94a.jpg',
+        title: 'Travel requirments ',
+        width: '25%',
+    },
+    {
+        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/QR_Destinations_2021Jan.png/800px-QR_Destinations_2021Jan.png',
+        title: 'Where we travel',
+        width: '25%',
+    },
+];
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: 'relative',
@@ -173,8 +172,9 @@ const ImageMarked = styled('span')(({ theme }) => ({
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-function SearchBody(props) {
-
+function SearchEdit(props) {
+    const location = useLocation();
+    const {reservation, dep, price, tprice, total} = location.state;
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -212,18 +212,16 @@ function SearchBody(props) {
     const [flights, setFlights] = useState({ from: "", to: "", date: "", arr: "", dep: "", tdep: "", tarr: "", ec: "", bs: "", first: "", flightNum: "", retDate: "", searchRes: false })
     const [flightlist, setFlightlist] = useState([]);
     const [show, setShow] = useState(false);
-
     const handleShow = () => setShow(true);
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
     const [value, setValue] = useState([null, null]);
     const [dates, setdates] = useState([null, null]);
     const moment = require('moment')
-
     const [date, setDate] = useState("");
     const [retDate, setretDate] = useState("");
     const [arr, setArr] = useState("");
-    const [dep, setDep] = useState("");
+    const [dep1, setDep] = useState("");
     const [tdep, setTdep] = useState("");
     const [tarr, setTarr] = useState("");
     const [ec, setEc] = useState("");
@@ -253,8 +251,6 @@ function SearchBody(props) {
             //setFlightlist(  flightlist.filter((u,index) =>{return  flightlist.indexOf(u) === index}))
             console.log(flightlist);
         })
-
-
     }, [])
     //snack bar
     const [openSnack, setOpenSnack] = useState(false);
@@ -262,12 +258,10 @@ function SearchBody(props) {
     const handleClickSnack = () => {
         setOpenSnack(true);
     };
-
     const handleCloseSnack = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpenSnack(false);
     };
     return (
@@ -432,7 +426,7 @@ function SearchBody(props) {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}  >
                                     <DatePicker
                                         label="Departure date"
-                                        mask="_//_"
+                                        mask="//"
                                         value={date}
                                         style={{ width: 50, marginTop: 30 }}
                                         onChange={(newValue) => {
@@ -447,7 +441,7 @@ function SearchBody(props) {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DatePicker
                                         label="Return date"
-                                        mask="_//_"
+                                        mask="//"
 
                                         id="outlined-start-adornment"
                                         sx={{ m: 1, width: '25ch' }}
@@ -460,9 +454,10 @@ function SearchBody(props) {
                                 </LocalizationProvider>
                             </div>
                             <Button variant="contained" style={{ position: 'center', marginLeft: 500, marginTop: 40, backgroundColor: '#5c0931', color: 'white', width: 200, height: 45 }} onClick={(event) => {
-                               
-                                navigate("/SearchRes",{state:{flights:{ from: from, to: to, date: date, arr: arr, dep: dep, tdep: tdep, tarr: tarr, ec: ec, bs: bs, first: first, flightNum: flightNum, retDate: "", searchRes: true }, cabin:cabin, adultPass:adult,childPass:child}});
+                                setFlights({ from: from, to: to, date: date, arr: arr, dep: dep1, tdep: tdep, tarr: tarr, ec: ec, bs: bs, first: first, flightNum: flightNum, retDate: "", searchRes: true });
+                                navigate("/changeFlight",{state:{flights:flights, reservation:reservation, dep:dep, price:price, tprice:tprice, total:total}});
                             }}>
+                               {/* onClick={()=> {navigate("/changeFlight"), state:{res:reservation, dep:dep, flightlist:searchresults, cabin:cabin, adultPass:adultPass, childPass:childPass, price:price, tprice:tprice, total:total}}}} */}
                                 Search
                             </Button>
 
@@ -470,7 +465,6 @@ function SearchBody(props) {
                         </form>
                     </Paper>
                     {/* <h1 style={{marginLeft:90,color:"black"}}>  Search your flight:  <CompareArrowsIcon/><br/>Departure Flight</h1> */}
-
                 </div>
                 <br />
                 <br />
@@ -479,23 +473,18 @@ function SearchBody(props) {
                 <Typography style={{ fontFamily: 'Verdana', color: '#5c0931', marginTop: 30, marginLeft: 200 }} >
                     As one of the largest and most experienced global airlines throughout the COVID-19 crisis, you can rely on us to take you on your next journey safely.
 
-
-
                 </Typography>
                 <br />
                 <br />
-               
 
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 25 }}>
-                    {safetravel.map((image) => (
+                    {buttonImages.map((image) => (
                         <ImageButton
                             focusRipple
                             key={image.title}
                             style={{
                                 width: image.width,
                             }}
-                            onClick={()=>navigate("/SafeTravel")}
-
                         >
                             <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
                             <ImageBackdrop className="MuiImageBackdrop-root" />
@@ -518,75 +507,6 @@ function SearchBody(props) {
                         </ImageButton>
                     ))}
                 </Box>
-
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 80,marginTop:-25 }}>
-                    {travelReq.map((image) => (
-                        <ImageButton
-                            focusRipple
-                            key={image.title}
-                            style={{
-                                width: image.width,
-                            }}
-                            onClick={()=>navigate("/TravelRequirments")}
-                        >
-                            <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
-                            <ImageBackdrop className="MuiImageBackdrop-root" />
-                            <Image>
-                                <Typography
-                                    component="span"
-                                    variant="subtitle1"
-                                    color="inherit"
-                                    sx={{
-                                        position: 'relative',
-                                        p: 4,
-                                        pt: 2,
-                                        pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-                                    }}
-                                >
-                                    {image.title}
-                                    <ImageMarked className="MuiImageMarked-root" />
-                                </Typography>
-                            </Image>
-                        </ImageButton>
-                    ))}
-                </Box>
-
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 135,marginTop:-25 }}>
-                    {whereWeTravel.map((image) => (
-                        <ImageButton
-                            focusRipple
-                            key={image.title}
-                            style={{
-                                width: image.width,
-                            }}
-                            onClick={()=>navigate("/WhereWeTravel")}
-                        >
-                            <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
-                            <ImageBackdrop className="MuiImageBackdrop-root" />
-                            <Image>
-                                <Typography
-                                    component="span"
-                                    variant="subtitle1"
-                                    color="inherit"
-                                    sx={{
-                                        position: 'relative',
-                                        p: 4,
-                                        pt: 2,
-                                        pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-                                    }}
-                                >
-                                    {image.title}
-                                    <ImageMarked className="MuiImageMarked-root" />
-                                </Typography>
-                            </Image>
-                        </ImageButton>
-                    ))}
-                </Box>
-
-
-
-         
-
 
                 <br />
                 <br />
@@ -818,7 +738,7 @@ function SearchBody(props) {
                         </CardContent>
                         <CardActions>
 
-                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -10, marginLeft: 100 }} onClick={()=>navigate("/Meet")}>Learn More</Button>
+                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -10, marginLeft: 100 }}>Learn More</Button>
                         </CardActions>
                     </Card>
 
@@ -869,4 +789,4 @@ function SearchBody(props) {
     )
 }
 
-export default SearchBody
+export default SearchEdit

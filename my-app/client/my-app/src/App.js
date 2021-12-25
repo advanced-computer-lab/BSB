@@ -180,14 +180,8 @@ export default function App() {
                             <h5 className='mb-4'></h5>
                             {adminClicked ? <Admin></Admin> : (userClicked ? <User></User> : <div>
 
-                                <Layout />
-                                <AppBar position="fixed" style={{ width: window.screen.width }}>
-                                    <Container maxWidth="xl">
-                                        <Toolbar disableGutters>
-                                            <h3 style={{ marginLeft: 15 }}>BSB Airways</h3>
-                                        </Toolbar>
-                                    </Container>
-                                </AppBar>
+                              
+                           
                                 <Button variant="secondary" data-target="#myModal" data-toggle="modal" data-backdrop="static" onClick={(event) => setUserClicked(true)} data-keyboard="false" style={{
                                     position: 'absolute',
                                     right: 790,

@@ -23,7 +23,11 @@ import MuiAlert from '@mui/material/Alert';
 import FlightIcon from '@mui/icons-material/Flight';
 import ListItemText from '@mui/material/ListItemText';
 import { ListItemButton } from '@mui/material';
+import DatePicker from '@mui/lab/DatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
+const moment = require("moment");
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -33,12 +37,11 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function AddFlightForm(props) {
   const [show, setShow] = useState(false);
-
+  const [error, setError] = useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-
   const [date, setDate] = useState("");
   const [arr, setArr] = useState("");
   const [dep, setDep] = useState("");
@@ -78,6 +81,7 @@ function AddFlightForm(props) {
   const [clicked, setClicked] = useState(false);
   useEffect(() => {
     if (clicked) {
+
       axios.post('http://localhost:8000/addFlight', {
         FlightNu: flightNum,
         From: from,
@@ -90,35 +94,42 @@ function AddFlightForm(props) {
         NuofAvailableEconomySeats: ec,
         NuofAvailableBuisnessSeats: bs,
         NuofAvailableFirstSeats: first,
-        EcoPrice: ecPrice,
-        BusPrice: bsPrice,
+        ecoPrice: ecPrice,
+        busPrice: bsPrice,
         FPrice: firstPrice,
-        TripDuration: tripDuration
+        TripDuration:Number(arr.substring(0,2))-Number(dep.substring(0,2))
+       
       })
         .then(function (response) {
           console.log("xxx");
-        })
-      setShow(false);
+          setShow(false);
+        }).catch(error => {
+          console.log(error.response)
+          setError(error.response.data);
+        });
+
       setClicked(false);
     }
   });
 
 
+
+
   return (
     <>
-      <ListItemButton onClick={handleShow} variant='primary' color= "#3F72AF" >
-      <ListItemIcon>
-          <FlightIcon />
-        </ListItemIcon>
-        <ListItemText primary="Add Flight" />
-      </ListItemButton>
+      <Button onClick={handleShow} variant='primary' style={{ fontFamily: 'Verdana', backgroundColor: '#5c0931', color: 'white', width: 230, marginLeft: 80, marginTop: 20 }} >
+
+        <FlightIcon /> Click here to add a new flight
 
 
-      <Modal show={show} onHide={handleClose} animation={false} style={{ height: 500, marginTop: 150 }} >
-        <Modal.Header position="fixed" style={{ marginTop: '20' }} closeButton >
-          <Modal.Title>Add a new flight</Modal.Title>
+      </Button>
+
+
+      <Modal show={show} onHide={handleClose} animation={false} style={{ height: 600, marginTop: 150 }} >
+        <Modal.Header position="fixed" style={{ marginTop: '20', backgroundColor: '#e0dfdf' }} closeButton >
+          <Modal.Title style={{ color: '#5c0931' }}>Add a new flight</Modal.Title>
         </Modal.Header>
-        <Modal.Body> <div border="solid">
+        <Modal.Body style={{ marginTop: 20 }}> <div border="solid">
 
 
 
@@ -140,13 +151,12 @@ function AddFlightForm(props) {
 
 
 
-            <br />
-            <br />
+
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
               size="small"
               label="Departure Airport"
               defaultValue=""
@@ -167,43 +177,46 @@ function AddFlightForm(props) {
               defaultValue=""
               onChange={event => setTo(event.target.value)}
             />
+            <div style={{ width: 220, height: 20, marginLeft: 240, marginTop: -40 }}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}    >
+                <DatePicker
+                  label="Departure date"
+                  mask="_//_"
+
+                  value={date}
+                  style={{ width: 200, marginTop: 20 }}
+                  onChange={(newValue) => {
+                    setDate(moment(new Date(newValue).toUTCString()).format("YYYY-MM-DDT22:00:00.000") + "Z");
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+
+                />
+              </LocalizationProvider>
+            </div>
+            <br />
             <br />
 
-            <br />
             <TextField
 
               required
               id="outlined-size-small"
-
+              type="time"
               size="small"
-              label="Date"
-              defaultValue=""
-              onChange={event => setDate(event.target.value)}
-            />
+              style={{ width: 220, marginRight: 20 }}
 
-            <br />
-            <br />
-
-            <TextField
-
-              required
-              id="outlined-size-small"
-
-              size="small"
               label="Departure time"
               defaultValue=""
               onChange={event => setDep(event.target.value)}
             />
 
-
-            <br />
-            <br />
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 10 }}
+              type="time"
               size="small"
+              style={{ width: 220 }}
               label="Arrival time"
               defaultValue=""
               onChange={event => setArr(event.target.value)}
@@ -219,7 +232,7 @@ function AddFlightForm(props) {
 
               required
               id="outlined-size-small"
-
+              type='number'
               size="small"
               label="Departure Terminal"
               defaultValue=""
@@ -227,13 +240,13 @@ function AddFlightForm(props) {
             />
 
 
-            <br />
-            <br />
+
             <TextField
 
               required
+              type='number'
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
               size="small"
               label="Arrival Terminal"
               defaultValue=""
@@ -251,19 +264,20 @@ function AddFlightForm(props) {
               id="outlined-size-small"
 
               size="small"
+              type='number'
               label="Economy Seats"
               defaultValue=""
               onChange={event => setEc(event.target.value)}
             />
 
-            <br />
-            <br />
+
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
               size="small"
+              type='number'
               label="Economy Seats Price"
               defaultValue=""
               onChange={event => setEcPrice(event.target.value)}
@@ -276,7 +290,7 @@ function AddFlightForm(props) {
 
               required
               id="outlined-size-small"
-
+              type='number'
               size="small"
               label="Business Seats"
               defaultValue=""
@@ -284,14 +298,14 @@ function AddFlightForm(props) {
             />
 
 
-            <br />
-            <br />
+
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
               size="small"
+              type='number'
               label="Business Seats Price"
               defaultValue=""
               onChange={event => setBsPrice(event.target.value)}
@@ -304,7 +318,7 @@ function AddFlightForm(props) {
 
               required
               id="outlined-size-small"
-
+              type='number'
               size="small"
               label="First Class Seats"
               defaultValue=""
@@ -312,14 +326,13 @@ function AddFlightForm(props) {
             />
 
 
-            <br />
 
-            <br />
             <TextField
 
               required
               id="outlined-size-small"
-
+              style={{ marginLeft: 15 }}
+              type='number'
               size="small"
               label="First Class Seats Price"
               defaultValue=""
@@ -328,26 +341,30 @@ function AddFlightForm(props) {
 
             <br />
             <br />
-            <TextField
+            {/* <TextField
 
               required
               id="outlined-size-small"
-
+              type='number'
               size="small"
               label="Trip Duration"
               defaultValue=""
               onChange={event => setTripDuration(event.target.value)}
-            />
+            /> */}
+            <p style={{ color: 'red' }}>
+              {error}
+            </p>
+
 
 
 
           </form>
         </div></Modal.Body>
-        <Modal.Footer style={{ marginTop: 10 }}>
+        <Modal.Footer style={{ marginTop: 10, backgroundColor: '#e0dfdf' }}  >
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={(event) => setClicked(true)}>
+          <Button style={{ backgroundColor: '#5c0931', color: 'white' }} onClick={(event) => setClicked(true)}>
             ADD
           </Button>
 
