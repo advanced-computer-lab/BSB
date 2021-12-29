@@ -662,10 +662,17 @@ function CreateAccount() {
                                 <FormControlLabel control={<Checkbox defaultChecked color="default" />} label="I agree to the Terms and Conditions of the Airways and accept the Privacy Policy." style={{ color: '#5c0931' }} />
 
                             </FormGroup>
+                            <p style={{ color: 'red' }}>
+                                {error}
+                            </p>
+                            <p style={{ color: '#5D6A78',marginTop:-15,fontWeight:'bold',fontFamily:'Verdana' }}> 
+                               Note: Your username is the first part of your email i.e BSB@gmail.com
+                                <br/>
+                                username: BSB
+                            </p>
                         </Stack>
                         <Stack spacing={2} sx={{ width: '100%' }}>
-                            <Button variant="contained" style={{ color: 'white', width: 400, marginLeft: 650, marginTop: 10, backgroundColor: '#5c0931' }} onClick={() => 
-                            {
+                            <Button variant="contained" style={{ color: 'white', width: 400, marginLeft: 650, marginTop: -5, backgroundColor: '#5c0931' }} onClick={() => {
                                 axios.post('http://localhost:8000/usersRegister', {
 
                                     firstName: firstName,
@@ -675,15 +682,16 @@ function CreateAccount() {
                                     password: password
 
                                 })
-                                .then(function (response) {
-                                    console.log("xxx");
-                                    console.log("added succesfully")
-                                    handleClick();
+                                    .then(function (response) {
+                                        console.log("xxx");
+                                        console.log(response.data)
+                                        console.log("added succesfully")
+                                        handleClick();
 
-                                }).catch(error => {
-                                    console.log(error.response)
-                                    //  setError(error.response.data);
-                                })
+                                    }).catch(error => {
+                                        console.log(error.response)
+                                        //  setError(error.response.data);
+                                    })
                             }
 
 
@@ -694,12 +702,12 @@ function CreateAccount() {
                             </Button>
 
                             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }} style={{backgroundColor:'green',color:'white'}}>
-                                    This is a success message!
+                                <Alert onClose={handleClose} severity="success" style={{ width: 500 }} style={{ backgroundColor: 'green', color: 'white' }}>
+                                    Account created successfully
                                 </Alert>
                             </Snackbar>
 
-                            
+
                         </Stack>
 
 

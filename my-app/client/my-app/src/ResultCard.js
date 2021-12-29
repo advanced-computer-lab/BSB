@@ -89,7 +89,7 @@ export default function ResultCard(props) {
               
           </Grid>
           <Button variant="outlined" onClick={(event) => { props.click(true); props.flight(props.flightID) }} startIcon={<FlightTakeoffIcon />} style={{ marginTop:-150, marginLeft: 920, height: 40, color: "white", borderColor: "white" , fontSize:10}}>Choose flight</Button>
-{props.flightID.From}
+ 
         </Grid>
         <Button onClick={() => { handleClickOpen(); setDets() }}
           startIcon={<InfoIcon style={{ marginLeft: 10 }} />} style={{ transform: 'scale(0.8)', marginLeft: 870, marginTop: -140, color: "white", borderColor: "white" }}> <text style={{ textDecorationLine: "underline" }}> View Flight Details </text></Button>

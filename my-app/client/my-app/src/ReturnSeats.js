@@ -1,31 +1,31 @@
 import React from 'react'
 //import { useLocation } from 'react-router'
-//import plane from './images/planeOutline.jpeg'
+import planeOutline from './images/planeOutline.jpeg'
 import { Image } from 'react-bootstrap'
 import Button from '@mui/material/Button'
 import axios from 'axios'
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router'
-import { Snackbar, Alert, Typography } from '@mui/material'
-import AirplanemodeActive from '@mui/icons-material/AirplanemodeActive'
-//import ReturnSeats from './ReturnSeats'
-import plane from './images/plane.png'
+import { useNavigate, useLocation } from 'react-router'
+import { Snackbar, Alert } from '@mui/material'
+import FlightIcon from '@mui/icons-material/Flight';
+import AirplanemodeInactive from '@mui/icons-material/AirplanemodeInactive'
+import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import flightpic from './images/flightpic.jpg'
-import seats from './images/seats.png'
-import planeOutline from './images/planeOutline.jpeg'
-import { Paper } from '@mui/material';
+import { Paper } from '@mui/material'
+import { Typography } from '@mui/material'
 
-export default function Seats() {
-    const location = useLocation()
-    const { depFlight, retFlight, cab, adult, child } = location.state
-    const id= localStorage.getItem("id");
-
+export default function ReturnSeats() {
+    // const id = "6185ad7b250c46b0fd2322ea";
+    const cabinClass = "Economy";
     const [eco, setEco] = useState([]);
     const [bus, setBus] = useState([]);
     const [fst, setFst] = useState([]);
     const [chosen, setChosen] = useState([]);
-    const [open, setOpen] = useState(false);
+    const location = useLocation()
+    const { depFlight, retFlight, cab, adult, child, departureSeats} = location.state
+    const id= localStorage.getItem("id");
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
     const handleClick = () => {
         setOpen(true);
     }
@@ -82,11 +82,9 @@ export default function Seats() {
             removeSeat(u);
         }
     }
-    console.log(depFlight._id)
-    console.log(cab)
     useEffect(() => {
         axios.post('http://localhost:8000/flightSeatsInfo', {
-            _id: depFlight._id,
+            _id: retFlight._id,
             cabin: cab
         })
             .then(function (response) {
@@ -95,7 +93,9 @@ export default function Seats() {
                 setEco(response.data.Economy);
                 setBus(response.data.Business);
                 setFst(response.data.First);
+
             }
+
             )
     }, []);
 
@@ -107,46 +107,39 @@ export default function Seats() {
                 id='intro-example'
                 className='p-5 text-center bg-image'
                 style={{
-                    background: `url(${planeOutline})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", height: 700, width: window.screen.width,
-                    marginTop: 70,
+                    background: `url(${planeOutline})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", height: 1500, width: window.screen.width,
+                    marginTop: 0,
 
                 }}
+
 
 
             >
                 <Paper elevation={4} style={{ backgroundColor: '#e0dfdf', height: 100, width: 700, marginLeft: 400, marginTop: -30 }}>
 
 
-                    <h1 style={{ color: '#5c0931', marginLeft: 20, fontWeight: 'bold', fontFamily: 'Verdana', fontSize: 35 }}>Choose your departure flight seats</h1>
+                    <h1 style={{ color: '#5c0931', marginLeft: 20, fontWeight: 'bold', fontFamily: 'Verdana', fontSize: 35 }}>Choose your return flight seats</h1>
 
                 </Paper>
 
-
-                <div style={{ marginLeft: "240px", width: "450px", marginTop: 180 }}>
+                <div style={{ marginTop: 150, marginLeft: 200, width: "450px" }}>
                     {eco.map(u => {
-                        return <Button id={u.seat} onClick={(e) => { addSeat(u.seat); clickE(e, u.seat) }} disabled={u.res} variant="outlined" size="small" style={{ opacity: u.res ? 0.5 : 1, display: " inline-block", transform: "scale(0.85)", color: "white", backgroundColor: "blue" }}>{u.seat}</Button>
+                        return <Button onClick={(e) => { addSeat(u.seat); clickE(e, u.seat) }} disabled={u.res} variant="outlined" size="small" style={{ display: " inline-block", transform: "scale(0.7)", color: "white", backgroundColor: "blue" }}>{u.seat}</Button>
                     })}
                 </div>
-                <br />
-
-                <div style={{ marginLeft: "720px", width: "320px", marginTop: -85 }}>
+                <div style={{ marginLeft: 670, width: "320px", marginTop: -100 }}>
                     {bus.map(u => {
-                        return <Button id={u.seat} onClick={(e) => { addSeat(u.seat); clickB(e, u.seat) }} disabled={u.res} variant="outlined" size="small" style={{ opacity: u.res ? 0.5 : 1, display: " inline-block", transform: "scale(0.85)", color: "white", backgroundColor: "#5c0931" }}>{u.seat}</Button>
+                        return <Button onClick={(e) => { addSeat(u.seat); clickB(e, u.seat) }} disabled={u.res} variant="outlined" size="small" style={{ display: " inline-block", transform: "scale(0.7)", color: "white", backgroundColor: "#5c0931" }}>{u.seat}</Button>
                     })}
                 </div>
-                <br />
-
-                <div style={{ width: "200px", marginLeft: "1050px", marginTop: -100 }}>
+                <div style={{ width: "200px", marginLeft: 1000, marginTop: -60 }}>
                     {fst.map(u => {
-                        return <Button id={u.seat} onClick={(e) => { addSeat(u.seat); clickF(e, u.seat) }} disabled={u.res} variant="outlined" size="small" style={{ opacity: u.res ? 0.5 : 1, display: " inline-block", transform: "scale(0.85)", color: "#5c0931", backgroundColor: "gold" }}>{u.seat}</Button>
+                        return <Button onClick={(e) => { addSeat(u.seat); clickF(e, u.seat) }} disabled={u.res} variant="outlined" size="small" style={{ display: " inline-block", transform: "scale(0.7)", color: "#5c0931", backgroundColor: "gold" }}>{u.seat}</Button>
                     })}
                 </div>
             </div>
 
-            <br />
-            <br />
-            <br />
-            <Paper elevation={4} style={{ backgroundColor: '#e0dfdf', height: 100, width: 200, marginLeft: 1200, marginTop: -250 }} >
+            <Paper elevation={4} style={{ backgroundColor: '#e0dfdf', height: 100, width: 200, marginLeft: 1200, marginTop: -1000 }} >
 
                 <Typography style={{ fontFamily: 'Verdana', fontSize: 10, color: '#5c0931', fontWeight: 'bold' }}>
                     First Class
@@ -166,18 +159,15 @@ export default function Seats() {
 
                 </Typography>
             </Paper>
+
             <Button variant="outlined" style={{ color: "white", backgroundColor: "#5c0931", marginLeft: 1200, marginTop: 50 }} onClick={() => {
                 if (chosen.length == (adult + child)) {
-                    navigate("/ReturnSeats", { state: { depFlight: depFlight, retFlight: retFlight, cab: cab, adult: adult, child: child, departureSeats: chosen,id:id} });
-                    console.log(chosen);
+                    navigate("/Summary", { state: { depFlight: depFlight, retFlight: retFlight, cab: cab, adult: adult, child: child, departureSeats: departureSeats, returnSeats: chosen,id:id} });
                 }
                 else {
                     handleClick();
                 }
-            }}>Return flight seats</Button>
-            <br />
-            <br />
-            <br />
+            }}>Proceed to payment!</Button>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                     You must choose seats equal to selected number of passengers!

@@ -22,7 +22,7 @@ export default function ReservedFlights() {
             setFlights(res.data)
             console.log(res.data);
         })
-    })
+    },[])
     return (
         <div>
                 <h1 style={{ color: ' #5c0931', marginLeft: 550}}>{}</h1>

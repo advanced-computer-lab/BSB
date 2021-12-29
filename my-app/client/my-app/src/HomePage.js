@@ -30,6 +30,22 @@ import Meet from './Meet';
 import TravelReq from './TravelReq'
 import SearchRes from './SearchRes'
 import Seats from './Seats'
+import ReservedFlights from './ReservedFlights'
+import ReturnSeats from './ReturnSeats'
+import Search from './Search';
+import Summary from './Summary';
+import EditSeats from './EditSeats'
+import SearchEdit from './SearchEdit'
+import ChangeFlight from './ChangeFlight'
+import UserProfile from './UserProfile';
+import EditProfile from './EditProfile';
+import ChangePassword from './ChangePassword';
+import NewSeats from './NewSeats';
+import NewSummary from './NewSummary';
+import WhereWeTravel from './WhereWeTravel';
+import Porto from './Porto';
+import Geneva from './Geneva';
+import NewYork from './NewYork';
 function HomePage() {
 
     return (
@@ -44,8 +60,8 @@ function HomePage() {
             <BrowserRouter>
                 <AppBarr />
                 <Routes>
-                    {/* <Route path='/' element={<LandingPage />}> </Route>
-                    <Route path='/LandingPage' element={<LandingPage />}> </Route> */}
+                     <Route path='/' element={<Searchu />}> </Route>
+                   
                     <Route path='/AirportHotel' element={<AirportHotel />}> </Route>
                     <Route path='/BaggageAllowance' element={<BaggageAllowance />}> </Route>
                     <Route path='/UpgradeJourmey' element={<UpgradeJourmey />}> </Route>
@@ -73,8 +89,22 @@ function HomePage() {
                     <Route path='/TravelRequirments' element={<TravelReq />}> </Route>
                     <Route path='/SearchRes' element={<SearchRes />}> </Route>
                     <Route path='/Seats' element={<Seats />}> </Route>
-                    
-
+                    <Route path='/returnSeats' element={<ReturnSeats />}> </Route>
+                    <Route path='/Summary' element={<Summary />}> </Route>
+                    <Route path='/ReservedFlights' element={<ReservedFlights/>}> </Route>
+                    <Route path='/EditSeats' element={<EditSeats/>}> </Route>
+                    <Route path='/SearchEdit' element={<SearchEdit/>}> </Route>
+                    <Route path='/ChangeFlight' element={<ChangeFlight/>}> </Route>
+                    <Route path='/UserProfile' element={<UserProfile/>}> </Route>
+                    <Route path='/ChangePassword' element={<ChangePassword/>}> </Route>
+                    <Route path='/EditProfile' element={<EditProfile/>}> </Route>
+                    <Route path='/NewSeats' element={<NewSeats/>}> </Route>
+                    <Route path='/NewSummary' element={<NewSummary/>}> </Route>
+                    <Route path='/WhereWeTravel' element={<WhereWeTravel/>}> </Route>
+                    <Route path='/SignUp' element={<CreateAccount/>}> </Route>
+                    <Route path='/Porto' element={<Porto/>}> </Route>
+                    <Route path='/Geneva' element={<Geneva/>}> </Route>
+                    <Route path='/NewYork' element={<NewYork/>}> </Route>
                 </Routes>
                 <Footer />
             </BrowserRouter>

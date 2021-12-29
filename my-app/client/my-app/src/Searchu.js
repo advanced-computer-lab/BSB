@@ -57,7 +57,11 @@ import { styled } from '@mui/material/styles';
 import ButtonBase from '@mui/material/ButtonBase';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const images = [
@@ -87,18 +91,18 @@ const images = [
 
 
 
-const safetravel=[{
+const safetravel = [{
     url: 'https://www.qatarairways.com/content/dam/images/renditions/horizontal-1/campaigns/global/safety-measures/h1-crew-new-ppe.jpg',
     title: 'Safe travel',
     width: '25%',
 },
 ]
-const travelReq=[ {
+const travelReq = [{
     url: 'https://i.pinimg.com/originals/db/d7/65/dbd7657550f6c3e8d23b6f869ca3b94a.jpg',
     title: 'Travel requirments ',
     width: '25%',
 },]
-const whereWeTravel=[{
+const whereWeTravel = [{
     url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/QR_Destinations_2021Jan.png/800px-QR_Destinations_2021Jan.png',
     title: 'Where we travel',
     width: '25%',
@@ -270,6 +274,26 @@ function SearchBody(props) {
 
         setOpenSnack(false);
     };
+    const [openDialog, setOpenDialog] = React.useState(false);
+
+    const handleClickOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    const [openDialogPorto, setOpenDialogPorto] = React.useState(false);
+
+    const handleClickOpenDialogPorto = () => {
+        setOpenDialogPorto(true);
+    };
+
+    const handleCloseDialogPorto = () => {
+        setOpenDialogPorto(false);
+    };
+
     return (
         <div >
 
@@ -373,40 +397,40 @@ function SearchBody(props) {
                                                 </Stack>
                                             </td>
                                         </tr>
-                                        
 
-                                            <Stack direction='row' spacing={1} >
-                                                <Typography style={{ color: '#808294', fontweight: 'bold', fontSize: 16, marginLeft: 30, marginTop: 50 }}>
-                                                    Child 
-                                                </Typography>
-                                                <Button style={{ width: 5, marginLeft: 100, backgroundColor: '#5c0931', color: 'white', height: 35, marginTop: 50 }} onClick={() => setChild(child + 1)}>+</Button>
-                                                <Input type=" number" style={{ width: 15, marginLeft: 15, position: 'center' }} />
-                                                <Button style={{ width: 5, marginLeft: 10, backgroundColor: '#5c0931', color: 'white', height: 35, marginTop: 50 }}>-</Button>
-                                            </Stack>
-                                            <td>
-                                                {/* <TextField
+
+                                        <Stack direction='row' spacing={1} >
+                                            <Typography style={{ color: '#808294', fontweight: 'bold', fontSize: 16, marginLeft: 30, marginTop: 50 }}>
+                                                Child
+                                            </Typography>
+                                            <Button style={{ width: 5, marginLeft: 100, backgroundColor: '#5c0931', color: 'white', height: 35, marginTop: 50 }} onClick={() => setChild(child + 1)}>+</Button>
+                                            <Input type=" number" style={{ width: 15, marginLeft: 15, position: 'center' }} />
+                                            <Button style={{ width: 5, marginLeft: 10, backgroundColor: '#5c0931', color: 'white', height: 35, marginTop: 50 }}>-</Button>
+                                        </Stack>
+                                        <td>
+                                            {/* <TextField
                                                     label=""
                                                     type="number"
                                                     id="outlined-start-adornment"
                                                     sx={{ m: 1, width: '10ch', height: '3ch', marginTop: 3, marginBottom: 3 }}
                                                     onChange={event => setChild(event.target.value)}
                                                 /> */}
-                                            </td>
-                                            <br/>
-                                            
-                                                       <hr style={{ fontSize: 20, fontWeight: "bold", marginLeft: 50, color: ' #5c0931' }} />
+                                        </td>
+                                        <br />
+
+                                        <hr style={{ fontSize: 20, fontWeight: "bold", marginLeft: 50, color: ' #5c0931' }} />
                                         < Divider sx={{ m: 1, width: '200%', marginTop: 3, marginBottom: 3 }} />
                                         <tr>
-                                            <Typography style={{ color: '#808294', fontweight: 'bold', fontSize: 16,marginLeft:30}}>
+                                            <Typography style={{ color: '#808294', fontweight: 'bold', fontSize: 16, marginLeft: 30 }}>
                                                 Cabin class:
-                                                </Typography>
+                                            </Typography>
                                             <td>
-                                                <FormControl sx={{ m: 1, minWidth: 180 }} style={{marginLeft:-150}}>
+                                                <FormControl sx={{ m: 1, minWidth: 180 }} style={{ marginLeft: -150 }}>
                                                     <InputLabel id="demo-simple-select-required-label"></InputLabel>
                                                     <NativeSelect
                                                         labelId="demo-simple-select-label"
                                                         id="demo-simple-select"
-                                                        style={{width:200}}
+                                                        style={{ width: 200 }}
                                                         value={cabin}
                                                         label="cabin"
                                                         onChange={event => setCabin(event.target.value)}
@@ -434,7 +458,7 @@ function SearchBody(props) {
                                         label="Departure date"
                                         mask="_//_"
                                         value={date}
-                                        style={{ width: 50, marginTop: 30 }}
+                                        style={{ width: 50, marginTop: 30, backgroundColor: 'black' }}
                                         onChange={(newValue) => {
                                             setDate(moment(new Date(newValue).toUTCString()).format("YYYY-MM-DDT22:00:00.000") + "Z");
                                         }}
@@ -460,8 +484,8 @@ function SearchBody(props) {
                                 </LocalizationProvider>
                             </div>
                             <Button variant="contained" style={{ position: 'center', marginLeft: 500, marginTop: 40, backgroundColor: '#5c0931', color: 'white', width: 200, height: 45 }} onClick={(event) => {
-                               
-                                navigate("/SearchRes",{state:{flights:{ from: from, to: to, date: date, arr: arr, dep: dep, tdep: tdep, tarr: tarr, ec: ec, bs: bs, first: first, flightNum: flightNum, retDate: "", searchRes: true }, cabin:cabin, adultPass:adult,childPass:child}});
+
+                                navigate("/SearchRes", { state: { flights: { from: from, to: to, date: date, arr: arr, dep: dep, tdep: tdep, tarr: tarr, ec: ec, bs: bs, first: first, flightNum: flightNum, retDate: "", searchRes: true }, cabin: cabin, adultPass: adult, childPass: child } });
                             }}>
                                 Search
                             </Button>
@@ -484,7 +508,7 @@ function SearchBody(props) {
                 </Typography>
                 <br />
                 <br />
-               
+
 
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 25 }}>
                     {safetravel.map((image) => (
@@ -494,7 +518,7 @@ function SearchBody(props) {
                             style={{
                                 width: image.width,
                             }}
-                            onClick={()=>navigate("/SafeTravel")}
+                            onClick={() => navigate("/SafeTravel")}
 
                         >
                             <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
@@ -519,7 +543,7 @@ function SearchBody(props) {
                     ))}
                 </Box>
 
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 80,marginTop:-25 }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 80, marginTop: -25 }}>
                     {travelReq.map((image) => (
                         <ImageButton
                             focusRipple
@@ -527,7 +551,7 @@ function SearchBody(props) {
                             style={{
                                 width: image.width,
                             }}
-                            onClick={()=>navigate("/TravelRequirments")}
+                            onClick={() => navigate("/TravelRequirments")}
                         >
                             <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
                             <ImageBackdrop className="MuiImageBackdrop-root" />
@@ -551,7 +575,7 @@ function SearchBody(props) {
                     ))}
                 </Box>
 
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 135,marginTop:-25 }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 135, marginTop: -25 }}>
                     {whereWeTravel.map((image) => (
                         <ImageButton
                             focusRipple
@@ -559,7 +583,7 @@ function SearchBody(props) {
                             style={{
                                 width: image.width,
                             }}
-                            onClick={()=>navigate("/WhereWeTravel")}
+                            onClick={() => navigate("/WhereWeTravel")}
                         >
                             <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
                             <ImageBackdrop className="MuiImageBackdrop-root" />
@@ -585,7 +609,7 @@ function SearchBody(props) {
 
 
 
-         
+
 
 
                 <br />
@@ -683,8 +707,41 @@ function SearchBody(props) {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginLeft: 250 }}>Share</Button>
-                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white' }}>Learn More</Button>
+                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginLeft: 250 }} onClick={handleClickOpenDialogPorto}>Share</Button>
+                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white' }} onClick={()=> navigate('/NewYork')}>Learn More</Button>
+                            <Dialog
+                                open={openDialog}
+                                onClose={handleCloseDialog}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title" style={{ color: '#5c0931', fontFamily: 'Verdana', fontWeight: 'bold' }}>
+                                    {"Share the trip with your friends"}
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        You can send all the details of the trips to your friends via email
+                                        <TextField
+
+
+                                            id="outlined-size-small"
+                                            style={{ marginLeft: 15, marginTop: 20 }}
+
+                                            type='email'
+                                            label="Email"
+                                            defaultValue=""
+
+                                        />
+
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={handleCloseDialogPorto} style={{ color: 'white', backgroundColor: '#5c0931' }}>Cancel</Button>
+                                    <Button onClick={handleCloseDialogPorto} style={{ color: 'white', backgroundColor: '#5c0931' }} autoFocus>
+                                        Send
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
                         </CardActions>
                     </Card>
                 </Stack>
@@ -707,8 +764,44 @@ function SearchBody(props) {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginLeft: 130, marginTop: -20 }}>Share</Button>
-                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -20 }}>Learn More</Button>
+                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginLeft: 130, marginTop: -20 }} onClick={handleClickOpenDialog}>Share</Button>
+                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -20 }} onClick={() => { navigate('/Geneva') }}>Learn More</Button>
+                            <Dialog
+                                open={openDialog}
+                                onClose={handleCloseDialog}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title" style={{ color: '#5c0931', fontFamily: 'Verdana', fontWeight: 'bold' }}>
+                                    {"Share the trip with your friends"}
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        You can send all the details of the trips to your friends via email
+                                        <TextField
+
+
+                                            id="outlined-size-small"
+                                            style={{ marginLeft: 15, marginTop: 20 }}
+
+                                            type='email'
+                                            label="Email"
+                                            defaultValue=""
+
+                                        />
+
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={handleCloseDialog} style={{ color: 'white', backgroundColor: '#5c0931' }}>Cancel</Button>
+                                    <Button onClick={handleCloseDialog} style={{ color: 'white', backgroundColor: '#5c0931' }} autoFocus>
+                                        Send
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+
+
+
                         </CardActions>
                     </Card>
                     <td />
@@ -728,8 +821,42 @@ function SearchBody(props) {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginLeft: 220, marginTop: -20 }}>Share</Button>
-                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -20 }}>Learn More</Button>
+                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginLeft: 220, marginTop: -20 }} onClick={handleClickOpenDialogPorto}>Share</Button>
+                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -20 }} onClick={() => navigate('/Porto')}>Learn More</Button>
+                            <Dialog
+                                open={openDialogPorto}
+                                onClose={handleCloseDialogPorto}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title" style={{ color: '#5c0931', fontFamily: 'Verdana', fontWeight: 'bold' }}>
+                                    {"Share the trip with your friends"}
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        You can send all the details of the trips to your friends via email
+                                        <TextField
+
+
+                                            id="outlined-size-small"
+                                            style={{ marginLeft: 15, marginTop: 20 }}
+
+                                            type='email'
+                                            label="Email"
+                                            defaultValue=""
+
+                                        />
+
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={handleCloseDialogPorto} style={{ color: 'white', backgroundColor: '#5c0931' }}>Cancel</Button>
+                                    <Button onClick={handleCloseDialogPorto} style={{ color: 'white', backgroundColor: '#5c0931' }} autoFocus>
+                                        Send
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+
                         </CardActions>
                     </Card>
 
@@ -768,7 +895,7 @@ function SearchBody(props) {
                         </CardContent>
                         <CardActions>
 
-                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -10, marginLeft: 100 }}>Learn More</Button>
+                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -10, marginLeft: 100 }} onClick={() => navigate('/Lounges')}>Learn More</Button>
                         </CardActions>
                     </Card>
 
@@ -791,12 +918,12 @@ function SearchBody(props) {
                         <CardActions>
 
                             <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -10, marginLeft: 100 }} onClick={() => {
-                                                navigate("/UpgradeJourmey")
+                                navigate("/UpgradeJourmey")
 
 
 
 
-                                            }}>Learn More</Button>
+                            }}>Learn More</Button>
                         </CardActions>
                     </Card>
 
@@ -818,7 +945,7 @@ function SearchBody(props) {
                         </CardContent>
                         <CardActions>
 
-                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -10, marginLeft: 100 }} onClick={()=>navigate("/Meet")}>Learn More</Button>
+                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -10, marginLeft: 100 }} onClick={() => navigate("/Meet")}>Learn More</Button>
                         </CardActions>
                     </Card>
 

@@ -263,6 +263,8 @@ function AppBarr() {
     const handleChangeAcc = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+    const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+  
     return (
         <div>
             <AppBar position="fixed" style={{ width: window.screen.width, backgroundColor: '#e0dfdf',opacity:0.95 }} color='transparent'    >
@@ -618,7 +620,7 @@ function AppBarr() {
 
 
 
-                                        <Button variant="outlined" style={{ color: '#808294' }}>
+                                        <Button variant="outlined" style={{ color: '#808294' }} onClick={()=>navigate('/TravelRequirments')}>
                                             Travel requirements
 
 

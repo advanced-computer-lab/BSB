@@ -1,150 +1,244 @@
-import React from 'react'
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
+import React from "react";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
 import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import App from './App';
-import { useState } from 'react';
-import Layout from './Layout';
-import { useEffect } from 'react';
-import axios from 'axios';
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-function EditProfile(props) {
+import CardActions from "@material-ui/core/CardActions";
+import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
+import CardMedia from '@mui/material/CardMedia';
+import TextField from '@mui/material/TextField';
+import InputLabel from "@material-ui/core/InputLabel";
+import Snackbar from '@mui/material/Snackbar'
+import Stack from '@mui/material/Stack'
+import Alert from "@mui/material/Alert";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
+function EditProfile() {
+    const navigate = useNavigate();
     const [openSnackBar, setOpenSnackBar] = useState(false);
-
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [passport, setPassport] = useState("");
+    const location = useLocation();
+    const { id} = location.state;
     const handleClickSB = () => {
         setOpenSnackBar(true);
-    };
+    }
 
     const handleCloseSB = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpenSnackBar(false);
-    };
-    const [editLastName, setLastName] = useState(props.editLastName);
-    const [editFirstName, setFirstName] = useState(props.editFirstName);
-    const [editEmail, setEmail] = useState(props.editEmail);
-    const [editPassport, setEditPassport] = useState(props.editPassport);
-    const [clicked, setClicked] = useState(false);
+    }
+    function editProfile() {
+        axios.post('http://localhost:8000/editProfile', {
+            firstName: firstName,
+            lastName: lastName,
+            passport: passport,
 
-    useEffect(() => {
-        if (clicked) {
 
-            axios.post('http://localhost:8000/editProfile', {
-                _id: "61abb8b7dda93117406ba763",
-                firstName: editFirstName,
-                lastName: editLastName,
-                email: editEmail,
-                passport: editPassport
+        })
+            .then(function (response) {
+                console.log("xxx");
+                console.log(response.data._id);
+                console.log(response);
+                handleClickSB();
+                //setID(response._id)
 
+
+
+            }).catch(error => {
+                console.log(error)
+                //setError(error.response.data);
             })
-                .then(function (response) {
-                    console.log("xxx");
-                    console.log(response.data)
-                })
-            setClicked(false);
-        }
 
-
-
-
-    })
-
-
+    }
     return (
         <div>
-            {props.logout ? <App /> : (props.back ? props.component :
-                <div style={{ marginTop: -100 }}>
-                    <Layout />
 
-                    <div>
-                        <h1 style={{ marginTop: -690, marginLeft: 80 }}>Edit your profile</h1>
-                    </div>
-                    <Box
-                        component="form"
-                        sx={{
-                            '& > :not(style)': { m: 1, width: '25ch' },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                        style={{ marginLeft: 120, marginTop: 30 }}
+            <div
+
+                id='intro-example'
+                className='p-5 text-center bg-image'
+                style={{
+                    background: `url('https://www.puredestinations.co.uk/wp-content/uploads/2016/06/header-Qatar-Airways-introduces-Dreamliner-aircraft-to-Birmingham-International-Airport--1600x500.jpg')`, backgroundSize: "contain", backgroundRepeat: "no-repeat", height: 600, width: window.screen.width,
+                    marginTop: 430,
+
+                }}
+
+
+            >
+
+                <Typography style={{ fontSize: 20, fontWeight: "bold", marginTop: 450, marginLeft: 50, color: ' #5c0931' }}
+
+                    align="left"
+                    gutterBottom
+                >
+                    <Link style={{ color: '#5c0931' }} color='#5c0931' href="#" onClick={() => navigate("/UserProfile",{state:{id:id}})}>Profile</Link> >  Edit your profile
+
+                </Typography>
+            </div>
+
+            <hr style={{ fontSize: 20, fontWeight: "bold", marginLeft: 50, color: ' #5c0931', marginTop: -50 }} />
+
+
+            <Card
+                style={{
+                    width: 700,
+                    height: 80,
+                    marginLeft: 400,
+                    marginTop: 0,
+                    backgroundColor: ' #5c0931', opacity: 0.8
+                }}
+            >
+                <CardContent>
+                    <Typography
+                        style={{ fontWeight: "bold", color: 'white', fontSize: 25 }}
+                        //color="textPrimary"
+                        align="center"
+                        variant="h6"
+                        component="h2"
+                        gutterBottom
                     >
-                        <TextField
-
-                            required
-                            id="outlined-error"
-                            label="First Name"
-                            style={{width:300}}
-                            defaultValue={props.firstName}
-                            onChange={event => setFirstName(event.target.value)}
-                        />
-                        <br />
-                        <TextField
-
-                            required
-                            id="outlined-error"
-                            label="Last Name"
-                            style={{width:300}}
-                            defaultValue={props.lastName}
-                            onChange={event => setLastName(event.target.value)}
-
-                        />
-                        <br />
-                        <TextField
-
-                            required
-                            id="outlined-error"
-                            style={{width:300}}
-                            label="Email"
-                            defaultValue={props.email}
-                            onChange={event => setEmail(event.target.value)}
-
-                        />
-                        <br />
-                        <TextField
-
-                            required
-                            id="outlined-error"
-                            label="Passport"
-                            style={{width:300}}
-                            defaultValue={props.passport}
-                            onChange={event => setEditPassport(event.target.value)}
-
-                        />
-
-                        <br />
-                    </Box>
-                    );
 
 
+                        Edit your profile       </Typography>
+
+
+                </CardContent>
+            </Card>
+            <Card
+                style={{
+                    width: 700,
+                    height: 400,
+                    marginLeft: 400,
+                    marginTop: 0,
+                    backgroundColor: "#EBECF0", opacity: 0.8
+                }}
+            >
+                <CardContent>
+                    <Typography
+                        style={{ fontWeight: "bold", color: ' #5c0931', fontSize: 17, marginTop: 20 }}
+                        //color="textPrimary"
+                        align="left"
+                        variant="h6"
+                        component="h2"
+                        gutterBottom
+                    >
+
+
+                        First name
+                    </Typography>
+                    <TextField style={{ marginLeft: 10, marginTop: 20, width: 250 }} id="outlined-basic" label=" " variant="outlined" onChange={event => setFirstName(event.target.value)} />
+                    <br />
+                    <br />
+                    <br />
+
+                    <Typography
+                        style={{ fontWeight: "bold", color: ' #5c0931', fontSize: 17, marginLeft: 300, marginTop: -157 }}
+                        //color="textPrimary"
+                        align="left"
+                        variant="h6"
+                        component="h2"
+                        gutterBottom
+                    >
+
+
+                        Last name
+                    </Typography>
+
+                    <TextField style={{ marginLeft: 300, marginTop: 20, width: 250 }} id="outlined-basic" label=" " variant="outlined" onChange={event => setLastName(event.target.value)} />
+                    <br />
+                    <br />
+                    <br />
+
+                    <Typography
+                        style={{ fontWeight: "bold", color: ' #5c0931', fontSize: 17 }}
+                        //color="textPrimary"
+                        align="left"
+                        variant="h6"
+                        component="h2"
+                        gutterBottom
+                    >
+
+
+                        Enter your new Email
+                    </Typography>
+
+
+                    <TextField style={{ marginLeft: 10, marginTop: 20, width: 250 }} id="outlined-basic" label=" " variant="outlined" />
+                    <br />
+                    <br />
+                    <br />
+
+                    <Typography
+                        style={{ fontWeight: "bold", color: ' #5c0931', fontSize: 17, marginLeft: 300, marginTop: -155 }}
+                        //color="textPrimary"
+                        align="left"
+                        variant="h6"
+                        component="h2"
+                        gutterBottom
+                    >
+
+
+                        Enter your new Passport Number
+                    </Typography>
+
+
+                    <TextField style={{ marginLeft: 10, marginTop: 20, width: 250, marginLeft: 300 }} id="outlined-basic" label=" " variant="outlined" onChange={event => setPassport(event.target.value)} />
+                    <br />
                     <br />
                     <br />
                     <Stack spacing={2} sx={{ width: '20' }}>
-                        <Button variant="contained" style={{ marginLeft: 700, width: 200, marginTop: 100 }} onClick={e => { handleClickSB(); setClicked(true) }} >
-                            Submit
-                        </Button>
-                        <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSB} anchorOrigin={ {vertical:'bottom' , horizontal:'center'}} >
-                            <Alert onClose={handleCloseSB} severity="success" sx={{ width: '100%' }}>
-                                Changes submitted successfully!
-                            </Alert>
-                        </Snackbar>
+                        <div style={{
+                            flexDirection: "row",
+                            justifyContent: "flex-end",
+                            marginleft: -30
+                        }}>
+                            <Button style={{ background: '#5c0931', fontSize: 20, marginTop: -20, marginLeft: 200, width: 200, color: 'white' }} variant="secondary" onClick={ (event)=>editProfile()} >Submit</Button>
+                            <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSB} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+                                <Alert onClose={handleCloseSB} severity="success" sx={{ width: '100%' }}>
+                                    Your Data have been changed successfully
+                                </Alert>
 
+
+                            </Snackbar>
+
+                        </div>
                     </Stack>
 
-                </div>
 
 
-            )}
+                </CardContent>
+            </Card>
+            <br />
+            <br />
+
+            <br />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
+
     )
 }
 
-export default EditProfile
+export default EditProfile;

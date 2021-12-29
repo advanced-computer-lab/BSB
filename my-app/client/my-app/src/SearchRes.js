@@ -34,7 +34,7 @@ export default function SearchRes() {
   const [flightlist, setFlightlist] = useState([]);
   const [flightlist2, setFlightlist2] = useState([]);
   //departurelist, returnlist ,cabin ,adultPass,childPass} = location.state
-  const { flights, cabin, adultPass, childPass } = location.state;
+  const { flights, cabin, adultPass, childPass ,id} = location.state;
   console.log(flights)
   useEffect(() => {
 
@@ -244,7 +244,7 @@ export default function SearchRes() {
           />
 
           <Button variant="outlined" style={{ color: "white", backgroundColor: "#5c0931",marginLeft:700 }} onClick={() => {
-            navigate("/Seats", { state: { depFlight: departure, retFlight: returnFlight, cab: cabin, adult: adultPass, child: childPass } });
+            navigate("/Seats", { state: { depFlight: departure, retFlight: returnFlight, cab: cabin, adult: adultPass, child: childPass ,id:id} });
           }}>Choose your seats</Button>
         </div><br /></>
         : clickedRes ? <>  <div>

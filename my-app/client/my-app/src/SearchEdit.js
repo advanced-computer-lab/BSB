@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import SearchResults from './SearchResults';
 import axios from 'axios';
 import Layout from './Layout';
-
+import { useLocation } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import { TextField } from '@mui/material';
 import { Button } from '@material-ui/core';
@@ -35,7 +35,7 @@ import Typography from '@mui/material/Typography';
 import search from './images/search.jpg'
 import cappadocia from './images/cappadocia.jpg'
 import { ButtonGroup } from '@material-ui/core';
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate } from 'react-router';
 import homepage from './images/homepage.jpg'
 import { Card } from 'react-bootstrap';
 import homepagee from './images/homepagee.jpg'
@@ -85,23 +85,24 @@ const images = [
 
 
 
-const buttonImages = [
-    {
-        url: 'https://www.qatarairways.com/content/dam/images/renditions/horizontal-1/campaigns/global/safety-measures/h1-crew-new-ppe.jpg',
-        title: 'Safe travel',
-        width: '25%',
-    },
-    {
-        url: 'https://i.pinimg.com/originals/db/d7/65/dbd7657550f6c3e8d23b6f869ca3b94a.jpg',
-        title: 'Travel requirments ',
-        width: '25%',
-    },
-    {
-        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/QR_Destinations_2021Jan.png/800px-QR_Destinations_2021Jan.png',
-        title: 'Where we travel',
-        width: '25%',
-    },
-];
+
+
+const safetravel = [{
+    url: 'https://www.qatarairways.com/content/dam/images/renditions/horizontal-1/campaigns/global/safety-measures/h1-crew-new-ppe.jpg',
+    title: 'Safe travel',
+    width: '25%',
+},
+]
+const travelReq = [{
+    url: 'https://i.pinimg.com/originals/db/d7/65/dbd7657550f6c3e8d23b6f869ca3b94a.jpg',
+    title: 'Travel requirments ',
+    width: '25%',
+},]
+const whereWeTravel = [{
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/QR_Destinations_2021Jan.png/800px-QR_Destinations_2021Jan.png',
+    title: 'Where we travel',
+    width: '25%',
+},]
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: 'relative',
@@ -172,10 +173,12 @@ const ImageMarked = styled('span')(({ theme }) => ({
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-function SearchEdit(props) {
-    const location = useLocation();
-    const {reservation, dep, price, tprice, total} = location.state;
+function SearchBody(props) {
+
     const navigate = useNavigate();
+    const location = useLocation();
+    const { reservation, dep, price, tprice, total } = location.state;
+   const id= localStorage.getItem("id");
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -187,7 +190,7 @@ function SearchEdit(props) {
     };
 
     const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
+ //   const id = open ? 'simple-popover' : undefined;
 
 
     const theme = useTheme();
@@ -212,12 +215,14 @@ function SearchEdit(props) {
     const [flights, setFlights] = useState({ from: "", to: "", date: "", arr: "", dep: "", tdep: "", tarr: "", ec: "", bs: "", first: "", flightNum: "", retDate: "", searchRes: false })
     const [flightlist, setFlightlist] = useState([]);
     const [show, setShow] = useState(false);
+
     const handleShow = () => setShow(true);
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
     const [value, setValue] = useState([null, null]);
     const [dates, setdates] = useState([null, null]);
     const moment = require('moment')
+
     const [date, setDate] = useState("");
     const [retDate, setretDate] = useState("");
     const [arr, setArr] = useState("");
@@ -251,6 +256,8 @@ function SearchEdit(props) {
             //setFlightlist(  flightlist.filter((u,index) =>{return  flightlist.indexOf(u) === index}))
             console.log(flightlist);
         })
+
+
     }, [])
     //snack bar
     const [openSnack, setOpenSnack] = useState(false);
@@ -258,10 +265,12 @@ function SearchEdit(props) {
     const handleClickSnack = () => {
         setOpenSnack(true);
     };
+
     const handleCloseSnack = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
+
         setOpenSnack(false);
     };
     return (
@@ -367,40 +376,40 @@ function SearchEdit(props) {
                                                 </Stack>
                                             </td>
                                         </tr>
-                                        
 
-                                            <Stack direction='row' spacing={1} >
-                                                <Typography style={{ color: '#808294', fontweight: 'bold', fontSize: 16, marginLeft: 30, marginTop: 50 }}>
-                                                    Child 
-                                                </Typography>
-                                                <Button style={{ width: 5, marginLeft: 100, backgroundColor: '#5c0931', color: 'white', height: 35, marginTop: 50 }} onClick={() => setChild(child + 1)}>+</Button>
-                                                <Input type=" number" style={{ width: 15, marginLeft: 15, position: 'center' }} />
-                                                <Button style={{ width: 5, marginLeft: 10, backgroundColor: '#5c0931', color: 'white', height: 35, marginTop: 50 }}>-</Button>
-                                            </Stack>
-                                            <td>
-                                                {/* <TextField
+
+                                        <Stack direction='row' spacing={1} >
+                                            <Typography style={{ color: '#808294', fontweight: 'bold', fontSize: 16, marginLeft: 30, marginTop: 50 }}>
+                                                Child
+                                            </Typography>
+                                            <Button style={{ width: 5, marginLeft: 100, backgroundColor: '#5c0931', color: 'white', height: 35, marginTop: 50 }} onClick={() => setChild(child + 1)}>+</Button>
+                                            <Input type=" number" style={{ width: 15, marginLeft: 15, position: 'center' }} />
+                                            <Button style={{ width: 5, marginLeft: 10, backgroundColor: '#5c0931', color: 'white', height: 35, marginTop: 50 }}>-</Button>
+                                        </Stack>
+                                        <td>
+                                            {/* <TextField
                                                     label=""
                                                     type="number"
                                                     id="outlined-start-adornment"
                                                     sx={{ m: 1, width: '10ch', height: '3ch', marginTop: 3, marginBottom: 3 }}
                                                     onChange={event => setChild(event.target.value)}
                                                 /> */}
-                                            </td>
-                                            <br/>
-                                            
-                                                       <hr style={{ fontSize: 20, fontWeight: "bold", marginLeft: 50, color: ' #5c0931' }} />
+                                        </td>
+                                        <br />
+
+                                        <hr style={{ fontSize: 20, fontWeight: "bold", marginLeft: 50, color: ' #5c0931' }} />
                                         < Divider sx={{ m: 1, width: '200%', marginTop: 3, marginBottom: 3 }} />
                                         <tr>
-                                            <Typography style={{ color: '#808294', fontweight: 'bold', fontSize: 16,marginLeft:30}}>
+                                            <Typography style={{ color: '#808294', fontweight: 'bold', fontSize: 16, marginLeft: 30 }}>
                                                 Cabin class:
-                                                </Typography>
+                                            </Typography>
                                             <td>
-                                                <FormControl sx={{ m: 1, minWidth: 180 }} style={{marginLeft:-150}}>
+                                                <FormControl sx={{ m: 1, minWidth: 180 }} style={{ marginLeft: -150 }}>
                                                     <InputLabel id="demo-simple-select-required-label"></InputLabel>
                                                     <NativeSelect
                                                         labelId="demo-simple-select-label"
                                                         id="demo-simple-select"
-                                                        style={{width:200}}
+                                                        style={{ width: 200 }}
                                                         value={cabin}
                                                         label="cabin"
                                                         onChange={event => setCabin(event.target.value)}
@@ -426,7 +435,7 @@ function SearchEdit(props) {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}  >
                                     <DatePicker
                                         label="Departure date"
-                                        mask="//"
+                                        mask="_//_"
                                         value={date}
                                         style={{ width: 50, marginTop: 30 }}
                                         onChange={(newValue) => {
@@ -441,7 +450,7 @@ function SearchEdit(props) {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DatePicker
                                         label="Return date"
-                                        mask="//"
+                                        mask="_//_"
 
                                         id="outlined-start-adornment"
                                         sx={{ m: 1, width: '25ch' }}
@@ -454,10 +463,9 @@ function SearchEdit(props) {
                                 </LocalizationProvider>
                             </div>
                             <Button variant="contained" style={{ position: 'center', marginLeft: 500, marginTop: 40, backgroundColor: '#5c0931', color: 'white', width: 200, height: 45 }} onClick={(event) => {
-                                setFlights({ from: from, to: to, date: date, arr: arr, dep: dep1, tdep: tdep, tarr: tarr, ec: ec, bs: bs, first: first, flightNum: flightNum, retDate: "", searchRes: true });
-                                navigate("/changeFlight",{state:{flights:flights, reservation:reservation, dep:dep, price:price, tprice:tprice, total:total}});
+
+                                navigate("/ChangeFlight", { state: { flights: { from: from, to: to, date: date, arr: arr, dep: dep1, tdep: tdep, tarr: tarr, ec: ec, bs: bs, first: first, flightNum: flightNum, retDate: "", searchRes: true }, reservation: reservation, dep: dep, price: price, tprice: tprice, total: total, cabin: cabin, adultPass: adult, childPass: child, id: id } });
                             }}>
-                               {/* onClick={()=> {navigate("/changeFlight"), state:{res:reservation, dep:dep, flightlist:searchresults, cabin:cabin, adultPass:adultPass, childPass:childPass, price:price, tprice:tprice, total:total}}}} */}
                                 Search
                             </Button>
 
@@ -465,6 +473,7 @@ function SearchEdit(props) {
                         </form>
                     </Paper>
                     {/* <h1 style={{marginLeft:90,color:"black"}}>  Search your flight:  <CompareArrowsIcon/><br/>Departure Flight</h1> */}
+
                 </div>
                 <br />
                 <br />
@@ -473,18 +482,23 @@ function SearchEdit(props) {
                 <Typography style={{ fontFamily: 'Verdana', color: '#5c0931', marginTop: 30, marginLeft: 200 }} >
                     As one of the largest and most experienced global airlines throughout the COVID-19 crisis, you can rely on us to take you on your next journey safely.
 
+
+
                 </Typography>
                 <br />
                 <br />
 
+
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 25 }}>
-                    {buttonImages.map((image) => (
+                    {safetravel.map((image) => (
                         <ImageButton
                             focusRipple
                             key={image.title}
                             style={{
                                 width: image.width,
                             }}
+                            onClick={() => navigate("/SafeTravel")}
+
                         >
                             <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
                             <ImageBackdrop className="MuiImageBackdrop-root" />
@@ -507,6 +521,75 @@ function SearchEdit(props) {
                         </ImageButton>
                     ))}
                 </Box>
+
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 80, marginTop: -25 }}>
+                    {travelReq.map((image) => (
+                        <ImageButton
+                            focusRipple
+                            key={image.title}
+                            style={{
+                                width: image.width,
+                            }}
+                            onClick={() => navigate("/TravelRequirments")}
+                        >
+                            <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
+                            <ImageBackdrop className="MuiImageBackdrop-root" />
+                            <Image>
+                                <Typography
+                                    component="span"
+                                    variant="subtitle1"
+                                    color="inherit"
+                                    sx={{
+                                        position: 'relative',
+                                        p: 4,
+                                        pt: 2,
+                                        pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
+                                    }}
+                                >
+                                    {image.title}
+                                    <ImageMarked className="MuiImageMarked-root" />
+                                </Typography>
+                            </Image>
+                        </ImageButton>
+                    ))}
+                </Box>
+
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%', marginLeft: 135, marginTop: -25 }}>
+                    {whereWeTravel.map((image) => (
+                        <ImageButton
+                            focusRipple
+                            key={image.title}
+                            style={{
+                                width: image.width,
+                            }}
+                            onClick={() => navigate("/WhereWeTravel")}
+                        >
+                            <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
+                            <ImageBackdrop className="MuiImageBackdrop-root" />
+                            <Image>
+                                <Typography
+                                    component="span"
+                                    variant="subtitle1"
+                                    color="inherit"
+                                    sx={{
+                                        position: 'relative',
+                                        p: 4,
+                                        pt: 2,
+                                        pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
+                                    }}
+                                >
+                                    {image.title}
+                                    <ImageMarked className="MuiImageMarked-root" />
+                                </Typography>
+                            </Image>
+                        </ImageButton>
+                    ))}
+                </Box>
+
+
+
+
+
 
                 <br />
                 <br />
@@ -711,12 +794,9 @@ function SearchEdit(props) {
                         <CardActions>
 
                             <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -10, marginLeft: 100 }} onClick={() => {
-                                                navigate("/UpgradeJourmey")
+                                navigate("/UpgradeJourmey")
 
-
-
-
-                                            }}>Learn More</Button>
+                            }}>Learn More</Button>
                         </CardActions>
                     </Card>
 
@@ -738,7 +818,7 @@ function SearchEdit(props) {
                         </CardContent>
                         <CardActions>
 
-                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -10, marginLeft: 100 }}>Learn More</Button>
+                            <Button size="medium" style={{ backgroundColor: '#5c0931', color: 'white', marginTop: -10, marginLeft: 100 }} onClick={() => navigate("/Meet")}>Learn More</Button>
                         </CardActions>
                     </Card>
 
@@ -789,4 +869,4 @@ function SearchEdit(props) {
     )
 }
 
-export default SearchEdit
+export default SearchBody

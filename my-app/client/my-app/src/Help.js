@@ -125,7 +125,7 @@ function Help() {
                 id='intro-example'
                 className='p-5 text-center bg-image'
                 style={{
-                    marginTop: 750,
+                    marginTop: -300,
                     background: `url(${help})`, backgroundSize: "contain", backgroundRepeat: "repeat", height: 400, width: window.screen.width
                 }}
             >

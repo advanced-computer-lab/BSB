@@ -252,10 +252,53 @@ function LoginPage() {
         weightRange: '',
         showPassword: false,
     });
-
-
-
-
+    const [username, setUserName] = useState("");
+    const [password, setPassWord] = useState("");
+    const [error, setError] = useState("");
+    const [id, setID] = useState("");
+    const [res,setRes]=useState({})
+    const [user,setUser]=useState("")
+    function login() {
+        axios.post('http://localhost:8000/login', {
+            username: username,
+            password: password,
+    
+        })
+            .then(function (response) {
+                console.log("xxx");
+                console.log(response.data._id);
+                console.log(response);
+                setUser(username);
+                console.log(password);
+           //setID(response._id)
+              
+    
+    
+            }).catch(error => {
+                console.log(error)
+                //setError(error.response.data);
+            })
+            axios.post('http://localhost:8000/getID', {
+            username: username,
+    
+        })
+            .then(function (response) {
+                console.log("xxx");
+                //console.log(response.data._id);
+                console.log(response);
+                setID(response.data);
+                localStorage.setItem("id",response.data);
+                console.log(response.data);
+                console.log(id);
+           //setID(response._id)
+                navigate('/UserProfile',{state:response.data});
+    
+    
+            }).catch(error => {
+                console.log(error)
+                //setError(error.response.data);
+            })
+    }
 
     return (
         <div>
@@ -270,12 +313,23 @@ function LoginPage() {
                             required
                             id="outlined-required"
                             style={{ width: 400, marginLeft: 20 }}
-                            label="Enter your email or username"
+                            label="Enter your  username"
                             defaultValue=""
+                            onChange={event => setUserName(event.target.value)}
                         />
                         <br />
                         <br />
-                        <FormControl sx={{ m: 1, width: '25ch' }} style={{ marginLeft: 20, width: 400 }} variant="outlined">
+                        <TextField
+                            required
+                            type='password'
+                            id="outlined-required"
+                            style={{ width: 400, marginLeft: 20 }}
+                            label="Enter your  password"
+                            defaultValue=""
+                            onChange={event => setPassWord(event.target.value)}
+                        />
+
+                        {/* <FormControl sx={{ m: 1, width: '25ch' }} style={{ marginLeft: 20, width: 400 }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-password">Enter your password</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password"
@@ -296,8 +350,12 @@ function LoginPage() {
                                 }
                                 label="Password"
                             />
-                        </FormControl>
-                        <Button variant='contained' style={{ color: 'white', width: 400, marginLeft: 20, backgroundColor: '#5c0931' }}>
+                        </FormControl> */}
+                        <p style={{ color: 'red' }}>
+                            {error}
+                        </p>
+                        <Button variant='contained' style={{ color: 'white', width: 400, marginLeft: 20, backgroundColor: '#5c0931' }}
+                            onClick={(event) => login()}>
                             Login
                         </Button>
                     </div>
@@ -308,7 +366,7 @@ function LoginPage() {
                     <h4 style={{ fontFamily: 'Verdana', fontWeight: 'bold', color: '#5c0931', marginLeft: 175, marginTop: 70 }} >Don't have an account yet? </h4>
                     <h5 style={{ fontFamily: 'Verdana', fontWeight: 'bold', color: '#808294', marginLeft: 130, marginTop: 90 }}> Manage your bookings and receive our latest news and offers just for you</h5>
                     <Button variant='outlined' style={{ color: 'white', width: 400, marginLeft: 150, marginTop: 90, backgroundColor: '#5c0931' }}
-                        onClick={() => {
+                        onClick={(event) => {
                             navigate("/SignUp")
 
 
@@ -323,7 +381,7 @@ function LoginPage() {
 
 
 
-        </div>
+        </div >
     )
 }
 
